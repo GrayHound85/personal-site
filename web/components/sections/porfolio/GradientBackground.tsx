@@ -1,10 +1,8 @@
 type GradientVariant = "hero" | "subtle" | "minimal";
 
-
 type Glow = {
     className: string;
 };
-
 
 const variants: Record<GradientVariant, Glow[]> = {
 
@@ -64,7 +62,6 @@ const variants: Record<GradientVariant, Glow[]> = {
     ],
 
 
-
     subtle: [
 
         {
@@ -118,7 +115,6 @@ const variants: Record<GradientVariant, Glow[]> = {
     ],
 
 
-
     minimal: [
 
         {
@@ -138,14 +134,13 @@ const variants: Record<GradientVariant, Glow[]> = {
         },
 
     ],
-};
 
+};
 
 
 type GradientBackgroundProps = {
     variant?: GradientVariant;
 };
-
 
 export default function GradientBackground({
     variant = "hero",
@@ -155,7 +150,7 @@ export default function GradientBackground({
 
         <div
             className="
-                absolute
+                fixed
                 inset-0
 
                 overflow-hidden
@@ -194,7 +189,7 @@ export default function GradientBackground({
 
                     bg-linear-to-b
                     from-transparent
-                    to-slate-950
+                    to-slate-900
                 "
             />
 

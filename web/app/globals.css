@@ -56,6 +56,24 @@
     --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
+@keyframes section-highlight {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.015);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.section-highlight {
+    animation: section-highlight 400ms ease-out;
+}
+
 
 
 body {
@@ -66,4 +84,12 @@ body {
 
 h1 {
   font-family: Helvetica, Arial, sans-serif;
+}
+
+@utility scrollbar-hidden {
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }

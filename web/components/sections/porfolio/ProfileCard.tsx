@@ -1,4 +1,5 @@
 import HeroPanel from "./HeroPanel";
+import Card from "@/components/ui/Card";
 import SocialButton from "../../ui/SocialButton";
 import CopyButton from "@/components/ui/CopyButton";
 import Button from "@/components/ui/Button";
@@ -9,7 +10,7 @@ import GithubIcon from "@/components/icons/GithubIcon";
 
 export default function ProfileCard(){
     return (
-        <HeroPanel>
+        <Card className="bg-gray-950/40 h-full">
             <div className="
                     flex
                     h-full
@@ -100,6 +101,6 @@ export default function ProfileCard(){
 
                 </div>
             </div>
-        </HeroPanel>
+        </Card>
     );
 }

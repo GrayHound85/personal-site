@@ -5,7 +5,7 @@ import PortfolioLayout from "@/components/layout/PortfolioLayout";
 
 import HeroPanel from "@/components/sections/porfolio/HeroPanel";
 import ProfileCard from "@/components/sections/porfolio/ProfileCard";
-import NavBar from "@/components/sections/porfolio/NavBar";
+import NavBar from "@/components/ui/NavBar";
 import AdminButton from "@/components/sections/porfolio/AdminButton";
 
 
@@ -18,9 +18,23 @@ export default function LandingPage() {
             }
 
             navigation={
-                <NavBar>
-                    Navigation
-                </NavBar>
+                <NavBar 
+                    type="top"
+                    items={[
+                        {
+                            label: "About",
+                            targetId: "about",
+                        },
+                        {
+                            label: "Projects",
+                            targetId: "projects",
+                        },
+                        {
+                            label: "Education",
+                            targetId: "experience",
+                        }
+                    ]}
+                />
             }
 
             floating={
@@ -28,8 +42,16 @@ export default function LandingPage() {
             }
         >
 
-            <HeroPanel>
+            <HeroPanel id="about">
                 About
+            </HeroPanel>
+
+            <HeroPanel id="projects">
+                Projects
+            </HeroPanel>
+
+            <HeroPanel id="experience">
+                Experience
             </HeroPanel>
 
         </PortfolioLayout>
