@@ -93,7 +93,7 @@ export default function ProfileCard(){
 
                     <CopyButton text="oliver.norrie@gmail.com" />
 
-                    <div className="flex-1" />
+                    <div className="md:flex-1 h-8" />
 
                     <Button className="w-full ">
                         Resume

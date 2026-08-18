@@ -58,20 +58,22 @@
 
 @keyframes section-highlight {
     0% {
-        transform: scale(1);
+        border-color: transparent;
     }
 
     50% {
-        transform: scale(1.015);
+        border-color: var(--color-primary);
     }
 
     100% {
-        transform: scale(1);
+        border-color: transparent;
     }
 }
 
 .section-highlight {
-    animation: section-highlight 400ms ease-out;
+    border-width: 1px;
+    border-style: solid;
+    animation: section-highlight 500ms ease-in-out;
 }
 
 

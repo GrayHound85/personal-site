@@ -23,10 +23,10 @@ export default function PortfolioLayout({
                     relative
                     flex
                     flex-col
-                    lg:flex-row
+                    md:flex-row
 
                     min-h-screen
-                    lg:h-screen
+                    md:h-screen
 
                     w-full
                 "
@@ -35,14 +35,14 @@ export default function PortfolioLayout({
                 <aside
                     className="
                         w-full
-                        lg:w-100
+                        md:w-100
 
-                        shrink-0
+                        shrink-00
 
                         p-8
 
-                        lg:h-screen
-                        lg:z-10
+                        md:h-screen
+                        md:z-10
                     "
                 >
                     <div
@@ -50,7 +50,7 @@ export default function PortfolioLayout({
                             flex
                             justify-center
 
-                            lg:h-full
+                            md:h-full
                         "
                     >
                         {profile}
@@ -62,18 +62,18 @@ export default function PortfolioLayout({
                     className="
                         w-full
 
-                        lg:min-h-0
-                        lg:flex-1
+                        md:min-h-0
+                        md:flex-1
 
-                        lg:overflow-y-auto
+                        md:overflow-y-auto
                         scrollbar-none
 
                         p-8
-                        lg:pt-28
-                        lg:pl-0
-                        lg:pr-8
+                        md:pt-28
+                        md:pl-0
+                        md:pr-8
 
-                        lg:z-20
+                        md:z-20
                     "
                 >
                     <div
@@ -82,7 +82,7 @@ export default function PortfolioLayout({
                             flex-col
                             gap-6
 
-                            lg:pr-1
+                            md:pr-1
                         "
                     >
                         {children}
@@ -101,7 +101,7 @@ export default function PortfolioLayout({
                         z-50
 
                         hidden
-                        lg:block
+                        md:block
 
                         pr-8
                     "

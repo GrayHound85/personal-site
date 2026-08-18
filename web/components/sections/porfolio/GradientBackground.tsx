@@ -14,8 +14,8 @@ const variants: Record<GradientVariant, Glow[]> = {
                 -translate-x-1/2
                 top-[-45%]
 
-                h-[clamp(750px,75vw,1100px)]
-                w-[clamp(750px,75vw,1100px)]
+                h-[clamp(900px,75vw,1100px)]
+                w-[clamp(900px,75vw,1100px)]
 
                 bg-cyan-400
                 opacity-50

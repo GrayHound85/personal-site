@@ -15,7 +15,7 @@ export default function HeroPanel({
                 rounded-card
                 bg-gray-950/40
                 p-8
-                h-100
+                
 
                 scroll-mt-28
 

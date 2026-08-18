@@ -83,14 +83,19 @@ export default function NavBar({
                 flex
                 items-center
 
-                px-16
+                px-4
+                lg:px-16
             `, className)}
         >
 
             <div className="
                 flex
                 items-center
-                gap-20
+
+                w-full
+
+                lg:w-auto
+                lg:gap-20
             ">
                 {items.map((item) => (
                     <button
@@ -100,11 +105,17 @@ export default function NavBar({
                             handleScroll(event, item.targetId)
                         }
                         className="
-                            font-medium
+                            flex-1
+
+                            text-center
+                            text-l
+                            font-bold
                             text-white
 
                             transition-opacity
                             hover:opacity-70
+
+                            lg:flex-none
                         "
                     >
                         {item.label}
