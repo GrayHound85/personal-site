@@ -54,10 +54,7 @@ export default function NavBar({
             block: "start",
         });
 
-        const animationDelay = Math.min(
-            Math.max(distance * 0.5, 100),
-            800
-        );
+        const animationDelay = 0;
 
         setTimeout(() => {
 
