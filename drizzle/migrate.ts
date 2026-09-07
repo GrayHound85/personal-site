@@ -1,4 +1,5 @@
 import "dotenv/config";
+
 import { drizzle } from "drizzle-orm/postgres-js";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 
@@ -10,4 +11,11 @@ async function main() {
   });
 }
 
-main();
+main()
+  .then(() => {
+    process.exit(0);
+  })
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
