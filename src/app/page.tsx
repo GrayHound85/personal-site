@@ -1,11 +1,11 @@
-import BackgroundLayout from "@/components/layout/BackgroundLayout";
-import PortfolioLayout from "@/components/layout/PortfolioLayout";
+import BackgroundLayout from "@c/layout/BackgroundLayout";
+import PortfolioLayout from "@c/layout/PortfolioLayout";
 
-import HeroPanel from "@/components/sections/porfolio/HeroPanel";
-import ProfileCard from "@/components/sections/porfolio/ProfileCard";
-import NavBar from "@/components/ui/NavBar";
-import AdminButton from "@/components/sections/porfolio/AdminButton";
-import ExpandableText from "@/components/ui/ExpandibleText";
+import HeroPanel from "@c/sections/porfolio/HeroPanel";
+import ProfileCard from "@c/sections/porfolio/ProfileCard";
+import NavBar from "@c/ui/NavBar";
+import AdminButton from "@c/sections/porfolio/AdminButton";
+import ExpandableText from "@c/ui/ExpandibleText";
 
 export default function LandingPage() {
   return (
