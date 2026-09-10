@@ -43,6 +43,10 @@ export function getTopicsBySubCategory(subCategoryId: UUID) {
     .where(eq(TopicTable.subCategoryId, subCategoryId));
 }
 
+export function getTopicBySlug(slug: string) {
+  return db.select().from(TopicTable).where(eq(TopicTable.slug, slug));
+}
+
 export function getResources() {
   return db.select().from(ResourceTable);
 }
