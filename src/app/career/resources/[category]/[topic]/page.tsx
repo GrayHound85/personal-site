@@ -1,7 +1,7 @@
 import BackgroundLayout from "@c/layout/BackgroundLayout";
 import { getResourceNavigation } from "@l/service/s-resources";
 
-import ResourceNavigation from "./ResourceNav";
+import ResourceNavigation from "@c/sections/career/ResourceNav";
 
 export default async function ResourcesPage() {
   const navigation = await getResourceNavigation();
