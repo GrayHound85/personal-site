@@ -1,15 +1,13 @@
 type GradientVariant = "hero" | "subtle" | "minimal";
 
 type Glow = {
-    className: string;
+  className: string;
 };
 
 const variants: Record<GradientVariant, Glow[]> = {
-
-    hero: [
-
-        {
-            className: `
+  hero: [
+    {
+      className: `
                 left-1/2
                 -translate-x-1/2
                 top-[-45%]
@@ -23,11 +21,10 @@ const variants: Record<GradientVariant, Glow[]> = {
                 blur-[160px]
                 lg:blur-[200px]
             `,
-        },
+    },
 
-
-        {
-            className: `
+    {
+      className: `
                 left-[-20%]
                 top-[-5%]
 
@@ -40,11 +37,10 @@ const variants: Record<GradientVariant, Glow[]> = {
                 blur-[150px]
                 lg:blur-[180px]
             `,
-        },
+    },
 
-
-        {
-            className: `
+    {
+      className: `
                 right-[-20%]
                 top-0
 
@@ -57,15 +53,12 @@ const variants: Record<GradientVariant, Glow[]> = {
                 blur-[150px]
                 lg:blur-[180px]
             `,
-        },
+    },
+  ],
 
-    ],
-
-
-    subtle: [
-
-        {
-            className: `
+  subtle: [
+    {
+      className: `
                 left-1/2
                 -translate-x-1/2
                 top-[-45%]
@@ -78,11 +71,10 @@ const variants: Record<GradientVariant, Glow[]> = {
 
                 blur-[180px]
             `,
-        },
+    },
 
-
-        {
-            className: `
+    {
+      className: `
                 left-[-30%]
                 top-0
 
@@ -94,11 +86,10 @@ const variants: Record<GradientVariant, Glow[]> = {
 
                 blur-[160px]
             `,
-        },
+    },
 
-
-        {
-            className: `
+    {
+      className: `
                 right-[-30%]
                 top-0
 
@@ -110,15 +101,12 @@ const variants: Record<GradientVariant, Glow[]> = {
 
                 blur-[160px]
             `,
-        },
+    },
+  ],
 
-    ],
-
-
-    minimal: [
-
-        {
-            className: `
+  minimal: [
+    {
+      className: `
                 right-[-10%]
                 top-[-10%]
 
@@ -131,55 +119,44 @@ const variants: Record<GradientVariant, Glow[]> = {
 
                 blur-[160px]
             `,
-        },
-
-    ],
-
+    },
+  ],
 };
 
-
 type GradientBackgroundProps = {
-    variant?: GradientVariant;
+  variant?: GradientVariant;
 };
 
 export default function GradientBackground({
-    variant = "hero",
+  variant = "hero",
 }: GradientBackgroundProps) {
-
-    return (
-
-        <div
-            className="
+  return (
+    <div
+      className="
                 fixed
                 inset-0
 
                 overflow-hidden
-
+                backdrop-blur-[20px]
                 pointer-events-none
 
                 z-0
             "
-        >
-
-            {
-                variants[variant].map((glow, index) => (
-
-                    <div
-                        key={index}
-                        className={`
+    >
+      {variants[variant].map((glow, index) => (
+        <div
+          key={index}
+          className={`
                             absolute
                             rounded-full
 
                             ${glow.className}
                         `}
-                    />
+        />
+      ))}
 
-                ))
-            }
-
-
-            <div
-                className="
+      <div
+        className="
                     absolute
                     inset-x-0
                     bottom-0
@@ -191,9 +168,7 @@ export default function GradientBackground({
                     from-transparent
                     to-slate-900
                 "
-            />
-
-        </div>
-
-    );
+      />
+    </div>
+  );
 }

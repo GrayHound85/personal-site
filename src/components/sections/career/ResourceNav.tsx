@@ -26,20 +26,20 @@ export default function ResourceNavigation({
   );
 
   return (
-    <nav className="fixed left-0 top-0 h-screen w-72 border-r border-gray-200 bg-white p-6">
+    <nav className="fixed left-0 top-0 h-screen w-72  border-gray-200 bg-panel p-6">
       {selectedCategory ? (
         <>
           {/* Back to categories */}
           <Link
             href="/career/resources"
-            className="mb-6 flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900"
+            className="mb-6 flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-text-primary transition-colors hover:bg-primary"
           >
             <span>←</span>
             <span>All Categories</span>
           </Link>
 
           {/* Category title */}
-          <h2 className="mb-6 text-xl font-semibold text-gray-900">
+          <h2 className="mb-6 text-xl font-semibold text-primary">
             {selectedCategory.name}
           </h2>
 
@@ -51,7 +51,7 @@ export default function ResourceNavigation({
                   <li key={topic.id}>
                     <Link
                       href={`/career/resources/${selectedCategory.slug}/${topic.slug}`}
-                      className="block rounded-lg px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
+                      className="block rounded-lg px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-primary hover:text-text-primary"
                     >
                       {topic.name}
                     </Link>
@@ -63,7 +63,7 @@ export default function ResourceNavigation({
             {/* Subcategories */}
             {selectedCategory.subCategories.map((subCategory) => (
               <div key={subCategory.id}>
-                <h3 className="mb-2 px-3 text-sm font-semibold text-gray-900">
+                <h3 className="mb-2 px-3 text-sm font-semibold text-primary">
                   {subCategory.name}
                 </h3>
 
@@ -73,7 +73,7 @@ export default function ResourceNavigation({
                       <li key={topic.id}>
                         <Link
                           href={`/career/resources/${selectedCategory.slug}/${topic.slug}`}
-                          className="block rounded-lg px-3 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
+                          className="block rounded-lg px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-primary hover:text-text-primary"
                         >
                           {topic.name}
                         </Link>
@@ -88,16 +88,14 @@ export default function ResourceNavigation({
       ) : (
         <>
           {/* Category list */}
-          <h2 className="mb-6 text-xl font-semibold text-gray-900">
-            Resources
-          </h2>
+          <h2 className="mb-6 text-xl font-semibold text-primary">Resources</h2>
 
           <ul className="space-y-1">
             {navigation.map((category) => (
               <li key={category.id}>
                 <Link
                   href={`/career/resources/${category.slug}`}
-                  className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
+                  className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-medium text-text-secondary transition-colors hover:bg-primary hover:text-text-primary"
                 >
                   <span>{category.name}</span>
                   <span>→</span>
