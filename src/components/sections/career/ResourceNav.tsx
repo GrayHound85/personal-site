@@ -18,22 +18,16 @@ export default function ResourceNavigation({
   context,
 }: ResourceNavigationProps) {
   return (
-    <nav className="fixed left-0 top-0 h-screen w-72  border-gray-200 bg-panel p-6">
+    <nav className="h-full w-72 bg-panel p-6">
       {context.category ? (
         <>
-          {/* Back to categories */}
           <Link
             href="/career/resources"
-            className="mb-6 flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-text-primary transition-colors hover:bg-primary"
+            className=" flex items-center gap-2 px-3 py-2 text-xl font-semibold text-primary transition-colors hover:text-text-primary border-b mb-4 border-border"
           >
             <span>←</span>
-            <span>All Categories</span>
+            <span>{context.category.name}</span>
           </Link>
-
-          {/* Category title */}
-          <h2 className="mb-6 text-xl font-semibold text-primary">
-            {context.category.name}
-          </h2>
 
           <div className="space-y-6">
             {/* Topics directly inside the category */}
@@ -45,7 +39,7 @@ export default function ResourceNavigation({
                       href={`/career/resources/${context.category?.slug}/${topic.slug}`}
                       className="block rounded-lg px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-primary hover:text-text-primary"
                     >
-                      {context.topic?.name}
+                      {topic.name}
                     </Link>
                   </li>
                 ))}
@@ -76,12 +70,11 @@ export default function ResourceNavigation({
               </div>
             ))}
           </div>
+          {/* Back to categories */}
         </>
       ) : (
         <>
           {/* Category list */}
-          <h2 className="mb-6 text-xl font-semibold text-primary">Resources</h2>
-
           <ul className="space-y-1">
             {navigation.map((category) => (
               <li key={category.id}>
