@@ -3,31 +3,23 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import type { ResourceNavigation } from "@/types/resources";
+import type {
+  ResourceNavigation,
+  ResourcePageContext,
+} from "@/types/resources";
 
 type ResourceNavigationProps = {
   navigation: ResourceNavigation;
+  context: ResourcePageContext;
 };
 
 export default function ResourceNavigation({
   navigation,
+  context,
 }: ResourceNavigationProps) {
-  const pathname = usePathname();
-
-  const slug = pathname
-    .replace("/career/resources", "")
-    .split("/")
-    .filter(Boolean);
-
-  const categorySlug = slug[0];
-
-  const selectedCategory = navigation.find(
-    (category) => category.slug === categorySlug,
-  );
-
   return (
     <nav className="fixed left-0 top-0 h-screen w-72  border-gray-200 bg-panel p-6">
-      {selectedCategory ? (
+      {context.category ? (
         <>
           {/* Back to categories */}
           <Link
@@ -40,20 +32,20 @@ export default function ResourceNavigation({
 
           {/* Category title */}
           <h2 className="mb-6 text-xl font-semibold text-primary">
-            {selectedCategory.name}
+            {context.category.name}
           </h2>
 
           <div className="space-y-6">
             {/* Topics directly inside the category */}
-            {selectedCategory.topics.length > 0 && (
+            {context.category.topics.length > 0 && (
               <ul className="space-y-1">
-                {selectedCategory.topics.map((topic) => (
+                {context.category.topics.map((topic) => (
                   <li key={topic.id}>
                     <Link
-                      href={`/career/resources/${selectedCategory.slug}/${topic.slug}`}
+                      href={`/career/resources/${context.category?.slug}/${topic.slug}`}
                       className="block rounded-lg px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-primary hover:text-text-primary"
                     >
-                      {topic.name}
+                      {context.topic?.name}
                     </Link>
                   </li>
                 ))}
@@ -61,7 +53,7 @@ export default function ResourceNavigation({
             )}
 
             {/* Subcategories */}
-            {selectedCategory.subCategories.map((subCategory) => (
+            {context.category?.subCategories.map((subCategory) => (
               <div key={subCategory.id}>
                 <h3 className="mb-2 px-3 text-sm font-semibold text-primary">
                   {subCategory.name}
@@ -72,7 +64,7 @@ export default function ResourceNavigation({
                     {subCategory.topics.map((topic) => (
                       <li key={topic.id}>
                         <Link
-                          href={`/career/resources/${selectedCategory.slug}/${topic.slug}`}
+                          href={`/career/resources/${context.category?.slug}/${topic.slug}`}
                           className="block rounded-lg px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-primary hover:text-text-primary"
                         >
                           {topic.name}

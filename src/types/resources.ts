@@ -20,3 +20,9 @@ export type ResourceNavigationCategory = {
 };
 
 export type ResourceNavigation = ResourceNavigationCategory[];
+
+export type ResourcePageContext = {
+  category: ResourceNavigationCategory | null;
+  subCategory: ResourceNavigationSubCategory | null;
+  topic: ResourceNavigationTopic | null;
+};

@@ -9,6 +9,7 @@ import type {
   ResourceNavigationCategory,
   ResourceNavigationSubCategory,
   ResourceNavigationTopic,
+  ResourcePageContext,
 } from "@/types/resources";
 
 export async function getResourceNavigation(): Promise<ResourceNavigation> {
@@ -62,4 +63,73 @@ export async function getResourceNavigation(): Promise<ResourceNavigation> {
   );
 
   return navigation;
+}
+
+export async function getResourcePageContext(
+  slug: string[] | undefined,
+  navigation?: ResourceNavigation,
+): Promise<ResourcePageContext> {
+  const resourceNavigation = navigation ?? (await getResourceNavigation());
+
+  if (!slug || slug.length === 0) {
+    return {
+      category: null,
+      subCategory: null,
+      topic: null,
+    };
+  }
+
+  const category = resourceNavigation.find(
+    (category) => category.slug === slug[0],
+  );
+
+  if (!category) {
+    return {
+      category: null,
+      subCategory: null,
+      topic: null,
+    };
+  }
+
+  if (slug.length === 1) {
+    return {
+      category,
+      subCategory: null,
+      topic: null,
+    };
+  }
+
+  const topicSlug = slug[1];
+
+  const categoryTopic = category.topics.find(
+    (topic) => topic.slug === topicSlug,
+  );
+
+  if (categoryTopic) {
+    return {
+      category,
+      subCategory: null,
+      topic: categoryTopic,
+    };
+  }
+
+  for (const subCategory of category.subCategories) {
+    const subCategoryTopic = subCategory.topics.find(
+      (topic) => topic.slug === topicSlug,
+    );
+
+    if (subCategoryTopic) {
+      return {
+        category,
+        subCategory,
+        topic: subCategoryTopic,
+      };
+    }
+  }
+
+  return {
+    category,
+    subCategory: null,
+    topic: null,
+  };
 }
