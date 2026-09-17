@@ -1,7 +1,10 @@
+import { UUID } from "crypto";
 import {
   getCategories,
   getSubCategories,
   getTopics,
+  getResourcesByTopic,
+  getResourceTypes,
 } from "@l/repo/r-resources";
 
 import type {
@@ -10,6 +13,8 @@ import type {
   ResourceNavigationSubCategory,
   ResourceNavigationTopic,
   ResourcePageContext,
+  Resource,
+  ResourceType,
 } from "@/types/resources";
 
 export async function getResourceNavigation(): Promise<ResourceNavigation> {
@@ -132,4 +137,33 @@ export async function getResourcePageContext(
     subCategory: null,
     topic: null,
   };
+}
+
+export async function getResourcesByContext(
+  context: ResourcePageContext,
+): Promise<Resource[]> {
+  if (!context.topic) {
+    return [];
+  }
+  const [resourceTypes, resourcesRaw] = await Promise.all([
+    getResourceTypes(),
+    getResourcesByTopic(context.topic.id),
+  ]);
+
+  const resources: Resource[] = resourcesRaw.map((resourceRaw) => {
+    const resourceType = resourceTypes.find(
+      (type) => type.id === resourceRaw.resourceTypeId,
+    );
+
+    return {
+      id: resourceRaw.id,
+      title: resourceRaw.title,
+      type: resourceType?.code as ResourceType,
+      url: resourceRaw.url,
+      createdAt: resourceRaw.createdAt,
+      updatedAt: resourceRaw.updatedAt,
+    };
+  });
+
+  return resources;
 }

@@ -18,7 +18,7 @@ export default function ResourceNavigation({
   context,
 }: ResourceNavigationProps) {
   return (
-    <nav className="h-full w-72 bg-panel p-6">
+    <nav className="h-full w-80 bg-panel p-6 rounded-r-card border-border border">
       {context.category ? (
         <>
           <Link
@@ -26,7 +26,7 @@ export default function ResourceNavigation({
             className=" flex items-center gap-2 px-3 py-2 text-xl font-semibold text-primary transition-colors hover:text-text-primary border-b mb-4 border-border"
           >
             <span>←</span>
-            <span>{context.category.name}</span>
+            <span className="truncate">{context.category.name}</span>
           </Link>
 
           <div className="space-y-6">
@@ -80,7 +80,7 @@ export default function ResourceNavigation({
               <li key={category.id}>
                 <Link
                   href={`/career/resources/${category.slug}`}
-                  className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-medium text-text-secondary transition-colors hover:bg-primary hover:text-text-primary"
+                  className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-semibold text-text-secondary transition-colors hover:bg-primary hover:text-text-primary"
                 >
                   <span>{category.name}</span>
                   <span>→</span>

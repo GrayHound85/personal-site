@@ -22,21 +22,21 @@ export function getTopics() {
   return db.select().from(TopicTable);
 }
 
-export function getSubCategoriesByCategory(categoryId: UUID) {
+export function getSubCategoriesByCategory(categoryId: string) {
   return db
     .select()
     .from(SubCategoryTable)
     .where(eq(SubCategoryTable.categoryId, categoryId));
 }
 
-export function getTopicsByCategory(categoryId: UUID) {
+export function getTopicsByCategory(categoryId: string) {
   return db
     .select()
     .from(TopicTable)
     .where(eq(TopicTable.categoryId, categoryId));
 }
 
-export function getTopicsBySubCategory(subCategoryId: UUID) {
+export function getTopicsBySubCategory(subCategoryId: string) {
   return db
     .select()
     .from(TopicTable)
@@ -51,14 +51,14 @@ export function getResources() {
   return db.select().from(ResourceTable);
 }
 
-export function getResourcesByTopic(topicId: UUID) {
+export function getResourcesByTopic(topicId: string) {
   return db
     .select()
     .from(ResourceTable)
     .where(eq(ResourceTable.topicId, topicId));
 }
 
-export function getResource(resourceId: UUID) {
+export function getResource(resourceId: string) {
   return db
     .select()
     .from(ResourceTable)
@@ -69,7 +69,7 @@ export function getResourceTypes() {
   return db.select().from(ResourceTypeTable);
 }
 
-export function getResourceNotes(resourceID: UUID) {
+export function getResourceNotes(resourceID: string) {
   return db
     .select()
     .from(ResourceNotesTable)
