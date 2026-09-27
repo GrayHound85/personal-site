@@ -13,7 +13,7 @@ import BookIcon from "@c/icons/BooksIcon";
 import VideoIcon from "@/components/icons/VideoIcon";
 import DocsIcon from "@/components/icons/DocsIcon";
 import WebIcon from "@/components/icons/WebIcon";
-import Link from "next/link";
+import ArrowIcon from "@/components/icons/ArrowIcon";
 
 type ResourceListProps = {
   context: ResourcePageContext;
@@ -53,8 +53,14 @@ export default async function ResourceList({ context }: ResourceListProps) {
 
   console.log(resources);
   return (
-    <Card className="flex flex-col w-full h-full">
-      <DividerLine />
+    <Card className="flex flex-col w-full h-full pt-3">
+      <div className="h-6 flex flex-row gap-3">
+        <div className="h-5 font-bold">+</div>
+        <div className="flex-1" />
+        <div>G</div>
+        <div>L</div>
+      </div>
+      <DividerLine className="mt-1" />
       <div className="flex flex-col">
         {Object.entries(groupedResources).map(([type, resources]) => {
           const Icon = resourceTypeIcons[type as ResourceType];
@@ -73,7 +79,7 @@ export default async function ResourceList({ context }: ResourceListProps) {
                   className="
                       group
                       justify-between!
-                      rounded-card!
+                      rounded-card_inner!
                       border!
                       border-border/60!
                       bg-panel/50!
@@ -81,6 +87,7 @@ export default async function ResourceList({ context }: ResourceListProps) {
                       py-5!
                       text-left!
                       text-text-primary!
+                      h-13
 
                       transition-all
                       duration-200
@@ -92,13 +99,14 @@ export default async function ResourceList({ context }: ResourceListProps) {
                     "
                 >
                   <div className="flex w-full items-center justify-between gap-4">
-                    <span className="font-medium text-text-primary transition-colors group-hover:text-primary">
+                    <span className="font-medium text-text-secondary transition-colors group-hover:text-primary">
                       {resource.title}
                     </span>
 
-                    <span className="text-text-secondary transition-transform duration-200 group-hover:translate-x-1">
-                      →
-                    </span>
+                    <ArrowIcon
+                      direction="right"
+                      className="text-text-secondary transition-transform duration-200 group-hover:translate-x-1"
+                    />
                   </div>
                 </LinkButton>
               ))}

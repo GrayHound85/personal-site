@@ -2,45 +2,37 @@ import type { ReactNode } from "react";
 
 import GradientBackground from "../sections/porfolio/GradientBackground";
 
-export type BackgroundVariant =
-    | "hero"
-    | "subtle"
-    | "minimal";
+export type BackgroundVariant = "hero" | "subtle" | "minimal";
 
 type BackgroundLayoutProps = {
-    children: ReactNode;
-    background?: BackgroundVariant;
+  children: ReactNode;
+  background?: BackgroundVariant;
 };
 
 export default function BackgroundLayout({
-    children,
-    background = "hero",
+  children,
+  background = "hero",
 }: BackgroundLayoutProps) {
-
-    return (
-
-        <main
-            className="
+  return (
+    <main
+      className="
                 relative
                 isolate
 
                 flex
 
                 min-h-screen
+                
 
                 overflow-x-hidden
 
                 bg-background
             "
-        >
+    >
+      <GradientBackground variant={background} />
 
-            <GradientBackground
-                variant={background}
-            />
-
-
-            <div
-                className="
+      <div
+        className="
                     relative
                     z-10
 
@@ -49,11 +41,9 @@ export default function BackgroundLayout({
                     min-h-screen
                     w-full
                 "
-            >
-                {children}
-            </div>
-
-        </main>
-
-    );
+      >
+        {children}
+      </div>
+    </main>
+  );
 }

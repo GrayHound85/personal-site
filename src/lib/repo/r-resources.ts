@@ -1,4 +1,4 @@
-import { db } from "@d/db";
+import { db, executeDatabaseQuery } from "@d/db";
 import {
   CategoryTable,
   ResourceTable,
@@ -7,71 +7,75 @@ import {
   SubCategoryTable,
   TopicTable,
 } from "@d/schema";
-import { UUID } from "crypto";
 import { eq } from "drizzle-orm";
 
 export function getCategories() {
-  return db.select().from(CategoryTable);
+  return executeDatabaseQuery(() => db.select().from(CategoryTable));
 }
 
 export function getSubCategories() {
-  return db.select().from(SubCategoryTable);
+  return executeDatabaseQuery(() => db.select().from(SubCategoryTable));
 }
 
 export function getTopics() {
-  return db.select().from(TopicTable);
+  return executeDatabaseQuery(() => db.select().from(TopicTable));
 }
 
 export function getSubCategoriesByCategory(categoryId: string) {
-  return db
-    .select()
-    .from(SubCategoryTable)
-    .where(eq(SubCategoryTable.categoryId, categoryId));
+  return executeDatabaseQuery(() =>
+    db
+      .select()
+      .from(SubCategoryTable)
+      .where(eq(SubCategoryTable.categoryId, categoryId)),
+  );
 }
 
 export function getTopicsByCategory(categoryId: string) {
-  return db
-    .select()
-    .from(TopicTable)
-    .where(eq(TopicTable.categoryId, categoryId));
+  return executeDatabaseQuery(() =>
+    db.select().from(TopicTable).where(eq(TopicTable.categoryId, categoryId)),
+  );
 }
 
 export function getTopicsBySubCategory(subCategoryId: string) {
-  return db
-    .select()
-    .from(TopicTable)
-    .where(eq(TopicTable.subCategoryId, subCategoryId));
+  return executeDatabaseQuery(() =>
+    db
+      .select()
+      .from(TopicTable)
+      .where(eq(TopicTable.subCategoryId, subCategoryId)),
+  );
 }
 
 export function getTopicBySlug(slug: string) {
-  return db.select().from(TopicTable).where(eq(TopicTable.slug, slug));
+  return executeDatabaseQuery(() =>
+    db.select().from(TopicTable).where(eq(TopicTable.slug, slug)),
+  );
 }
 
 export function getResources() {
-  return db.select().from(ResourceTable);
+  return executeDatabaseQuery(() => db.select().from(ResourceTable));
 }
 
 export function getResourcesByTopic(topicId: string) {
-  return db
-    .select()
-    .from(ResourceTable)
-    .where(eq(ResourceTable.topicId, topicId));
+  return executeDatabaseQuery(() =>
+    db.select().from(ResourceTable).where(eq(ResourceTable.topicId, topicId)),
+  );
 }
 
 export function getResource(resourceId: string) {
-  return db
-    .select()
-    .from(ResourceTable)
-    .where(eq(ResourceTable.id, resourceId));
+  return executeDatabaseQuery(() =>
+    db.select().from(ResourceTable).where(eq(ResourceTable.id, resourceId)),
+  );
 }
 
 export function getResourceTypes() {
-  return db.select().from(ResourceTypeTable);
+  return executeDatabaseQuery(() => db.select().from(ResourceTypeTable));
 }
 
 export function getResourceNotes(resourceID: string) {
-  return db
-    .select()
-    .from(ResourceNotesTable)
-    .where(eq(ResourceNotesTable.resourceId, resourceID));
+  return executeDatabaseQuery(() =>
+    db
+      .select()
+      .from(ResourceNotesTable)
+      .where(eq(ResourceNotesTable.resourceId, resourceID)),
+  );
 }

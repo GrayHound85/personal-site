@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import ArrowIcon from "@/components/icons/ArrowIcon";
+
 import type {
   ResourceNavigation,
   ResourcePageContext,
@@ -25,7 +27,7 @@ export default function ResourceNavigation({
             href="/career/resources"
             className=" flex items-center gap-2 px-3 py-2 text-xl font-semibold text-primary transition-colors hover:text-text-primary border-b mb-4 border-border"
           >
-            <span>←</span>
+            <ArrowIcon direction="left" />
             <span className="truncate">{context.category.name}</span>
           </Link>
 
