@@ -190,4 +190,6 @@ export async function createResource(
   title: string,
   url: string,
   resourceTypeId: string,
-) {}
+) {
+  console.log(topicId, title, url, resourceTypeId);
+}

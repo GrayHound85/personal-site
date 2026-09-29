@@ -4,8 +4,6 @@ import {
   Children,
   cloneElement,
   isValidElement,
-  useEffect,
-  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -33,8 +31,6 @@ export default function DropDown({
   const [open, setOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(defaultValue);
 
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
   const options = Children.toArray(children).filter(
     (child): child is React.ReactElement<DropDownOptionProps> =>
       isValidElement(child) && child.type === DropDownOption,
@@ -43,16 +39,6 @@ export default function DropDown({
   const selectedOption = options.find(
     (option) => option.props.value === selectedValue,
   );
-
-  useEffect(() => {
-    if (!buttonRef.current) return;
-
-    if (required && !selectedValue) {
-      buttonRef.current.setCustomValidity("Please select a resource type.");
-    } else {
-      buttonRef.current.setCustomValidity("");
-    }
-  }, [required, selectedValue]);
 
   function handleSelect(value: string) {
     setSelectedValue(value);
@@ -65,11 +51,25 @@ export default function DropDown({
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      {/* This is what gets submitted with FormData */}
-      <input type="hidden" name={name} value={selectedValue} />
+      <select
+        name={name}
+        value={selectedValue}
+        onChange={(event) => setSelectedValue(event.target.value)}
+        required={required}
+        tabIndex={-1}
+        aria-hidden="true"
+        className="absolute h-0 w-0 opacity-0"
+      >
+        <option value="">{placeholder}</option>
+
+        {options.map((option) => (
+          <option key={option.props.value} value={option.props.value}>
+            {option.props.children}
+          </option>
+        ))}
+      </select>
 
       <button
-        ref={buttonRef}
         type="button"
         className={twMerge(
           `
