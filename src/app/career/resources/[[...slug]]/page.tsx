@@ -1,13 +1,10 @@
-import BackgroundLayout from "@c/layout/BackgroundLayout";
 import {
   getResourceNavigation,
   getResourcePageContext,
+  getResourcesByContext,
 } from "@l/service/s-resources";
 
-import ResourceNavigation from "@c/sections/career/ResourceNav";
-import ResourceHeader from "@c/sections/career/ResourceHeader";
-import ResourceTopicDescription from "@c/sections/career/ResourceTopicDescription";
-import ResourceList from "@c/sections/career/ResourcesList";
+import ResourcePageClient from "../ResourcePageClient";
 
 export default async function ResourcesPage({
   params,
@@ -19,22 +16,14 @@ export default async function ResourcesPage({
   const navigation = await getResourceNavigation();
 
   const context = await getResourcePageContext(slug, navigation);
+  const resourceList = await getResourcesByContext(context);
 
   return (
-    <BackgroundLayout background="subtle">
-      <main className="flex flex-col w-full h-full gap-5">
-        <ResourceHeader context={context} />
-        <div className="flex flex-row h-full w-full gap-5 pb-5 pr-5">
-          <ResourceNavigation navigation={navigation} context={context} />
-          <div className="flex flex-col w-full h-full gap-5">
-            <ResourceTopicDescription
-              description={"fesfesf"}
-              notesSlug={slug}
-            />
-            <ResourceList context={context} />
-          </div>
-        </div>
-      </main>
-    </BackgroundLayout>
+    <ResourcePageClient
+      context={context}
+      slug={slug}
+      navigation={navigation}
+      resourceList={resourceList}
+    />
   );
 }

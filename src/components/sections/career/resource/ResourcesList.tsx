@@ -1,4 +1,9 @@
-import { getResourcesByContext } from "@/lib/service/s-resources";
+"use client";
+
+import { useState } from "react";
+
+import Modal from "@c/ui/Modal";
+import CreateResourceForm from "./CreateResourceForm";
 
 import type {
   Resource,
@@ -7,16 +12,17 @@ import type {
 } from "@/types/resources";
 
 import Card from "@/components/ui/Card";
-import DividerLine from "@/components/ui/DividerLine";
-import LinkButton from "@/components/ui/LinkButton";
+import DividerLine from "@c/ui/DividerLine";
+import LinkButton from "@c/ui/LinkButton";
 import BookIcon from "@c/icons/BooksIcon";
-import VideoIcon from "@/components/icons/VideoIcon";
-import DocsIcon from "@/components/icons/DocsIcon";
-import WebIcon from "@/components/icons/WebIcon";
-import ArrowIcon from "@/components/icons/ArrowIcon";
+import VideoIcon from "@c/icons/VideoIcon";
+import DocsIcon from "@c/icons/DocsIcon";
+import WebIcon from "@c/icons/WebIcon";
+import ArrowIcon from "@c/icons/ArrowIcon";
 
 type ResourceListProps = {
-  context: ResourcePageContext;
+  resourceList: Resource[];
+  onOpenModal: (content: React.ReactNode) => void;
 };
 
 const resourceTypeIcons: Record<
@@ -36,8 +42,11 @@ const resourceTypeNames: Record<ResourceType, string> = {
   docs: "Docs",
 };
 
-export default async function ResourceList({ context }: ResourceListProps) {
-  const resources = await getResourcesByContext(context);
+export default function ResourceList({
+  resourceList,
+  onOpenModal,
+}: ResourceListProps) {
+  const resources = resourceList;
   const groupedResources = resources.reduce(
     (groups, resource) => {
       if (!groups[resource.type]) {
@@ -55,7 +64,13 @@ export default async function ResourceList({ context }: ResourceListProps) {
   return (
     <Card className="flex flex-col w-full h-full pt-3">
       <div className="h-6 flex flex-row gap-3">
-        <div className="h-5 font-bold">+</div>
+        <button
+          type="button"
+          onClick={() => onOpenModal(<CreateResourceForm />)}
+          className="h-5 font-bold w-10"
+        >
+          +
+        </button>
         <div className="flex-1" />
         <div>G</div>
         <div>L</div>

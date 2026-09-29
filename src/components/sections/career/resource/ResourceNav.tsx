@@ -15,7 +15,7 @@ type ResourceNavigationProps = {
   context: ResourcePageContext;
 };
 
-export default function ResourceNavigation({
+export default function ResourceNav({
   navigation,
   context,
 }: ResourceNavigationProps) {
