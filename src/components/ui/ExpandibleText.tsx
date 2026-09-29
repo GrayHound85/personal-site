@@ -3,38 +3,31 @@
 import { useState } from "react";
 
 type ExpandableTextProps = {
-    children: React.ReactNode;
+  children: React.ReactNode;
 };
 
-export default function ExpandableText({
-    children,
-}: ExpandableTextProps) {
+export default function ExpandableText({ children }: ExpandableTextProps) {
+  const [expanded, setExpanded] = useState(false);
 
-    const [expanded, setExpanded] = useState(false);
-
-    return (
-        <div>
-            <div
-                className={`
+  return (
+    <div>
+      <div
+        className={`
                     overflow-hidden
                     transition-[max-height]
                     duration-500
                     ease-in-out
 
-                    ${
-                        expanded
-                            ? "max-h-[2000px]"
-                            : "max-h-[140px]"
-                    }
+                    ${expanded ? "max-h-[2000px]" : "max-h-35"}
                 `}
-            >
-                {children}
-            </div>
+      >
+        {children}
+      </div>
 
-            <button
-                type="button"
-                onClick={() => setExpanded(!expanded)}
-                className="
+      <button
+        type="button"
+        onClick={() => setExpanded(!expanded)}
+        className="
                     mt-4
 
                     font-semibold
@@ -43,9 +36,9 @@ export default function ExpandableText({
                     transition-opacity
                     hover:opacity-70
                 "
-            >
-                {expanded ? "Show less ↑" : "See more ↓"}
-            </button>
-        </div>
-    );
+      >
+        {expanded ? "Show less ↑" : "See more ↓"}
+      </button>
+    </div>
+  );
 }

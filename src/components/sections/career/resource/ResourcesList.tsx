@@ -1,15 +1,8 @@
 "use client";
 
-import { useState } from "react";
-
-import Modal from "@c/ui/Modal";
 import CreateResourceForm from "./CreateResourceForm";
 
-import type {
-  Resource,
-  ResourcePageContext,
-  ResourceType,
-} from "@/types/resources";
+import type { Resource, ResourceType } from "@/types/resources";
 
 import Card from "@/components/ui/Card";
 import DividerLine from "@c/ui/DividerLine";
@@ -22,11 +15,14 @@ import ArrowIcon from "@c/icons/ArrowIcon";
 
 type ResourceListProps = {
   resourceList: Resource[];
+  resourceTypes: ResourceType[];
+  topicId?: string;
   onOpenModal: (content: React.ReactNode) => void;
+  onCloseModal: () => void;
 };
 
 const resourceTypeIcons: Record<
-  ResourceType,
+  string,
   React.ComponentType<React.SVGProps<SVGSVGElement>>
 > = {
   video: VideoIcon,
@@ -35,7 +31,7 @@ const resourceTypeIcons: Record<
   website: WebIcon,
 };
 
-const resourceTypeNames: Record<ResourceType, string> = {
+const resourceTypeNames: Record<string, string> = {
   video: "Videos",
   book: "Books",
   website: "Websites",
@@ -44,47 +40,63 @@ const resourceTypeNames: Record<ResourceType, string> = {
 
 export default function ResourceList({
   resourceList,
+  resourceTypes,
+  topicId,
   onOpenModal,
+  onCloseModal,
 }: ResourceListProps) {
-  const resources = resourceList;
-  const groupedResources = resources.reduce(
+  const groupedResources = resourceList.reduce(
     (groups, resource) => {
-      if (!groups[resource.type]) {
-        groups[resource.type] = [];
+      const typeCode = resource.type.code;
+
+      if (!groups[typeCode]) {
+        groups[typeCode] = [];
       }
 
-      groups[resource.type].push(resource);
+      groups[typeCode].push(resource);
 
       return groups;
     },
-    {} as Record<ResourceType, Resource[]>,
+    {} as Record<string, Resource[]>,
   );
 
-  console.log(resources);
   return (
-    <Card className="flex flex-col w-full h-full pt-3">
-      <div className="h-6 flex flex-row gap-3">
+    <Card className="flex h-full w-full flex-col pt-3">
+      <div className="flex h-6 flex-row gap-3">
         <button
           type="button"
-          onClick={() => onOpenModal(<CreateResourceForm />)}
-          className="h-5 font-bold w-10"
+          onClick={() =>
+            onOpenModal(
+              <CreateResourceForm
+                topicId={topicId}
+                resourceTypes={resourceTypes}
+                onClose={onCloseModal}
+              />,
+            )
+          }
+          className="h-5 w-10 font-bold"
         >
           +
         </button>
+
         <div className="flex-1" />
+
         <div>G</div>
         <div>L</div>
       </div>
+
       <DividerLine className="mt-1" />
+
       <div className="flex flex-col">
-        {Object.entries(groupedResources).map(([type, resources]) => {
-          const Icon = resourceTypeIcons[type as ResourceType];
+        {Object.entries(groupedResources).map(([typeCode, resources]) => {
+          const Icon = resourceTypeIcons[typeCode];
 
           return (
-            <section key={type} className="flex flex-col gap-5">
-              <h2 className="flex flex-row gap-3 font-bold text-2xl align-text-bottom">
-                <Icon className="w-8 h-8 shrink-0" />
-                {resourceTypeNames[type as ResourceType]}
+            <section key={typeCode} className="flex flex-col gap-5">
+              <h2 className="flex flex-row gap-3 text-2xl font-bold align-text-bottom">
+                {Icon && <Icon className="h-8 w-8 shrink-0" />}
+
+                {resourceTypeNames[typeCode] ?? typeCode}
               </h2>
 
               {resources.map((resource) => (
@@ -92,26 +104,24 @@ export default function ResourceList({
                   href={resource.url}
                   key={resource.id}
                   className="
-                      group
-                      justify-between!
-                      rounded-card_inner!
-                      border!
-                      border-border/60!
-                      bg-panel/50!
-                      px-6!
-                      py-5!
-                      text-left!
-                      text-text-primary!
-                      h-13
-
-                      transition-all
-                      duration-200
-
-                      hover:-translate-y-0.5
-                      hover:border-primary/40!
-                      hover:bg-panel/70!
-                      hover:shadow-lg!
-                    "
+                    group
+                    h-13
+                    justify-between!
+                    rounded-card_inner!
+                    border!
+                    border-border/60!
+                    bg-panel/50!
+                    px-6!
+                    py-5!
+                    text-left!
+                    text-text-primary!
+                    transition-all
+                    duration-200
+                    hover:-translate-y-0.5
+                    hover:border-primary/40!
+                    hover:bg-panel/70!
+                    hover:shadow-lg!
+                  "
                 >
                   <div className="flex w-full items-center justify-between gap-4">
                     <span className="font-medium text-text-secondary transition-colors group-hover:text-primary">

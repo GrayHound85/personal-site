@@ -6,6 +6,7 @@ import type {
   ResourcePageContext,
   Resource,
   ResourceNavigation,
+  ResourceType,
 } from "@/types/resources";
 
 import ResourceNav from "@/components/sections/career/resource/ResourceNav";
@@ -19,6 +20,7 @@ type ResourcePageClientProps = {
   context: ResourcePageContext;
   slug?: string[];
   resourceList: Resource[];
+  resourceTypes: ResourceType[];
   navigation: ResourceNavigation;
 };
 
@@ -27,6 +29,7 @@ export default function ResourcePageClient({
   slug,
   resourceList,
   navigation,
+  resourceTypes,
 }: ResourcePageClientProps) {
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
 
@@ -51,7 +54,10 @@ export default function ResourcePageClient({
               />
               <ResourceList
                 resourceList={resourceList}
+                topicId={context.topic?.id}
+                resourceTypes={resourceTypes}
                 onOpenModal={openModal}
+                onCloseModal={closeModal}
               />
             </div>
           </div>

@@ -54,8 +54,10 @@ export default function Modal({ open, onClose, children }: ModalProps) {
           rounded-card
           border
           border-border
-          bg-panel
-          p-8
+          bg-[#03151C]
+          p-10
+          pt-13
+          pb-12
           shadow-card
         "
         onMouseDown={(event) => event.stopPropagation()}
@@ -66,8 +68,8 @@ export default function Modal({ open, onClose, children }: ModalProps) {
           aria-label="Close"
           className="
             absolute
-            right-4
-            top-4
+            right-2
+            top-2
 
             flex
             h-8

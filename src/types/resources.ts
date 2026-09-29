@@ -19,7 +19,10 @@ export type ResourceNavigationCategory = {
   subCategories: ResourceNavigationSubCategory[];
 };
 
-export type ResourceType = "video" | "book" | "website" | "docs";
+export type ResourceType = {
+  code: string;
+  id: string;
+};
 
 export type Resource = {
   id: string;

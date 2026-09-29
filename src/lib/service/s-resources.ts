@@ -1,4 +1,5 @@
 import { UUID } from "crypto";
+import { getResource } from "../repo/r-resources";
 import {
   getCategories,
   getSubCategories,
@@ -139,26 +140,42 @@ export async function getResourcePageContext(
   };
 }
 
+export async function getAllResourceTypes(): Promise<ResourceType[]> {
+  const resourceTypesRaw = getResourceTypes();
+
+  const resourceTypes: ResourceType[] = (await resourceTypesRaw).map(
+    (resourceTypeRaw) => {
+      return {
+        id: resourceTypeRaw.id,
+        code: resourceTypeRaw.code,
+      };
+    },
+  );
+  return resourceTypes;
+}
+
 export async function getResourcesByContext(
   context: ResourcePageContext,
+  resourceTypes: ResourceType[],
 ): Promise<Resource[]> {
   if (!context.topic) {
     return [];
   }
-  const [resourceTypes, resourcesRaw] = await Promise.all([
-    getResourceTypes(),
-    getResourcesByTopic(context.topic.id),
-  ]);
+  const resourcesRaw = await getResourcesByTopic(context.topic.id);
 
   const resources: Resource[] = resourcesRaw.map((resourceRaw) => {
     const resourceType = resourceTypes.find(
       (type) => type.id === resourceRaw.resourceTypeId,
     );
 
+    if (!resourceType) {
+      throw new Error(`Resource type ${resourceRaw.resourceTypeId} not found`);
+    }
+
     return {
       id: resourceRaw.id,
       title: resourceRaw.title,
-      type: resourceType?.code as ResourceType,
+      type: resourceType,
       url: resourceRaw.url,
       createdAt: resourceRaw.createdAt,
       updatedAt: resourceRaw.updatedAt,
@@ -167,3 +184,10 @@ export async function getResourcesByContext(
 
   return resources;
 }
+
+export async function createResource(
+  topicId: string,
+  title: string,
+  url: string,
+  resourceTypeId: string,
+) {}
