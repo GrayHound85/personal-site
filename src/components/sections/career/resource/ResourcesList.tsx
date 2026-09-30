@@ -61,7 +61,7 @@ export default function ResourceList({
   );
 
   return (
-    <Card className="flex h-full w-full flex-col pt-3">
+    <Card className="flex min-h-0 w-full flex-1 flex-col pt-3">
       <div className="flex h-6 flex-row gap-3">
         <button
           type="button"
@@ -86,58 +86,59 @@ export default function ResourceList({
       </div>
 
       <DividerLine className="mt-1" />
+      <div className="scrollbar-hidden min-h-0 flex-1 overflow-y-auto">
+        <div className="flex flex-col gap-7">
+          {Object.entries(groupedResources).map(([typeCode, resources]) => {
+            const Icon = resourceTypeIcons[typeCode];
 
-      <div className="flex flex-col">
-        {Object.entries(groupedResources).map(([typeCode, resources]) => {
-          const Icon = resourceTypeIcons[typeCode];
+            return (
+              <section key={typeCode} className="flex flex-col gap-2">
+                <h2 className="flex flex-row gap-3 text-2xl font-bold align-text-bottom">
+                  {Icon && <Icon className="h-8 w-8 shrink-0" />}
 
-          return (
-            <section key={typeCode} className="flex flex-col gap-5">
-              <h2 className="flex flex-row gap-3 text-2xl font-bold align-text-bottom">
-                {Icon && <Icon className="h-8 w-8 shrink-0" />}
+                  {resourceTypeNames[typeCode] ?? typeCode}
+                </h2>
 
-                {resourceTypeNames[typeCode] ?? typeCode}
-              </h2>
+                {resources.map((resource) => (
+                  <LinkButton
+                    href={resource.url}
+                    key={resource.id}
+                    className="
+                      group
+                      h-13
+                      justify-between!
+                      rounded-card_inner!
+                      border!
+                      border-border/60!
+                      bg-panel/50!
+                      px-6!
+                      py-5!
+                      text-left!
+                      text-text-primary!
+                      transition-all
+                      duration-200
+                      hover:-translate-y-0.5
+                      hover:border-primary/40!
+                      hover:bg-panel/70!
+                      hover:shadow-lg!
+                    "
+                  >
+                    <div className="flex w-full items-center justify-between gap-4">
+                      <span className="font-medium text-text-secondary transition-colors group-hover:text-primary">
+                        {resource.title}
+                      </span>
 
-              {resources.map((resource) => (
-                <LinkButton
-                  href={resource.url}
-                  key={resource.id}
-                  className="
-                    group
-                    h-13
-                    justify-between!
-                    rounded-card_inner!
-                    border!
-                    border-border/60!
-                    bg-panel/50!
-                    px-6!
-                    py-5!
-                    text-left!
-                    text-text-primary!
-                    transition-all
-                    duration-200
-                    hover:-translate-y-0.5
-                    hover:border-primary/40!
-                    hover:bg-panel/70!
-                    hover:shadow-lg!
-                  "
-                >
-                  <div className="flex w-full items-center justify-between gap-4">
-                    <span className="font-medium text-text-secondary transition-colors group-hover:text-primary">
-                      {resource.title}
-                    </span>
-
-                    <ArrowIcon
-                      direction="right"
-                      className="text-text-secondary transition-transform duration-200 group-hover:translate-x-1"
-                    />
-                  </div>
-                </LinkButton>
-              ))}
-            </section>
-          );
-        })}
+                      <ArrowIcon
+                        direction="right"
+                        className="text-text-secondary transition-transform duration-200 group-hover:translate-x-1"
+                      />
+                    </div>
+                  </LinkButton>
+                ))}
+              </section>
+            );
+          })}
+        </div>
       </div>
     </Card>
   );

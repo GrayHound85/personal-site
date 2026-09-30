@@ -1,6 +1,6 @@
 "use server";
 
-import { createResource } from "@l/service/s-resources";
+import { createResourceService } from "@l/service/s-resources";
 
 export async function createResourceAction(
   topicId: string,
@@ -10,5 +10,5 @@ export async function createResourceAction(
   const url = formData.get("url") as string;
   const resourceTypeId = formData.get("resourceTypeId") as string;
 
-  await createResource(topicId, title, url, resourceTypeId);
+  await createResourceService(topicId, title, url, resourceTypeId);
 }

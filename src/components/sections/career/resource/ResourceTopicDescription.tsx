@@ -12,7 +12,7 @@ export default function ResourceTopicDescription({
   notesSlug,
 }: ResourceTopicDescriptionProps) {
   return (
-    <Card className="w-full p-6 h-50">
+    <Card className="h-50 w-full shrink-0 p-6">
       <div className="flex flex-col ">
         <div className="flex flex-row">
           <h3 className="text-lg font-semibold text-text-secondary">Summery</h3>

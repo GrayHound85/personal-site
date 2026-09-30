@@ -79,3 +79,24 @@ export function getResourceNotes(resourceID: string) {
       .where(eq(ResourceNotesTable.resourceId, resourceID)),
   );
 }
+
+//===============================================================
+
+export function createResource(
+  topicId: string,
+  title: string,
+  url: string,
+  resourceTypeId: string,
+) {
+  executeDatabaseQuery(() =>
+    db
+      .insert(ResourceTable)
+      .values({
+        topicId,
+        title,
+        url,
+        resourceTypeId,
+      })
+      .returning(),
+  );
+}

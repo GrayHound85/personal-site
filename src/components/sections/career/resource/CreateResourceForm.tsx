@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { createResourceAction } from "@/app/actions/a-resource";
 
 import type { ResourceType } from "@/types/resources";
@@ -23,12 +24,13 @@ export default function CreateResourceForm({
   if (!topicId) {
     return <div>You have not selected a topic</div>;
   }
-
+  const router = useRouter();
   const selectedTopicId = topicId;
 
   async function handleSubmit(formData: FormData) {
     await createResourceAction(selectedTopicId, formData);
     onClose();
+    router.refresh();
   }
 
   return (

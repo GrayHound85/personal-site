@@ -1,5 +1,5 @@
 import { UUID } from "crypto";
-import { getResource } from "../repo/r-resources";
+import { getResource, createResource } from "../repo/r-resources";
 import {
   getCategories,
   getSubCategories,
@@ -185,11 +185,12 @@ export async function getResourcesByContext(
   return resources;
 }
 
-export async function createResource(
+export async function createResourceService(
   topicId: string,
   title: string,
   url: string,
   resourceTypeId: string,
 ) {
   console.log(topicId, title, url, resourceTypeId);
+  createResource(topicId, title, url, resourceTypeId);
 }

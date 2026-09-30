@@ -43,11 +43,11 @@ export default function ResourcePageClient({
   return (
     <>
       <BackgroundLayout background="subtle">
-        <main className="flex flex-col w-full h-full gap-5">
+        <main className="flex h-screen min-h-0 w-full flex-col gap-5 overflow-hidden">
           <ResourceHeader context={context} />
-          <div className="flex flex-row h-full w-full gap-5 pb-5 pr-5">
+          <div className="flex min-h-0 flex-1 flex-row gap-5 pb-5 pr-5">
             <ResourceNav navigation={navigation} context={context} />
-            <div className="flex flex-col w-full h-full gap-5">
+            <div className="flex min-h-0 flex-1 flex-col gap-5">
               <ResourceTopicDescription
                 description={"fesfesf"}
                 notesSlug={slug}
