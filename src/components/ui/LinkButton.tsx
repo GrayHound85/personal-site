@@ -1,22 +1,20 @@
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
+import { ComponentProps } from "react";
 
-type LinkButtonProps = {
-    href: string;
-    children: React.ReactNode;
-    className?: string;
+type LinkButtonProps = ComponentProps<typeof Link> & {
+  children: React.ReactNode;
+  className?: string;
 };
-
 export default function LinkButton({
-    href,
-    children,
-    className,
+  href,
+  children,
+  className,
 }: LinkButtonProps) {
-
-    return (
-        <Link
-            href={href}
-            className={twMerge(`
+  return (
+    <Link
+      href={href}
+      className={twMerge(`
                 inline-flex
                 items-center
                 justify-center
@@ -37,8 +35,8 @@ export default function LinkButton({
 
                 ${className ?? ""}
             `)}
-        >
-            {children}
-        </Link>
-    );
+    >
+      {children}
+    </Link>
+  );
 }

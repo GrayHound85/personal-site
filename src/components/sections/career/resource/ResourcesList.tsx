@@ -103,28 +103,29 @@ export default function ResourceList({
                   <LinkButton
                     href={resource.url}
                     key={resource.id}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="
                       group
                       h-13
                       justify-between!
                       rounded-card_inner!
                       border!
-                      border-border/60!
-                      bg-panel/50!
+                      border-border/40!
+                      bg-panel/40
                       px-6!
                       py-5!
                       text-left!
                       text-text-primary!
                       transition-all
-                      duration-200
+                      duration-100
                       hover:-translate-y-0.5
-                      hover:border-primary/40!
-                      hover:bg-panel/70!
+                      hover:bg-primary-hover
                       hover:shadow-lg!
                     "
                   >
                     <div className="flex w-full items-center justify-between gap-4">
-                      <span className="font-medium text-text-secondary transition-colors group-hover:text-primary">
+                      <span className="font-medium text-text-secondary transition-colors group-hover:text-text-primary">
                         {resource.title}
                       </span>
 

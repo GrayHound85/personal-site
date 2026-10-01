@@ -4,18 +4,22 @@ import { twMerge } from "tailwind-merge";
 type HeroPanelProps = HTMLAttributes<HTMLDivElement>;
 
 export default function HeroPanel({
-    children,
-    className,
-    ...props
+  children,
+  className,
+  ...props
 }: HeroPanelProps) {
-
-    return (
-        <div
-            className={twMerge(`
+  return (
+    <div
+      className={twMerge(
+        `
                 rounded-card
                 bg-gray-950/40
                 p-8
-                
+                flex
+                flex-col
+                gap-1
+                border
+                border-transparent
 
                 scroll-mt-28
 
@@ -24,10 +28,12 @@ export default function HeroPanel({
 
                 transition-transform
                 duration-300
-            `, className)}
-            {...props}
-        >
-            {children}
-        </div>
-    );
+            `,
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
 }

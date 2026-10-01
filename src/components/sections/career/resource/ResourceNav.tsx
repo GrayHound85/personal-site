@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 import ArrowIcon from "@/components/icons/ArrowIcon";
+import LinkButton from "@/components/ui/LinkButton";
 
 import type {
   ResourceNavigation,
@@ -23,13 +23,13 @@ export default function ResourceNav({
     <nav className="h-full w-80 bg-panel p-6 rounded-r-card border-border border">
       {context.category ? (
         <>
-          <Link
+          <LinkButton
             href="/career/resources"
-            className=" flex items-center gap-2 px-3 py-2 text-xl font-semibold text-primary transition-colors hover:text-text-primary border-b mb-4 border-border"
+            className=" flex items-center gap-2 px-3 py-2 text-l text-text-primary transition-colors mb-4"
           >
             <ArrowIcon direction="left" />
             <span className="truncate">{context.category.name}</span>
-          </Link>
+          </LinkButton>
 
           <div className="space-y-6">
             {/* Topics directly inside the category */}
@@ -39,7 +39,7 @@ export default function ResourceNav({
                   <li key={topic.id}>
                     <Link
                       href={`/career/resources/${context.category?.slug}/${topic.slug}`}
-                      className="block rounded-lg px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-primary hover:text-text-primary"
+                      className="block rounded-lg px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-primary-hover hover:text-text-primary"
                     >
                       {topic.name}
                     </Link>
@@ -61,7 +61,7 @@ export default function ResourceNav({
                       <li key={topic.id}>
                         <Link
                           href={`/career/resources/${context.category?.slug}/${topic.slug}`}
-                          className="block rounded-lg px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-primary hover:text-text-primary"
+                          className="block rounded-lg px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-primary-hover hover:text-text-primary"
                         >
                           {topic.name}
                         </Link>
@@ -82,7 +82,7 @@ export default function ResourceNav({
               <li key={category.id}>
                 <Link
                   href={`/career/resources/${category.slug}`}
-                  className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-semibold text-text-secondary transition-colors hover:bg-primary hover:text-text-primary"
+                  className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-m font-semibold text-text-secondary transition-colors hover:bg-primary hover:text-text-primary"
                 >
                   <span>{category.name}</span>
                   <span>→</span>

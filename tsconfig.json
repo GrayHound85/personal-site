@@ -22,7 +22,8 @@
       "@/*": ["./src/*"],
       "@c/*": ["./src/components/*"],
       "@d/*": ["./src/db/*"],
-      "@l/*": ["./src/lib/*"]
+      "@l/*": ["./src/lib/*"],
+      "@p/*": ["./public/*"]
     }
   },
   "include": [
