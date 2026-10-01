@@ -10,7 +10,7 @@ import GithubIcon from "@/components/icons/GithubIcon";
 
 export default function ProfileCard() {
   return (
-    <Card className="bg-gray-950/40 h-full border-none">
+    <Card className="bg-gray-950/40 h-full border-none w-full">
       <div
         className="
                 flex

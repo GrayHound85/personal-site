@@ -8,6 +8,7 @@ import AdminButton from "@c/sections/porfolio/AdminButton";
 import ProjectCard from "@/components/sections/porfolio/ProjectCard";
 import ExpandableText from "@c/ui/ExpandibleText";
 import LinkButton from "@/components/ui/LinkButton";
+import ExperienceCard from "@/components/sections/porfolio/ExperienceCard";
 
 import { projects } from "@/config/projects";
 import Card from "@/components/ui/Card";
@@ -60,8 +61,23 @@ export default function LandingPage() {
         </p>
       </HeroPanel>
 
-      <HeroPanel id="projects" className="flex flex-row">
-        <div className="flex flex-row gap-8">
+      <HeroPanel
+        id="projects"
+        className="flex lg:flex-row flex-col p-5 gap-4 lg:p-8"
+      >
+        <div className="flex flex-row gap-2 lg:hidden">
+          <LinkButton
+            href="./projects"
+            className="text-center text-s h-10 w-30"
+          >
+            View all
+          </LinkButton>
+          <div className="flex-1" />
+          <h1 className="text-3xl font-bold text-text-secondary text-right ">
+            Projects
+          </h1>
+        </div>
+        <div className="grid gap-8 min-[1500px]:grid-cols-2 min-[1900px]:grid-cols-3 w-full">
           <ProjectCard
             link={projects.homelab.link}
             title={projects.homelab.title}
@@ -72,10 +88,12 @@ export default function LandingPage() {
             title={projects.personalSite.title}
             image={projects.personalSite.image}
           />
-          <Card className="border-none w-100 h-70">{""}</Card>
+          <Card className="border-none w-100 h-70 hidden min-[1900px]:block">
+            {""}
+          </Card>
         </div>
         <div className="flex-1" />
-        <div className="flex flex-col gap-2">
+        <div className="lg:flex flex-col gap-2 hidden">
           <h1 className="text-3xl font-bold text-text-secondary text-right">
             Projects
           </h1>
@@ -88,8 +106,26 @@ export default function LandingPage() {
         </div>
       </HeroPanel>
 
-      <HeroPanel id="experience">
+      <HeroPanel id="experience" className="flex flex-col gap-5">
         <h1 className="text-3xl font-bold text-text-secondary">Experience</h1>
+        <div className="flex flex-grid gap-8">
+          <ExperienceCard
+            title="STEM Racing"
+            subHeading="2nd place UK National finals"
+            date="Feb 2024"
+            description={[
+              "Was head of branding winning multiple awards for our display at both regional and national competitions.",
+            ]}
+          />
+          <ExperienceCard
+            title="Vex Robotics V5"
+            subHeading="World championship qualifiers"
+            date="Apr 2026"
+            description={[
+              "Our team won the programming award at the UK National finals which qualified us to compete in the USA later that year.",
+            ]}
+          />
+        </div>
       </HeroPanel>
     </PortfolioLayout>
   );

@@ -11,7 +11,15 @@ export default function ProjectCard({ link, image, title }: ProjectCardProps) {
   return (
     <LinkCard
       href={link}
-      className="w-100 h-70 rounded-card_inner relative overflow-hidden hover:border-none border-none"
+      className="    
+            w-full
+            max-w-100
+            aspect-10/7
+            rounded-card_inner
+            relative
+            overflow-hidden
+            border-none
+            hover:border-none"
     >
       {image && <Image src={image} alt={title} fill className="object-cover" />}
 
