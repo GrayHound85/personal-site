@@ -106,9 +106,9 @@ export default function LandingPage() {
         </div>
       </HeroPanel>
 
-      <HeroPanel id="experience" className="flex flex-col gap-5">
+      <HeroPanel id="experience" className="flex flex-col gap-5 p-5 lg:p-8">
         <h1 className="text-3xl font-bold text-text-secondary">Experience</h1>
-        <div className="flex flex-grid gap-8">
+        <div className="grid grid-cols-1 min-[1500px]:grid-cols-2 gap-8">
           <ExperienceCard
             title="STEM Racing"
             subHeading="2nd place UK National finals"

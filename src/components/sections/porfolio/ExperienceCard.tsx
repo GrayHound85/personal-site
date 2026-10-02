@@ -16,13 +16,16 @@ export default function ExperienceCard({
   description,
 }: ExperienceCardProps) {
   return (
-    <Card className="flex flex-col rounded-card_inner p-5 border-border/40">
-      <div className="flex flex-row gap-5">
-        <h2 className="text-xl text-primary-hover font-semibold">{title}</h2>
+    <Card className="flex flex-col rounded-card_inner p-5 border-none bg-[#1d283829]">
+      <div className="flex flex-col gap-1">
+        <div className="flex flex-row">
+          <h2 className="text-xl text-primary-hover font-semibold">{title}</h2>
+          <div className="flex-1" />
+          <p className="text-text-secondary font-semibold">{date}</p>
+        </div>
+
         <div className="flex-1" />
-        <h3>{subHeading}</h3>
-        <div>|</div>
-        <p className="text-text-secondary font-semibold">{date}</p>
+        <h3 className="font-semibold text-text-secondary">{subHeading}</h3>
       </div>
       <DividerLine className="mt-2" />
 
