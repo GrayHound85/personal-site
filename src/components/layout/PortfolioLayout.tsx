@@ -1,25 +1,29 @@
-import type { ReactNode } from "react";
+import {
+  cloneElement,
+  isValidElement,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 
 import BackgroundLayout from "./BackgroundLayout";
 
 type PortfolioLayoutProps = {
-    profile: ReactNode;
-    navigation: ReactNode;
-    floating?: ReactNode;
-    children: ReactNode;
+  profile: ReactNode;
+  navigation: ReactNode;
+  floating?: ReactNode;
+  children: ReactNode;
 };
 
 export default function PortfolioLayout({
-    profile,
-    navigation,
-    children,
-    floating,
+  profile,
+  navigation,
+  children,
+  floating,
 }: PortfolioLayoutProps) {
-
-    return (
-        <BackgroundLayout background="hero">
-            <div
-                className="
+  return (
+    <BackgroundLayout background="hero">
+      <div
+        className="
                     relative
                     flex
                     flex-col
@@ -30,10 +34,9 @@ export default function PortfolioLayout({
 
                     w-full
                 "
-            >
-
-                <aside
-                    className="
+      >
+        <aside
+          className="
                         w-full
                         md:w-100
 
@@ -44,22 +47,21 @@ export default function PortfolioLayout({
                         md:h-screen
                         md:z-10
                     "
-                >
-                    <div
-                        className="
+        >
+          <div
+            className="
                             flex
                             justify-center
 
                             md:h-full
                         "
-                    >
-                        {profile}
-                    </div>
-                </aside>
+          >
+            {profile}
+          </div>
+        </aside>
 
-
-                <main
-                    className="
+        <main
+          className="
                         w-full
 
                         md:min-h-0
@@ -75,23 +77,23 @@ export default function PortfolioLayout({
 
                         md:z-20
                     "
-                >
-                    <div
-                        className="
+        >
+          <div
+            className="
                             flex
                             flex-col
                             gap-6
 
                             md:pr-1
                         "
-                    >
-                        {children}
-                    </div>
-                </main>
+          >
+            {children}
+            <div className="md:hidden h-28" />
+          </div>
+        </main>
 
-
-                <header
-                    className="
+        <header
+          className="
                         pointer-events-none
 
                         absolute
@@ -105,16 +107,29 @@ export default function PortfolioLayout({
 
                         pr-8
                     "
-                >
-                    <div className="pointer-events-auto">
-                        {navigation}
-                    </div>
-                </header>
+        >
+          <div className="pointer-events-auto">{navigation}</div>
+        </header>
 
+        <div className="pointer-events-none fixed inset-x-3 bottom-3 z-50 md:hidden">
+          <div className="pointer-events-auto mx-auto max-w-md">
+            {isValidElement(navigation)
+              ? cloneElement(
+                  navigation as ReactElement<{
+                    type?: string;
+                    className?: string;
+                  }>,
+                  {
+                    type: "standard",
+                    className: "shadow-lg border border-white/10",
+                  },
+                )
+              : navigation}
+          </div>
+        </div>
 
-                {floating}
-
-            </div>
-        </BackgroundLayout>
-    );
+        {floating}
+      </div>
+    </BackgroundLayout>
+  );
 }
