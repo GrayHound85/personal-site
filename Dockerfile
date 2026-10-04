@@ -28,6 +28,9 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/drizzle/migrations ./drizzle/migrations
 COPY --from=builder /app/scripts/migrate.mjs ./scripts/migrate.mjs
 
+COPY --from=dependencies /app/node_modules/postgres ./node_modules/postgres
+COPY --from=dependencies /app/node_modules/drizzle-orm ./node_modules/drizzle-orm
+
 EXPOSE 3000
 
 CMD ["sh", "-c", "node scripts/migrate.mjs && node server.js"]
