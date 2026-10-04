@@ -5,9 +5,15 @@ type ProjectCardProps = {
   link: string;
   image: string;
   title: string;
+  eager?: boolean;
 };
 
-export default function ProjectCard({ link, image, title }: ProjectCardProps) {
+export default function ProjectCard({
+  link,
+  image,
+  title,
+  eager = false,
+}: ProjectCardProps) {
   return (
     <LinkCard
       href={link}
@@ -21,7 +27,16 @@ export default function ProjectCard({ link, image, title }: ProjectCardProps) {
             border-none
             hover:border-none"
     >
-      {image && <Image src={image} alt={title} fill className="object-cover" />}
+      {image && (
+        <Image
+          src={image}
+          alt={title}
+          fill
+          sizes="(max-width: 640px) 100vw, 400px"
+          loading={eager ? "eager" : "lazy"}
+          className="object-cover"
+        />
+      )}
 
       <div className="absolute bottom-0 left-0 right-0 z-10 h-24 bg-linear-to-t from-black/75 to-transparent p-3 flex items-end">
         <h1 className="text-text-secondary font-semibold text-2xl">{title}</h1>

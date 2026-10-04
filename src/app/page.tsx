@@ -82,6 +82,7 @@ export default function LandingPage() {
             link={projects.homelab.link}
             title={projects.homelab.title}
             image={projects.homelab.image}
+            eager
           />
           <ProjectCard
             link={projects.personalSite.link}
