@@ -61,7 +61,7 @@ export default function ProfileCard() {
                 w-full
             "
         >
-          <h1 className="text-4xl font-bold">Oliver Norrie</h1>
+          <h1 className="text-4xl font-bold text-center">Oliver Norrie</h1>
           <h2
             className="
                     text-center 

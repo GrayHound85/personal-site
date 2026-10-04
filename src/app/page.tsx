@@ -30,6 +30,10 @@ export default function LandingPage() {
               targetId: "projects",
             },
             {
+              label: "Awards",
+              targetId: "awards",
+            },
+            {
               label: "Experience",
               targetId: "experience",
             },
@@ -107,12 +111,12 @@ export default function LandingPage() {
         </div>
       </HeroPanel>
 
-      <HeroPanel id="experience" className="flex flex-col gap-5 p-5 lg:p-8">
-        <h1 className="text-3xl font-bold text-text-secondary">Experience</h1>
+      <HeroPanel id="awards" className="flex flex-col gap-5 p-5 lg:p-8">
+        <h1 className="text-3xl font-bold text-text-secondary">Awards</h1>
         <div className="grid grid-cols-1 min-[1500px]:grid-cols-2 gap-8">
           <ExperienceCard
             title="STEM Racing"
-            subHeading="2nd place UK National finals"
+            subHeading="2nd place UK National finals + Best display"
             date="Feb 2024"
             description={[
               "Was head of branding winning multiple awards for our display at both regional and national competitions.",
@@ -127,6 +131,30 @@ export default function LandingPage() {
             ]}
           />
         </div>
+      </HeroPanel>
+
+      <HeroPanel id="experience" className="flex flex-col gap-5 p-5 lg:p-8">
+        <h1 className="text-3xl font-bold text-text-secondary">Experience</h1>
+        <ExperienceCard
+          title="Audio and Visual lead"
+          subHeading="University Of Edinburgh Satellite Instrument Development Project"
+          date="Sep 2024 – Nov 2025 (Part time)"
+          description={[
+            "Worked on creating simple to understand computer graphics to deliver complex information to investors and scientific audiences.",
+            "Worked with data from proprietary end to end instrument model and transformed it to deliver impact full metrics.",
+            "Worked to create graphics to bring across important information in funcding proposals to the European Space Agency (ESA)",
+          ]}
+        />
+        <ExperienceCard
+          title="Placement week at LUMC IT Infrastructure"
+          subHeading="LUMC (Leiden University Medical Center)"
+          date="Nov 2025"
+          description={[
+            "Followed different teams including DevOps to see the day to day operations of computing behind one of the biggest hospitals in the Netherlands",
+            "Got a much deeper insight into how infrastructure change when handling huge quantities of data.",
+            "Learned about their migration project to move the hospitals infrastructure to more modern data warehouse solution.",
+          ]}
+        />
       </HeroPanel>
     </PortfolioLayout>
   );
