@@ -6,8 +6,8 @@ import {
 } from "@l/service/s-resources";
 
 import ResourcePageClient from "../ResourcePageClient";
-import { ResourceTable } from "../../../../db/schema";
-import { ResourceType } from "../../../../types/resources";
+
+export const dynamic = "force-dynamic";
 
 export default async function ResourcesPage({
   params,
