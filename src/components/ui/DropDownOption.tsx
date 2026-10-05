@@ -1,11 +1,14 @@
-import type { ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
-export type DropDownOptionProps = {
+export type DropDownOptionProps = Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  "value" | "onSelect"
+> & {
   value: string;
   children: ReactNode;
-  className?: string;
   onSelect?: (value: string) => void;
+  selected?: boolean;
 };
 
 export default function DropDownOption({
@@ -13,26 +16,17 @@ export default function DropDownOption({
   children,
   className,
   onSelect,
+  selected = false,
 }: DropDownOptionProps) {
   return (
-    <li>
+    <li role="presentation">
       <button
         type="button"
+        role="option"
+        aria-selected={selected}
         onClick={() => onSelect?.(value)}
         className={twMerge(
-          `
-            inline-flex
-            w-full
-            items-center
-            rounded-lg
-            p-2
-            text-left
-            text-sm
-            font-medium
-            text-text-primary
-            transition-colors
-            hover:bg-primary
-          `,
+          "inline-flex w-full items-center rounded-lg p-2 text-left text-sm font-medium text-text-primary transition-colors hover:bg-primary",
           className,
         )}
       >

@@ -43,7 +43,8 @@ export default function Modal({ open, onClose, children }: ModalProps) {
         justify-center
 
         bg-black/50
-        p-6
+        p-3
+        sm:p-6
       "
       onMouseDown={onClose}
     >
@@ -51,13 +52,24 @@ export default function Modal({ open, onClose, children }: ModalProps) {
         className="
           relative
           
+          w-full
+          max-w-md
+          max-h-[calc(100dvh-1.5rem)]
+          overflow-y-auto
           rounded-card
           border
           border-border
           bg-[#03151C]
-          p-10
-          pt-13
-          pb-12
+          p-5
+          pt-12
+          pb-6
+          sm:w-auto
+          sm:max-w-none
+          sm:max-h-none
+          sm:overflow-visible
+          sm:p-10
+          sm:pt-13
+          sm:pb-12
           shadow-card
         "
         onMouseDown={(event) => event.stopPropagation()}

@@ -13,14 +13,16 @@ import type {
 type ResourceNavigationProps = {
   navigation: ResourceNavigation;
   context: ResourcePageContext;
+  onTopicSelect: () => void;
 };
 
 export default function ResourceNav({
   navigation,
   context,
+  onTopicSelect,
 }: ResourceNavigationProps) {
   return (
-    <nav className="h-full w-80 bg-panel p-6 rounded-r-card border-border border">
+    <nav className="h-full w-full overflow-y-auto rounded-r-card border border-border bg-panel p-4 md:w-80 md:p-6">
       {context.category ? (
         <>
           <LinkButton
@@ -39,6 +41,7 @@ export default function ResourceNav({
                   <li key={topic.id}>
                     <Link
                       href={`/career/resources/${context.category?.slug}/${topic.slug}`}
+                      onNavigate={onTopicSelect}
                       className="block rounded-lg px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-primary-hover hover:text-text-primary"
                     >
                       {topic.name}
@@ -61,6 +64,7 @@ export default function ResourceNav({
                       <li key={topic.id}>
                         <Link
                           href={`/career/resources/${context.category?.slug}/${topic.slug}`}
+                          onNavigate={onTopicSelect}
                           className="block rounded-lg px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-primary-hover hover:text-text-primary"
                         >
                           {topic.name}

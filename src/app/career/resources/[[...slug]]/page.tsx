@@ -16,15 +16,16 @@ export default async function ResourcesPage({
 }) {
   const { slug } = await params;
 
-  const navigation = await getResourceNavigation();
-  const resourceTypes = await getAllResourceTypes();
+  const [navigation, resourceTypes] = await Promise.all([
+    getResourceNavigation(),
+    getAllResourceTypes(),
+  ]);
   const context = await getResourcePageContext(slug, navigation);
   const resourceList = await getResourcesByContext(context, resourceTypes);
 
   return (
     <ResourcePageClient
       context={context}
-      slug={slug}
       navigation={navigation}
       resourceList={resourceList}
       resourceTypes={resourceTypes}
