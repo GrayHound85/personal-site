@@ -61,23 +61,26 @@ export default function ResourceList({
   );
 
   return (
-    <Card className="flex min-h-0 w-full flex-1 flex-col pt-3">
-      <div className="flex h-6 flex-row gap-3">
-        <button
-          type="button"
-          onClick={() =>
-            onOpenModal(
-              <CreateResourceForm
-                topicId={topicId}
-                resourceTypes={resourceTypes}
-                onClose={onCloseModal}
-              />,
-            )
-          }
-          className="h-5 w-10 font-bold"
-        >
-          +
-        </button>
+    <Card className="flex min-h-0 w-full flex-1 flex-col p-3 pt-3 md:p-8 md:pt-3">
+      <div className="flex h-7 flex-row gap-2 md:h-6 md:gap-3">
+        {topicId && (
+          <button
+            type="button"
+            aria-label="Create resource"
+            onClick={() =>
+              onOpenModal(
+                <CreateResourceForm
+                  topicId={topicId}
+                  resourceTypes={resourceTypes}
+                  onClose={onCloseModal}
+                />,
+              )
+            }
+            className="h-7 w-10 font-bold md:h-5"
+          >
+            +
+          </button>
+        )}
 
         <div className="flex-1" />
 
@@ -87,34 +90,49 @@ export default function ResourceList({
 
       <DividerLine className="mt-1" />
       <div className="scrollbar-hidden min-h-0 flex-1 overflow-y-auto">
-        <div className="flex flex-col gap-7">
-          {Object.entries(groupedResources).map(([typeCode, resources]) => {
-            const Icon = resourceTypeIcons[typeCode];
+        <div className="flex flex-col gap-4 md:gap-7">
+          {resourceList.length === 0 ? (
+            <p className="px-2 py-4 text-sm text-text-secondary">
+              {topicId
+                ? "No resources have been added yet."
+                : "Select a topic to view its resources."}
+            </p>
+          ) : (
+            Object.entries(groupedResources).map(([typeCode, resources]) => {
+              const Icon = resourceTypeIcons[typeCode];
 
-            return (
-              <section key={typeCode} className="flex flex-col gap-2">
-                <h2 className="flex flex-row gap-3 text-2xl font-bold align-text-bottom">
-                  {Icon && <Icon className="h-8 w-8 shrink-0" />}
+              return (
+                <section
+                  key={typeCode}
+                  className="flex flex-col gap-1 md:gap-2"
+                >
+                  <h2 className="flex flex-row items-center gap-2 text-lg font-bold align-text-bottom md:gap-3 md:text-2xl">
+                    {Icon && (
+                      <Icon className="h-6 w-6 shrink-0 md:h-8 md:w-8" />
+                    )}
 
-                  {resourceTypeNames[typeCode] ?? typeCode}
-                </h2>
+                    {resourceTypeNames[typeCode] ?? typeCode}
+                  </h2>
 
-                {resources.map((resource) => (
-                  <LinkButton
-                    href={resource.url}
-                    key={resource.id}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="
+                  {resources.map((resource) => (
+                    <LinkButton
+                      href={resource.url}
+                      key={resource.id}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="
                       group
-                      h-13
+                      h-11
+                      md:h-13
                       justify-between!
                       rounded-card_inner!
                       border!
                       border-border/40!
                       bg-panel/40
-                      px-6!
-                      py-5!
+                      px-3!
+                      py-3!
+                      md:px-6!
+                      md:py-5!
                       text-left!
                       text-text-primary!
                       transition-all
@@ -123,22 +141,23 @@ export default function ResourceList({
                       hover:bg-primary-hover
                       hover:shadow-lg!
                     "
-                  >
-                    <div className="flex w-full items-center justify-between gap-4">
-                      <span className="font-medium text-text-secondary transition-colors group-hover:text-text-primary">
-                        {resource.title}
-                      </span>
+                    >
+                      <div className="flex w-full items-center justify-between gap-4">
+                        <span className="font-medium text-text-secondary transition-colors group-hover:text-text-primary">
+                          {resource.title}
+                        </span>
 
-                      <ArrowIcon
-                        direction="right"
-                        className="text-text-secondary transition-transform duration-200 group-hover:translate-x-1"
-                      />
-                    </div>
-                  </LinkButton>
-                ))}
-              </section>
-            );
-          })}
+                        <ArrowIcon
+                          direction="right"
+                          className="text-text-secondary transition-transform duration-200 group-hover:translate-x-1"
+                        />
+                      </div>
+                    </LinkButton>
+                  ))}
+                </section>
+              );
+            })
+          )}
         </div>
       </div>
     </Card>

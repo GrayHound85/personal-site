@@ -1,46 +1,51 @@
 "use client";
 
-import type { SubmitEvent, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
 import Button from "@c/ui/Button";
 
 type FormProps = {
   children: ReactNode;
+  action: (formData: FormData) => void | Promise<void>;
   submitText: string;
-  onSubmit?: (formData: FormData) => void | Promise<void>;
+  pending?: boolean;
+  pendingText?: string;
+  error?: string | null;
   className?: string;
+  submitButtonClassName?: string;
 };
 
 export default function Form({
   children,
+  action,
   submitText,
-  onSubmit,
+  pending = false,
+  pendingText = "Submitting...",
+  error,
   className,
+  submitButtonClassName,
 }: FormProps) {
-  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const form = event.currentTarget;
-
-    if (!form.checkValidity()) {
-      form.reportValidity();
-      return;
-    }
-
-    const formData = new FormData(form);
-
-    await onSubmit?.(formData);
-  }
-
   return (
     <form
-      onSubmit={handleSubmit}
-      className={twMerge("w-100 flex flex-col gap-5", className)}
+      action={action}
+      className={twMerge("flex w-full flex-col gap-5", className)}
     >
       {children}
 
-      <Button type="submit">{submitText}</Button>
+      {error && (
+        <p className="text-sm text-red-500" role="alert">
+          {error}
+        </p>
+      )}
+
+      <Button
+        className={submitButtonClassName}
+        disabled={pending}
+        type="submit"
+      >
+        {pending ? pendingText : submitText}
+      </Button>
     </form>
   );
 }
