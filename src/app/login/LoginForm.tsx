@@ -9,10 +9,11 @@ export default function LoginForm({ redirectTo }: { redirectTo?: string }) {
   const [state, formAction, pending] = useActionState(loginAction, null);
 
   return (
-    <form action={formAction} className="mt-8 space-y-5 text-black">
+    <form action={formAction} className="mt-8 space-y-5 text-text-primary">
       <Input
         aria-label="Password"
         autoComplete="current-password"
+        className="login-password-input"
         name="password"
         placeholder="Password"
         required

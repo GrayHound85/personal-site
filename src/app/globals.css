@@ -77,6 +77,17 @@ h1 {
   font-family: Helvetica, Arial, sans-serif;
 }
 
+.login-password-input:-webkit-autofill,
+.login-password-input:-webkit-autofill:hover,
+.login-password-input:-webkit-autofill:focus,
+.login-password-input:autofill {
+  color: var(--color-text-primary);
+  -webkit-text-fill-color: var(--color-text-primary);
+  caret-color: var(--color-text-primary);
+  -webkit-transition: background-color 99999s ease-out 0s;
+  transition: background-color 99999s ease-out 0s;
+}
+
 @utility scrollbar-hidden {
   scrollbar-width: none;
 

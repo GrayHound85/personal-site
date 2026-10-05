@@ -18,6 +18,8 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
                     w-full
                     items-center
                     justify-center
+                    translate-y-[-8vh]
+                    md:translate-y-0
                     px-6
                 "
       >

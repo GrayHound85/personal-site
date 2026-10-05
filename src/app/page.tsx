@@ -54,20 +54,27 @@ export default function LandingPage() {
           About
         </h2>
 
-        <p className="">
-          I’m a Computer Science student at the University of Edinburgh with a
-          strong interest in software development, robotics, and building
-          practical projects from ideas into working solutions. I enjoy
-          exploring new technologies through a wide range of personal and
-          university projects, while continuing to develop my skills across
-          software and systems. I also have experience competing nationally and
-          internationally in STEM events, including robotics and STEM Racing.
+        <p className="space-y-3 sm:space-y-0">
+          <span className="block sm:inline">
+            I’m a Computer Science student at the University of Edinburgh with a
+            strong interest in software development, robotics, and building
+            practical projects from ideas into working solutions.
+          </span>{" "}
+          <span className="block sm:inline">
+            I enjoy exploring new technologies through a wide range of personal
+            and university projects, while continuing to develop my skills
+            across software and systems.
+          </span>{" "}
+          <span className="block sm:inline">
+            I also have experience competing nationally and internationally in
+            STEM events, including robotics and STEM Racing.
+          </span>
         </p>
       </HeroPanel>
 
       <HeroPanel
         id="projects"
-        className="flex lg:flex-row flex-col p-5 gap-4 lg:p-8"
+        className="flex flex-col gap-4 p-4 sm:p-5 lg:flex-row lg:p-8"
       >
         <div className="flex flex-row gap-2 lg:hidden">
           <LinkButton
@@ -97,7 +104,7 @@ export default function LandingPage() {
             {""}
           </Card>
         </div>
-        <div className="flex-1" />
+        <div className="hidden flex-1 lg:block" />
         <div className="lg:flex flex-col gap-2 hidden">
           <h1 className="text-3xl font-bold text-text-secondary text-right">
             Projects

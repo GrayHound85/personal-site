@@ -10,10 +10,4 @@ export const projects = {
     image: "/Banner.png",
     link: "/projects",
   },
-
-  temp: {
-    title: "Project under construction",
-    image: "",
-    link: "/projects",
-  },
 };

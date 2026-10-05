@@ -3,13 +3,16 @@
 import LinkButton from "@/components/ui/LinkButton";
 
 export default function AdminButton() {
-    return (
-        <LinkButton 
-            href="/login" 
-            className="
+  return (
+    <LinkButton
+      href="/login"
+      className="
                 fixed
-                bottom-6
-                right-6
+                top-3
+                right-3
+                md:right-6
+                md:top-auto
+                md:bottom-6
                 z-50
 
                 flex
@@ -18,16 +21,19 @@ export default function AdminButton() {
 
                 h-12
                 w-12
-                text-[#335f6f]
+                text-[#5cb9c8]
+                md:text-[#335f6f]
 
                 px-0
                 py-0
 
                 rounded-full
 
-                bg-[#000e19]
-            ">
-            ⚙
-        </LinkButton>
-    );
+                md:bg-[#000e19]
+                bg-[#056D7C]
+            "
+    >
+      ⚙
+    </LinkButton>
+  );
 }
