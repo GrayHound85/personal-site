@@ -5,6 +5,7 @@ import BackgroundLayout from "@/components/layout/BackgroundLayout";
 import ProjectContentsNav, {
   type ProjectSectionLink,
 } from "@/components/sections/projects/ProjectContentsNav";
+import ProjectImagePlaceholder from "@/components/sections/projects/ProjectImagePlaceholder";
 import ProjectFact from "@c/sections/projects/ProjectFact";
 
 export const metadata: Metadata = {
@@ -32,41 +33,46 @@ const overviewFacts = [
 export default function PersonalSiteProjectPage() {
   return (
     <BackgroundLayout background="subtle">
-      <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
-        <Link
-          href="/projects"
-          className="text-sm text-text-secondary transition-colors hover:text-primary"
+      <div className="mx-auto w-full max-w-7xl px-4 pt-16 pb-6 sm:px-6 lg:px-8 lg:py-10">
+        <ProjectContentsNav
+          backHref="/projects"
+          sections={sections}
+          intro={
+            <>
+              <Link
+                href="/projects"
+                className="hidden text-sm text-text-secondary transition-colors hover:text-primary lg:inline-flex"
+              >
+                Back to projects
+              </Link>
+
+              <header className="border-b border-border py-8 sm:py-10">
+                <p className="mb-3 text-sm font-semibold uppercase text-primary">
+                  Personal project
+                </p>
+                <h1 className="max-w-4xl text-4xl font-bold text-text-primary sm:text-5xl">
+                  A personal platform for building and learning in public
+                </h1>
+                <p className="mt-5 max-w-3xl text-lg leading-8 text-text-secondary">
+                  I am developing a self-hosted web application that brings my
+                  public portfolio together with private tools for learning and
+                  managing personal projects. The portfolio and foundations are
+                  in place, and the resource library is the clearest example of
+                  a complete data-backed workflow; other areas are being built
+                  incrementally.
+                </p>
+
+                <dl className="mt-8 grid gap-5 sm:grid-cols-3">
+                  {overviewFacts.map((fact) => (
+                    <ProjectFact key={fact.label} {...fact} />
+                  ))}
+                </dl>
+              </header>
+            </>
+          }
         >
-          Back to projects
-        </Link>
-
-        <header className="border-b border-border py-8 sm:py-10">
-          <p className="mb-3 text-sm font-semibold uppercase text-primary">
-            Personal project
-          </p>
-          <h1 className="max-w-4xl text-4xl font-bold text-text-primary sm:text-5xl">
-            A personal platform for building and learning in public
-          </h1>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-text-secondary">
-            I am developing a self-hosted web application that brings my public
-            portfolio together with private tools for learning and managing
-            personal projects. The portfolio and foundations are in place, and
-            the resource library is the clearest example of a complete
-            data-backed workflow; other areas are being built incrementally.
-          </p>
-
-          <dl className="mt-8 grid gap-5 sm:grid-cols-3">
-            {overviewFacts.map((fact) => (
-              <ProjectFact key={fact.label} {...fact} />
-            ))}
-          </dl>
-        </header>
-
-        <div className="grid gap-8 py-8 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-12 lg:py-10">
-          <ProjectContentsNav sections={sections} />
-
           <article className="min-w-0 max-w-4xl space-y-12">
-            <section id="built-today" className="scroll-mt-8">
+            <section id="built-today" className="scroll-mt-20 lg:scroll-mt-8">
               <p className="text-sm font-semibold uppercase text-primary">
                 Current state
               </p>
@@ -118,9 +124,15 @@ export default function PersonalSiteProjectPage() {
                   </dd>
                 </div>
               </dl>
+              <div className="mt-6">
+                <ProjectImagePlaceholder
+                  title="Resource library structure"
+                  description="A diagram showing how categories, subcategories, topics, and resources fit together."
+                />
+              </div>
             </section>
 
-            <section id="architecture" className="scroll-mt-8">
+            <section id="architecture" className="scroll-mt-20 lg:scroll-mt-8">
               <p className="text-sm font-semibold uppercase text-primary">
                 Under the hood
               </p>
@@ -160,9 +172,15 @@ export default function PersonalSiteProjectPage() {
                   PostgreSQL service. The site runs on my homelab.
                 </li>
               </ul>
+              <div className="mt-6">
+                <ProjectImagePlaceholder
+                  title="Application architecture"
+                  description="A system diagram tracing a request from the browser through Next.js, the service and repository layers, and PostgreSQL, with authentication around private routes."
+                />
+              </div>
             </section>
 
-            <section id="skills" className="scroll-mt-8">
+            <section id="skills" className="scroll-mt-20 lg:scroll-mt-8">
               <p className="text-sm font-semibold uppercase text-primary">
                 What I am practising
               </p>
@@ -201,7 +219,7 @@ export default function PersonalSiteProjectPage() {
               </ul>
             </section>
 
-            <section id="direction" className="scroll-mt-8">
+            <section id="direction" className="scroll-mt-20 lg:scroll-mt-8">
               <p className="text-sm font-semibold uppercase text-primary">
                 Next stages
               </p>
@@ -222,7 +240,7 @@ export default function PersonalSiteProjectPage() {
               </p>
             </section>
           </article>
-        </div>
+        </ProjectContentsNav>
       </div>
     </BackgroundLayout>
   );
