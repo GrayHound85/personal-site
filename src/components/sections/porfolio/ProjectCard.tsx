@@ -17,15 +17,7 @@ export default function ProjectCard({
   return (
     <LinkCard
       href={link}
-      className="    
-            w-full
-            max-w-100
-            aspect-10/7
-            rounded-card_inner
-            relative
-            overflow-hidden
-            border-none
-            hover:border-none"
+      className="w-full max-w-100 aspect-10/7 relative overflow-hidden rounded-card_inner border-none shadow-[0_0_36px_rgba(83,186,184,0.16)] hover:border-none"
     >
       {image && (
         <Image
