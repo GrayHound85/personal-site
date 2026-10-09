@@ -24,7 +24,7 @@ export default function BackgroundLayout({
                 min-h-screen
                 
 
-                overflow-x-hidden
+                overflow-x-clip
 
                 bg-background
             "

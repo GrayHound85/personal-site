@@ -86,7 +86,7 @@ export default function ResourceNav({
               <li key={category.id}>
                 <Link
                   href={`/career/resources/${category.slug}`}
-                  className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-m font-semibold text-text-secondary transition-colors hover:bg-primary hover:text-text-primary"
+                  className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-m font-semibold text-text-secondary transition-colors hover:bg-primary-hover hover:text-text-primary"
                 >
                   <span>{category.name}</span>
                   <span>→</span>

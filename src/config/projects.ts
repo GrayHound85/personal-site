@@ -8,6 +8,6 @@ export const projects = {
   personalSite: {
     title: "Personal Site",
     image: "/Banner.png",
-    link: "/projects",
+    link: "/projects/personal-site",
   },
 };

@@ -1,26 +1,22 @@
 import type { ComponentType, SVGProps } from "react";
 
-
 type SocialButtonProps = {
-    href: string;
-    icon: ComponentType<SVGProps<SVGSVGElement>>;
-    invert?: boolean;
+  href: string;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
+  invert?: boolean;
 };
 
-
 export default function SocialButton({
-    href,
-    icon: Icon,
-    invert = false,
+  href,
+  icon: Icon,
+  invert = false,
 }: SocialButtonProps) {
-
-    return (
-        <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-
-            className="
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="
                 flex
                 h-12
                 w-12
@@ -29,28 +25,22 @@ export default function SocialButton({
 
                 rounded-button
 
-                bg-primary
+                bg-action
                 hover:bg-primary-hover
 
                 transition
                 hover:scale-105
                 shrink-0
             "
-        >
-
-            <Icon
-                className={`
+    >
+      <Icon
+        className={`
                     h-7
                     w-7
 
-                    ${
-                        invert
-                        ? "text-primary"
-                        : "text-white"
-                    }
+                    ${invert ? "text-primary" : "text-white"}
                 `}
-            />
-
-        </a>
-    );
+      />
+    </a>
+  );
 }

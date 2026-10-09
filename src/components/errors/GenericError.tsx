@@ -27,7 +27,7 @@ export default function GenericError({
           onClick={onRetry}
           className="
             rounded-button
-            bg-primary
+            bg-action
             px-6
             py-3
             font-medium

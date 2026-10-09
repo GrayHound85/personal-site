@@ -236,7 +236,7 @@ export default function DropDown({
         aria-required={required || undefined}
         onClick={handleToggle}
         className={twMerge(
-          "inline-flex w-full items-center justify-between rounded-xl border border-border bg-panel px-4 py-3 text-sm font-medium text-text-primary shadow-sm transition-colors hover:bg-panel-hover focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:cursor-not-allowed disabled:opacity-50",
+          "inline-flex w-full items-center justify-between rounded-button border border-border bg-panel px-4 py-3 text-sm font-medium text-text-primary shadow-sm transition-colors hover:bg-panel-hover focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:cursor-not-allowed disabled:opacity-50",
           className,
         )}
       >
@@ -267,7 +267,7 @@ export default function DropDown({
           ref={menuRef}
           className="absolute left-0 top-full z-10 w-full pt-2"
         >
-          <div className="rounded-xl border border-border bg-[#031018] shadow-lg">
+          <div className="rounded-card_inner border border-border bg-panel shadow-lg">
             <ul id={menuId} role="listbox" className="p-2 text-sm font-medium">
               {renderOptions()}
             </ul>
@@ -287,7 +287,7 @@ export default function DropDown({
               }}
             >
               <div
-                className="overflow-y-auto rounded-xl border border-border bg-[#031018] shadow-lg"
+                className="overflow-y-auto rounded-card_inner border border-border bg-panel shadow-lg"
                 style={{ maxHeight: mobilePosition.maxHeight }}
               >
                 <ul

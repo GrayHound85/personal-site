@@ -16,7 +16,7 @@ const variants: Record<GradientVariant, Glow[]> = {
                 w-[clamp(900px,75vw,1100px)]
 
                 bg-cyan-400
-                opacity-50
+                opacity-30
 
                 blur-[160px]
                 lg:blur-[200px]
@@ -32,7 +32,7 @@ const variants: Record<GradientVariant, Glow[]> = {
                 w-[clamp(500px,50vw,750px)]
 
                 bg-blue-400
-                opacity-40
+                opacity-20
 
                 blur-[150px]
                 lg:blur-[180px]
@@ -48,7 +48,7 @@ const variants: Record<GradientVariant, Glow[]> = {
                 w-[clamp(500px,50vw,750px)]
 
                 bg-teal-400
-                opacity-40
+                opacity-20
 
                 blur-[150px]
                 lg:blur-[180px]
@@ -67,7 +67,7 @@ const variants: Record<GradientVariant, Glow[]> = {
                 w-[clamp(750px,80vw,1200px)]
 
                 bg-cyan-400
-                opacity-35
+                opacity-18
 
                 blur-[180px]
             `,
@@ -82,7 +82,7 @@ const variants: Record<GradientVariant, Glow[]> = {
                 w-[clamp(450px,45vw,700px)]
 
                 bg-blue-400
-                opacity-20
+                opacity-12
 
                 blur-[160px]
             `,
@@ -97,7 +97,7 @@ const variants: Record<GradientVariant, Glow[]> = {
                 w-[clamp(450px,45vw,700px)]
 
                 bg-teal-400
-                opacity-20
+                opacity-12
 
                 blur-[160px]
             `,
@@ -166,7 +166,7 @@ export default function GradientBackground({
 
                     bg-linear-to-b
                     from-transparent
-                    to-slate-900
+                    to-slate-950
                 "
       />
     </div>

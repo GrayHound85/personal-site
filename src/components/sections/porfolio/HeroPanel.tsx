@@ -13,7 +13,7 @@ export default function HeroPanel({
       className={twMerge(
         `
                 rounded-card
-                bg-gray-950/40
+                bg-panel/50
                 p-8
                 flex
                 flex-col

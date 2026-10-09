@@ -6,6 +6,7 @@ import ProfileCard from "@c/sections/porfolio/ProfileCard";
 import NavBar from "@c/ui/NavBar";
 import AdminButton from "@c/sections/porfolio/AdminButton";
 import ProjectCard from "@/components/sections/porfolio/ProjectCard";
+import AwardCard from "@/components/sections/porfolio/AwardCard";
 import ExpandableText from "@c/ui/ExpandibleText";
 import LinkButton from "@/components/ui/LinkButton";
 import ExperienceCard from "@/components/sections/porfolio/ExperienceCard";
@@ -121,7 +122,7 @@ export default function LandingPage() {
       <HeroPanel id="awards" className="flex flex-col gap-5 p-5 lg:p-8">
         <h1 className="text-3xl font-bold text-text-secondary">Awards</h1>
         <div className="grid grid-cols-1 min-[1500px]:grid-cols-2 gap-8">
-          <ExperienceCard
+          <AwardCard
             title="STEM Racing"
             subHeading="2nd place UK National finals + Best display"
             date="Feb 2024"
@@ -129,7 +130,7 @@ export default function LandingPage() {
               "Was head of branding winning multiple awards for our display at both regional and national competitions.",
             ]}
           />
-          <ExperienceCard
+          <AwardCard
             title="Vex Robotics V5"
             subHeading="World championship qualifiers"
             date="Apr 2026"
