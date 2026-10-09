@@ -15,24 +15,27 @@ export default function ExperienceCard({
   description,
 }: ExperienceCardProps) {
   return (
-    <Card className="flex flex-col rounded-card_inner border-none bg-[#1d283829] p-4 sm:p-5">
-      <div className="flex flex-col gap-2 sm:gap-1">
-        <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-          <h2 className="min-w-0 text-xl font-semibold leading-snug text-primary-hover">
+    <Card className="flex flex-col rounded-card_inner border-none bg-panel/50 p-4 sm:p-5">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start sm:gap-6">
+        <div className="w-fit max-w-full">
+          <h2 className="w-fit max-w-full text-xl font-semibold leading-snug text-text-primary">
             {title}
           </h2>
-          <p className="text-sm font-semibold text-text-secondary sm:shrink-0 sm:text-right sm:text-base">
-            {date}
-          </p>
+          <div
+            aria-hidden="true"
+            className="mt-3 h-0.5 w-full rounded-full bg-primary"
+          />
+          <h3 className="mt-2 w-fit max-w-full leading-relaxed text-text-secondary">
+            {subHeading}
+          </h3>
         </div>
-
-        <h3 className="font-semibold leading-relaxed text-text-secondary">
-          {subHeading}
-        </h3>
+        <p className="text-sm font-semibold text-text-secondary sm:shrink-0 sm:text-right">
+          {date}
+        </p>
       </div>
-      <DividerLine className="mt-2" />
+      <DividerLine className="mt-4" />
 
-      <ul className="mt-2 list-disc space-y-2 pl-5 leading-relaxed">
+      <ul className="mt-3 list-disc space-y-2 pl-5 leading-relaxed marker:text-primary">
         {description.map((desc) => (
           <li key={desc}>{desc}</li>
         ))}

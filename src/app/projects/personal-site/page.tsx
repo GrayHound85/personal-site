@@ -9,7 +9,6 @@ import ProjectImagePlaceholder from "@c/sections/projects/ProjectImagePlaceholde
 import ProjectFact from "@c/sections/projects/ProjectFact";
 
 export const metadata: Metadata = {
-  title: "Personal Site | Projects",
   description:
     "An overview of the personal web platform, its current features, architecture, and next steps.",
 };
