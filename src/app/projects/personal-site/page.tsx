@@ -5,7 +5,7 @@ import BackgroundLayout from "@/components/layout/BackgroundLayout";
 import ProjectContentsNav, {
   type ProjectSectionLink,
 } from "@/components/sections/projects/ProjectContentsNav";
-import ProjectImagePlaceholder from "@/components/sections/projects/ProjectImagePlaceholder";
+import ProjectImagePlaceholder from "@c/sections/projects/ProjectImagePlaceholder";
 import ProjectFact from "@c/sections/projects/ProjectFact";
 
 export const metadata: Metadata = {

@@ -3,16 +3,12 @@ import { twMerge } from "tailwind-merge";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
-export default function Button({
-    children,
-    className,
-    ...props
-}: ButtonProps) {
-    return (
-        <button
-            className={twMerge(`
-                rounded-xl
-                bg-primary
+export default function Button({ children, className, ...props }: ButtonProps) {
+  return (
+    <button
+      className={twMerge(`
+                rounded-button
+                bg-action
                 px-6
                 py-3
                 font-medium
@@ -23,9 +19,9 @@ export default function Button({
                 disabled:opacity-50
                 ${className ?? ""}
             `)}
-            {...props}
-        >
-            {children}
-        </button>
-    )
-}   
+      {...props}
+    >
+      {children}
+    </button>
+  );
+}

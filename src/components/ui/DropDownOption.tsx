@@ -26,7 +26,7 @@ export default function DropDownOption({
         aria-selected={selected}
         onClick={() => onSelect?.(value)}
         className={twMerge(
-          "inline-flex w-full items-center rounded-lg p-2 text-left text-sm font-medium text-text-primary transition-colors hover:bg-primary",
+          "inline-flex w-full items-center rounded-lg p-2 text-left text-sm font-medium text-text-primary transition-colors hover:bg-primary-hover",
           className,
         )}
       >

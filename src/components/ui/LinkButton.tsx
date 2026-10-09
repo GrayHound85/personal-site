@@ -19,9 +19,9 @@ export default function LinkButton({
                 items-center
                 justify-center
 
-                rounded-xl
+                rounded-button
 
-                bg-primary
+                bg-action
 
                 px-6
                 py-3
