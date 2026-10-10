@@ -31,7 +31,7 @@ const overviewFacts = [
 
 export default function PersonalSiteProjectPage() {
   return (
-    <BackgroundLayout background="subtle">
+    <BackgroundLayout background="plain">
       <div className="mx-auto w-full max-w-7xl px-4 pt-16 pb-6 sm:px-6 lg:px-8 lg:py-10">
         <ProjectContentsNav
           backHref="/projects"

@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import GradientBackground from "../sections/porfolio/GradientBackground";
 
-export type BackgroundVariant = "hero" | "subtle" | "minimal";
+export type BackgroundVariant = "hero" | "subtle" | "minimal" | "plain";
 
 type BackgroundLayoutProps = {
   children: ReactNode;
