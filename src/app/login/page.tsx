@@ -11,7 +11,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const redirectTo = Array.isArray(callbackUrl) ? callbackUrl[0] : callbackUrl;
 
   return (
-    <BackgroundLayout background="hero">
+    <BackgroundLayout background="plain">
       <div
         className="
                     flex
@@ -27,7 +27,8 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           className="
                         w-full
                         max-w-md
-                        bg-panel
+                        bg-gray-950/40
+                        border-none
                     "
         >
           <h1

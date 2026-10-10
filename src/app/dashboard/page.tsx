@@ -4,7 +4,7 @@ import DashboardCard from "@/components/sections/dashboard/DashboardCard";
 
 export default function DashboardPage() {
   return (
-    <BackgroundLayout background="subtle">
+    <BackgroundLayout background="plain">
       <main
         className="
                 flex

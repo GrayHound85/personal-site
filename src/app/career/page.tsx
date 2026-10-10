@@ -8,16 +8,16 @@ import DividerLine from "@/components/ui/DividerLine";
 
 export default function CareerPage() {
   return (
-    <BackgroundLayout background="subtle">
+    <BackgroundLayout background="plain">
       <main
         className="
-                            flex 
-                            flex-col 
-                            gap-6 
-                            w-full 
-                            min-h-screen
-                            items-start 
-                            p-8"
+                flex 
+                flex-col 
+                gap-6
+                w-full 
+                min-h-screen
+                items-start 
+                p-8"
       >
         <CareerCategory title="Career">
           <CareerCard

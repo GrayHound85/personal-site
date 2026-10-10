@@ -21,7 +21,7 @@ export default function PortfolioLayout({
   floating,
 }: PortfolioLayoutProps) {
   return (
-    <BackgroundLayout background="hero">
+    <BackgroundLayout background="plain">
       <div
         className="
                     relative

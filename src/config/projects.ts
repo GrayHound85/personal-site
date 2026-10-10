@@ -1,13 +1,25 @@
+import type { ProjectDefinition } from "@/types/projects";
+
 export const projects = {
   homelab: {
     title: "HomeLab",
-    image: "/Banner.png",
+    icon: {
+      name: "ServerIcon",
+      foregroundColor: "#85afd8",
+      backgroundColor: "",
+      invert: false,
+    },
     link: "/projects",
   },
 
   personalSite: {
     title: "Personal Site",
-    image: "/Banner.png",
+    icon: {
+      name: "PersonalSiteIcon",
+      foregroundColor: "#85afd8",
+      backgroundColor: "",
+      invert: false,
+    },
     link: "/projects/personal-site",
   },
-};
+} satisfies Record<string, ProjectDefinition>;

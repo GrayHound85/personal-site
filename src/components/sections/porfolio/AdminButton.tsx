@@ -21,16 +21,17 @@ export default function AdminButton() {
 
                 h-12
                 w-12
-                text-[#5cb9c8]
-                md:text-[#335f6f]
+                text-action
+                
 
                 px-0
                 py-0
 
                 rounded-full
 
-                md:bg-[#000e19]
-                bg-[#056D7C]
+                bg-action
+                bg-opacity-10
+              
             "
     >
       ⚙
