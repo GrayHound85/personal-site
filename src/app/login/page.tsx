@@ -28,6 +28,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
                         w-full
                         max-w-md
                         bg-gray-950/40
+                        border-none
                     "
         >
           <h1
