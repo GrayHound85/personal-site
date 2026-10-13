@@ -1,257 +1,173 @@
-# Oliver Norrie | Personal Site
 
-A self-hosted portfolio and full-stack web application built to showcase my work and provide a foundation for personal learning and productivity tools.
+# Personal Site
 
-**Live site:** [olivernorrie.com](https://olivernorrie.com) · **Source code:** [GitHub](https://github.com/GrayHound85/personal-site)
+A personal portfolio and private workspace built with Next.js, React, TypeScript, and Tailwind CSS. The project combines a public-facing portfolio with tools for managing career development, resources, projects, and other personal information.
 
----
+**Live site:** [olivernorrie.com](https://olivernorrie.com)
 
-## Overview
+**Repository:** [GitHub](https://github.com/GrayHound85/personal-site)
 
-This project started as a personal portfolio and is evolving into a broader platform: a public space for presenting projects and technical work, alongside a private workspace for tools I build for myself.
+## What is Already Built
 
-I am using it to develop practical experience across the full software lifecycle—from designing reusable React components and modelling relational data to implementing authentication, containerising the application, and deploying it on my own homelab.
+### Public Portfolio
+- Personal profile and introduction.
+- Project showcase with individual project pages.
+- Experience and achievements sections.
+- Links to GitHub, LinkedIn, and LeetCode.
+- Responsive layouts for desktop, tablet, and mobile.
 
-### Highlights
+### Resource Library
+- A structured library for useful learning resources.
+- Support for organising resources into categories and pages.
+- A foundation for collecting programming, data structures, algorithms, and interview preparation material.
 
-- **Full-stack TypeScript application** built with Next.js App Router and React.
-- **Data-backed resource library** using PostgreSQL and Drizzle ORM, with separate service and repository layers.
-- **Authentication and access control** using NextAuth.js credentials authentication and JWT-based sessions.
-- **Responsive interface** built with Tailwind CSS 4 and reusable layout and UI components.
-- **Self-hosted deployment** using Docker and Docker Compose, with a GitHub Actions / GitHub Container Registry workflow and Cloudflare Tunnel.
-- **Designed to grow incrementally**, with clear boundaries between public portfolio pages and private workspace features.
+### Personal Workspace
+The application also contains private sections intended to support personal organisation and career development.
 
-## Application architecture
+| Section | Purpose |
+| --- | --- |
+| Dashboard | Central starting point for private tools |
+| Career | Career development and internship tracking |
+| Finance | Personal finance tools |
+| Media | A foundation for a personal media library |
+| Notes | Personal notes and knowledge management |
+| Projects | Project management and documentation |
 
-The diagram below shows the main application boundaries and how requests flow from the browser through the Next.js application to persistent data.
+Some areas are still under development as the application grows.
+
+## Architecture
+
+The application is built around Next.js App Router, with server-side functionality for data access and authentication. PostgreSQL provides persistent storage, accessed through Drizzle ORM.
 
 ![Personal site application architecture](public/projects/personal-site_architecture.png)
 
-*Architecture diagram: Next.js App Router, authentication, application layers, PostgreSQL, and deployment components.*
+The architecture diagram above illustrates the application's structure and how its components interact.
 
-> The image path above is relative to the repository root. GitHub displays the diagram when the image is committed at `public/projects/personal-site_architecture.png`.
+## Technology Stack
 
-### Architecture at a glance
+| Technology | Purpose |
+| --- | --- |
+| Next.js | Application framework and routing |
+| React | Component-based user interface |
+| TypeScript | Type safety and maintainability |
+| Tailwind CSS | Responsive styling and design system |
+| PostgreSQL | Relational database |
+| Drizzle ORM | Type-safe database queries and schema management |
+| NextAuth.js | Authentication |
+| Docker | Containerised deployment |
+| GitHub Actions | Automated build and deployment workflow |
+| GitHub Container Registry | Storage and distribution of Docker images |
+| Cloudflare Tunnel | Remote access without directly exposing server ports |
 
-```mermaid
-flowchart TD
-    Browser["Browser"]
-    Routes["Next.js App Router"]
-    UI["React components<br/>Layouts, pages and UI"]
-    Auth["NextAuth.js<br/>Credentials and JWT sessions"]
-    Actions["Server-side operations"]
-    Service["Service layer"]
-    Repo["Repository layer"]
-    Drizzle["Drizzle ORM"]
-    DB[("PostgreSQL")]
+## Skills Developed
 
-    Browser --> Routes
-    Routes --> UI
-    Routes -. "Private routes" .-> Auth
-    UI --> Actions
-    Actions --> Service
-    Service --> Repo
-    Repo --> Drizzle
-    Drizzle --> DB
-```
+This project is an opportunity to develop practical full-stack engineering skills while building something that I can continue to use.
 
-The application uses server-side logic for data operations, with repository and service layers separating database access from application behaviour. Not every route uses every layer; the diagram represents the main architectural pattern.
+- **Frontend development:** Building reusable React components and learning how layouts behave across different screen sizes.
+- **Full-stack development:** Connecting the frontend to server-side logic, authentication, and a relational database.
+- **Database design:** Modelling application data and accessing it through Drizzle ORM.
+- **Authentication and authorisation:** Separating public content from private functionality.
+- **Deployment:** Building Docker images and running the application on a self-hosted Ubuntu server.
+- **CI/CD:** Using GitHub Actions to automate image builds and publish deployable versions.
+- **Infrastructure:** Managing containers, environment variables, networking, and remote access.
+- **Software architecture:** Organising a growing application into maintainable routes, components, and server-side modules.
 
-## Technology stack
+## Where the Project Is Going
 
-| Technology | How it is used |
-|---|---|
-| **Next.js App Router** | Routing, server-rendered pages, and server-side application features |
-| **React + TypeScript** | Reusable UI components and typed application code |
-| **Tailwind CSS 4** | Responsive styling and shared design conventions |
-| **PostgreSQL** | Relational data storage |
-| **Drizzle ORM** | Typed database queries and schema management |
-| **NextAuth.js** | Credentials-based authentication and JWT session handling |
-| **Docker + Compose** | Containerised application and database services |
-| **GitHub Actions + GHCR** | Automated image build and container image distribution |
-| **Cloudflare Tunnel** | Configured remote access to the self-hosted deployment |
+The long-term goal is to make the site a central hub for both my personal and technical projects.
 
-## Features and current status
+Potential areas of development include:
 
-I aim to be clear about what is implemented and what is still being developed.
+- A more complete internship and application tracker, including application opening dates.
+- A richer resource library with notes, links, books, and videos.
+- Improved project documentation and progress tracking.
+- Additional personal productivity and finance tools.
+- A personal media library hosted on the same home server.
+- A central interface for managing selected self-hosted services and containers.
 
-| Feature area | Current status |
-|---|---|
-| Public portfolio and profile | Implemented |
-| Public projects and project write-ups | Implemented |
-| Administrator login and private workspace foundation | Implemented |
-| PostgreSQL integration and Drizzle migrations | Implemented |
-| Data-backed learning resource library | Core workflow implemented |
-| Dashboard and workspace navigation | Foundation in place |
-| Career and study tools | In progress; some routes are scaffolds |
-| Media and finance areas | Early foundations; not complete workflows |
-| Additional interactive projects | Planned |
+These features will be developed incrementally as the underlying application and infrastructure mature.
 
-## Engineering decisions
+## Project Structure
 
-### Separation of concerns
-
-The resource library demonstrates the separation between UI, service logic, repository queries, and persistence:
-
-- **UI and routes** present information and collect user input.
-- **Service layer** coordinates application operations.
-- **Repository layer** encapsulates database access.
-- **Drizzle and PostgreSQL** provide typed queries and persistent storage.
-
-This structure makes responsibilities easier to understand and gives future features a pattern to follow.
-
-### Public and private boundaries
-
-The public portfolio is designed to be accessible without signing in, while private tools require an authenticated session and appropriate authorisation. Access checks for sensitive operations belong on the server rather than relying on whether a navigation link is visible.
-
-### Self-hosted deployment
-
-I wanted to understand more than application code, so the project also includes a containerised deployment path. GitHub Actions builds and publishes the configured application image to GitHub Container Registry; Docker Compose runs the application and database on my homelab. Cloudflare Tunnel provides the configured remote access path.
-
-## Repository structure
+The application uses the Next.js App Router. Routes and supporting code are organised into separate directories according to their responsibilities.
 
 ```text
-.
-├── src/
-│   ├── app/                 # App Router pages, layouts and API routes
-│   ├── components/
-│   │   ├── layout/          # Shared layouts
-│   │   ├── sections/        # Page-specific sections
-│   │   ├── ui/              # Reusable interface components
-│   │   └── icons/           # Icon components
-│   ├── config/              # Project and application configuration
-│   ├── db/                  # Database connection and schema
-│   ├── lib/
-│   │   ├── repo/            # Data-access repositories
-│   │   └── service/         # Application logic
-│   └── auth.ts              # Authentication configuration
-├── drizzle/
-│   └── migrations/          # Versioned database migrations
-├── scripts/                 # Operational scripts, including migrations
-├── auth.config.ts           # Shared authentication configuration
-├── drizzle.config.ts        # Drizzle configuration
-├── Dockerfile               # Application container build
-└── compose.yaml             # Container service definitions
+app/
+├── actions/
+├── career/
+├── dashboard/
+├── finance/
+├── login/
+├── media/
+├── notes/
+└── projects/
 ```
 
-This is a high-level guide; consult the repository for the complete current file tree.
+The exact contents of each directory will evolve as new functionality is added.
 
-## Running locally
+## Running Locally
 
 ### Prerequisites
 
-- Node.js compatible with the version required by the project.
+- Node.js compatible with the project configuration.
 - npm.
-- PostgreSQL, either installed locally or run through Docker Compose.
+- A PostgreSQL database.
+- Environment variables configured for authentication and database access.
 
-### 1. Clone and install
+### Setup
+
+Clone the repository:
 
 ```bash
 git clone https://github.com/GrayHound85/personal-site.git
 cd personal-site
+```
+
+Install dependencies:
+
+```bash
 npm install
 ```
 
-### 2. Configure environment variables
+Configure the required environment variables in a local `.env` file. These include the database connection string and authentication configuration, such as `DATABASE_URL`, `AUTH_SECRET`, and `AUTH_PASSWORD`, as required by the current implementation.
 
-Create a `.env` file in the project root. The application uses the following configuration:
-
-| Variable | Purpose |
-|---|---|
-| `DATABASE_URL` | PostgreSQL connection string |
-| `AUTH_PASSWORD` | Password for the configured administrator login |
-| `AUTH_SECRET` | Secret used by authentication/session configuration |
-| `POSTGRES_USER` | Database container user |
-| `POSTGRES_PASSWORD` | Database container password |
-| `POSTGRES_DB` | Database name |
-
-Use unique local credentials and never commit `.env` or real secrets. The database hostname in `DATABASE_URL` depends on where the application runs: a Compose service name is commonly used between containers, while a host-run development server may use a local port mapping.
-
-### 3. Start the database and apply migrations
-
-Review `compose.yaml` to confirm the services and ports before starting containers:
-
-```bash
-docker compose up -d
-```
-
-The repository includes Drizzle schema and migration files, plus `scripts/migrate.mjs`. Check `package.json` for the configured migration script and available commands:
-
-```bash
-npm run
-```
-
-Apply migrations to your configured database before running features that depend on the schema.
-
-### 4. Run the development server
+Start the development server:
 
 ```bash
 npm run dev
 ```
 
-Then visit [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-For a production build, run:
-
-```bash
-npm run build
-```
-
-Refer to `package.json` for the exact scripts available in the current branch.
+Available scripts can be checked in `package.json`.
 
 ## Deployment
 
-The production deployment is designed around a self-hosted Ubuntu server.
+The application is deployed using Docker on a self-hosted Ubuntu server.
 
-1. A configured GitHub Actions workflow builds the application image.
-2. The workflow publishes the image to GitHub Container Registry.
-3. The homelab pulls the updated image.
-4. Docker Compose runs the application and PostgreSQL services.
-5. Cloudflare Tunnel provides the configured remote access route.
+The deployment workflow is designed to keep the application container separate from the persistent PostgreSQL service. Docker Compose is used to manage the services, while GitHub Actions builds and publishes application images to GitHub Container Registry.
 
-After a successful image publish, run the following from the server directory containing the deployment Compose file:
+The general deployment process is:
 
-```bash
-docker compose pull
-docker compose up -d
-docker compose ps
-docker compose logs -f app
-```
+1. Changes are committed and merged into the deployment branch.
+2. GitHub Actions builds the application image.
+3. The image is published to GitHub Container Registry.
+4. The server pulls the updated image.
+5. Docker Compose recreates the application container using the new image.
 
-Check the Compose file for the actual service names and image tags. Routine updates should not require deleting database volumes.
+Cloudflare Tunnel provides remote access to selected services without requiring their ports to be directly exposed to the internet.
 
-## Security considerations
+## Security Considerations
 
-- Keep authentication secrets and database credentials out of version control.
-- Protect private routes and sensitive server operations with server-side authorisation.
-- Validate input before writing to the database.
-- Avoid sending secrets or private data to client-side code.
-- Back up important data before database migrations or maintenance.
+- Secrets and credentials are stored in environment variables rather than committed to the repository.
+- Private application areas require authentication.
+- Database access is handled server-side.
+- Docker containers separate the application from the host environment.
+- Remote access is configured through Cloudflare Tunnel.
 
-The project currently uses a credentials-based administrator model; planned workspace sections should not be taken as evidence that every feature is complete.
+Authentication and authorisation remain important areas to review as more private features are introduced.
 
-## What I am learning
+## Links
 
-This project is a practical way to build experience in:
-
-- Full-stack feature development, from UI to persistent data.
-- Relational data modelling and database migrations.
-- Component design and responsive interfaces.
-- Authentication, sessions, and server-side access control.
-- Application architecture and separation of concerns.
-- Docker-based deployment, CI image publishing, and self-hosted operations.
-- Delivering a larger project incrementally while communicating implementation status accurately.
-
-## Roadmap
-
-- Expand career and study tools for learning and professional development.
-- Build out the personal media workspace.
-- Develop finance and personal tracking tools.
-- Host more interactive projects within the public portfolio.
-- Improve the dashboard as complete workflows are added.
-
-These are future directions, not completed features.
-
----
-
-**Built by Oliver Norrie** · [Portfolio](https://olivernorrie.com) · [GitHub](https://github.com/GrayHound85)
+- **Website:** [olivernorrie.com](https://olivernorrie.com)
+- **Source code:** [GitHub repository](https://github.com/GrayHound85/personal-site)

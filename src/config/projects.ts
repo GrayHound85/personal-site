@@ -9,7 +9,7 @@ export const projects = {
       backgroundColor: "",
       invert: false,
     },
-    link: "/projects",
+    link: "/projects/homelab",
   },
 
   personalSite: {
