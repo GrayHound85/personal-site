@@ -145,6 +145,7 @@ export default function PersonalSiteProjectPage() {
                 <ProjectImagePlaceholder
                   title="Resource library structure"
                   description="A diagram showing how categories, subcategories, topics, and resources fit together."
+                  image="/projects/resource_struct_diagram.png"
                 />
               </div>
             </section>
@@ -195,6 +196,7 @@ export default function PersonalSiteProjectPage() {
                 <ProjectImagePlaceholder
                   title="Application architecture"
                   description="A system diagram tracing a request from the browser through Next.js, the service and repository layers, and PostgreSQL, with authentication around private routes."
+                  image="/projects/personal-site_architecture.png"
                 />
               </div>
             </section>
