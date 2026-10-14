@@ -9,6 +9,7 @@ export const projects = {
       backgroundColor: "",
       invert: false,
     },
+    image: "/projects/homelab_fusion_assembly.png",
     link: "/projects/homelab",
   },
 

@@ -35,7 +35,7 @@ export default function ProfileCard() {
             "
         >
           <img
-            src="/temp_headshot.png"
+            src="/head_shot.jpg"
             alt="Profile picture"
             className="
                     absolute
