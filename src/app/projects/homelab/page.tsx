@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -65,12 +64,12 @@ export default function HomeLabProjectPage() {
                     A self-built homelab for hosting and deploying projects
                   </h1>
                   <p className="mt-5 max-w-3xl text-lg leading-8 text-text-secondary">
-                    I built my own server and designed, modelled, and
-                    3D-printed a custom rack-style case to house it. Running
-                    Ubuntu Server and Docker, the homelab hosts my personal
-                    website and provides a platform for deploying future
-                    projects while developing my practical experience with
-                    Linux, networking, and infrastructure.
+                    I built my own server and designed, modelled, and 3D-printed
+                    a custom rack-style case to house it. Running Ubuntu Server
+                    and Docker, the homelab hosts my personal website and
+                    provides a platform for deploying future projects while
+                    developing my practical experience with Linux, networking,
+                    and infrastructure.
                   </p>
 
                   <dl className="mt-8 grid gap-5 sm:grid-cols-3">
@@ -93,12 +92,11 @@ export default function HomeLabProjectPage() {
               </h2>
               <Card className="mt-5 border-none bg-panel/50 p-4 sm:p-6">
                 <p className="leading-7 text-text-secondary">
-                  I assembled the server hardware myself, using a Gigabyte
-                  A520M DS3H V2 motherboard and an AMD Ryzen 5 3600 processor.
-                  I also designed the enclosure rather than using a
-                  pre-built case: I modelled the assembly in Fusion 360 and
-                  3D-printed the components to fit the hardware and networking
-                  equipment.
+                  I assembled the server hardware myself, using a Gigabyte A520M
+                  DS3H V2 motherboard and an AMD Ryzen 5 3600 processor. I also
+                  designed the enclosure rather than using a pre-built case: I
+                  modelled the assembly in Fusion 360 and 3D-printed the
+                  components to fit the hardware and networking equipment.
                 </p>
 
                 <dl className="mt-6 divide-y divide-border border-y border-border">
@@ -163,9 +161,9 @@ export default function HomeLabProjectPage() {
                 <p className="leading-7 text-text-secondary">
                   The homelab provides a headless Linux environment for running
                   applications and services. Docker and Docker Compose keep
-                  services separated into containers, while remote access and
-                  an automated image build process make it practical to
-                  maintain the applications hosted on the server.
+                  services separated into containers, while remote access and an
+                  automated image build process make it practical to maintain
+                  the applications hosted on the server.
                 </p>
                 <ul className="mt-5 space-y-3 leading-7 text-text-secondary">
                   <li>
@@ -189,8 +187,8 @@ export default function HomeLabProjectPage() {
                     </strong>{" "}
                     My personal website runs on the homelab in a Docker
                     container, with PostgreSQL running as a separate service.
-                    GitHub Actions builds the application image and publishes
-                    it to GitHub Container Registry (GHCR) for deployment.
+                    GitHub Actions builds the application image and publishes it
+                    to GitHub Container Registry (GHCR) for deployment.
                   </li>
                   <li>
                     <strong className="text-text-primary">
@@ -205,8 +203,8 @@ export default function HomeLabProjectPage() {
                     <strong className="text-text-primary">
                       Hardware and fabrication:
                     </strong>{" "}
-                    AMD Ryzen 5 3600, Gigabyte A520M DS3H V2, Fusion 360, and
-                    3D printing.
+                    AMD Ryzen 5 3600, Gigabyte A520M DS3H V2, Fusion 360, and 3D
+                    printing.
                   </li>
                 </ul>
               </Card>
@@ -232,8 +230,8 @@ export default function HomeLabProjectPage() {
                     <strong className="text-text-primary">
                       Deployment and containerisation:
                     </strong>{" "}
-                    running services with Docker Compose and using a
-                    GitHub Actions and GHCR workflow to build and distribute
+                    running services with Docker Compose and using a GitHub
+                    Actions and GHCR workflow to build and distribute
                     application images.
                   </li>
                   <li>
@@ -270,8 +268,8 @@ export default function HomeLabProjectPage() {
                 Where the project is going
               </h2>
               <p className="mt-3 leading-7 text-text-secondary">
-                The homelab is an ongoing project that will provide hosting
-                for my future applications and experiments with self-hosted
+                The homelab is an ongoing project that will provide hosting for
+                my future applications and experiments with self-hosted
                 services. Rather than treating each project as a separate
                 deployment, I want to use this server as a shared platform for
                 running and maintaining the software I build.
