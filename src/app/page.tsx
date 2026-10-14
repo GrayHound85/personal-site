@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import BackgroundLayout from "@c/layout/BackgroundLayout";
 import PortfolioLayout from "@c/layout/PortfolioLayout";
 
@@ -13,6 +15,24 @@ import ExperienceCard from "@/components/sections/porfolio/ExperienceCard";
 
 import { projects } from "@/config/projects";
 import Card from "@/components/ui/Card";
+
+export const metadata: Metadata = {
+  title: "Oliver Norrie | Computer Science Student at Edinburgh",
+
+  description:
+    "Explore Oliver Norrie's software projects, technical experience, and interests in Computer Science. Studying at the University of Edinburgh, with projects spanning web development, Python, and self-hosted infrastructure.",
+
+  alternates: {
+    canonical: "/",
+  },
+
+  openGraph: {
+    title: "Oliver Norrie | Computer Science Student at Edinburgh",
+    description:
+      "Software projects, technical experience, and Computer Science interests from Oliver Norrie, a student at the University of Edinburgh.",
+    url: "/",
+  },
+};
 
 export default function LandingPage() {
   return (
@@ -150,7 +170,7 @@ export default function LandingPage() {
           description={[
             "Worked on creating simple to understand computer graphics to deliver complex information to investors and scientific audiences.",
             "Worked with data from proprietary end to end instrument model and transformed it to deliver impact full metrics.",
-            "Worked to create graphics to bring across important information in funcding proposals to the European Space Agency (ESA)",
+            "Worked to create graphics to bring across important information in funding proposals to the European Space Agency (ESA)",
           ]}
         />
         <ExperienceCard
