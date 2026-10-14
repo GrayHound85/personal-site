@@ -11,6 +11,8 @@ const ACCESS_RULES: readonly AccessRule[] = [
   { path: "/login", roles: "public" },
   { path: "/projects", roles: "public", includeChildren: true },
   { path: "/media", roles: ["admin", "media"], includeChildren: true },
+  { path: "/sitemap.xml", roles: "public" },
+  { path: "/robots.txt", roles: "public" },
 ];
 
 function matchesRule(rule: AccessRule, pathname: string): boolean {
