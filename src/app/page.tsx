@@ -93,7 +93,7 @@ export default function LandingPage() {
           <ProjectCard
             link={projects.homelab.link}
             title={projects.homelab.title}
-            icon={projects.homelab.icon}
+            image={projects.homelab.image}
             eager
           />
           <ProjectCard

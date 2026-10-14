@@ -9,7 +9,8 @@ export const projects = {
       backgroundColor: "",
       invert: false,
     },
-    link: "/projects",
+    image: "/projects/homelab_fusion_assembly.png",
+    link: "/projects/homelab",
   },
 
   personalSite: {
