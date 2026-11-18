@@ -55,58 +55,94 @@ list is the order everywhere (home page and `/projects`).
 
 From that list, automatically:
 
-- the card on `/projects`
+- the row on `/projects`
 - the pinned card on the home page (if `featured: true`)
 - the sitemap entry (`src/app/sitemap.ts` reads the list)
+- the `home / projects / <slug>` nav bar and the tags on the project page
 - the page's `<title>` and meta description
 
 `/projects/*` is already public in `ACCESS_RULES`, so nothing to do there.
 
-### 1. Add the entry
+## Building a project page, step by step
+
+### Step 1: plan what goes where
+
+Each piece of information should appear **once**. Before writing, decide
+which slot each thing belongs in:
+
+| Slot                 | Put here                                                              | Don't put here                       |
+| -------------------- | --------------------------------------------------------------------- | ------------------------------------ |
+| `summary` (config)   | One sentence: what it is. Shows on cards + search results             | The tech stack (that's the tags)     |
+| `tags` (config)      | The stack: languages, frameworks, tools (`Next.js`, `Docker`)         | Categories like "Web", sentences     |
+| `headline` (header)  | A plain description of the project, a few words longer than the title | Marketing lines                      |
+| `intro` (header)     | 1–2 sentences: what you built and why it exists                       | Specs, stack, plans                  |
+| `status` (header)    | A few words on where it's at: "Live, hosting this site"               | Plans (that's the direction section) |
+| First section        | What you actually built, specs and details live here only             |                                      |
+| Architecture section | How it works / fits together                                          | Specs already given above            |
+| Skills section       | What _you_ learnt, not a re-description of the tech                   |                                      |
+| Direction section    | Plans. This is the only place future work is described                | Disclaimers repeated elsewhere       |
+
+The four sections above are what the existing pages use. They're a default,
+not a rule: a small project can just be one or two sections.
+
+### Step 2: add the config entry
+
+In `src/config/projects.ts`:
 
 ```ts
 {
-  slug: "port-scanner",            // folder name + URL: /projects/port-scanner
-  title: "Port Scanner",           // used in the page title
-  summary: "One sentence. Shown on the pinned card and as the meta description.",
-  tags: ["Security", "Python"],
+  slug: "port-scanner",   // folder name + URL: /projects/port-scanner
+  title: "Port Scanner",  // used in the page title
+  summary: "A multithreaded TCP port scanner I wrote to learn how network reconnaissance works.",
+  tags: ["Python", "Sockets"],
   year: 2026,
-  featured: true,                  // pin it on the home page
-  image: "/projects/port-scanner_cover.png",   // optional
-  icon: {                                      // optional
-    name: "ServerIcon",
-    foregroundColor: "#85afd8",
-    backgroundColor: "",
-    invert: false,
-  },
+  featured: true,         // pin it on the home page
 },
 ```
 
-- **Images** go in `public/projects/`, referenced as `/projects/<file>`.
-- The `/projects` card shows the **icon if there is one, otherwise the image**.
-  Icon names are listed in `ProjectIconName` (`src/types/projects.ts`). A new
-  icon needs adding there and to the `projectIcons` map in
-  `src/components/sections/porfolio/ProjectCard.tsx`.
-- **Tag dot colours** on the pinned cards are in `tagColours` at the top of
-  `src/components/sections/home/PinnedProject.tsx`. Unknown tags get the primary
-  colour, so add one there when using a new tag.
+New tag? Give it a dot colour in `tagColours` at the top of
+`src/components/sections/projects/ProjectTags.tsx`, otherwise it gets the
+primary colour.
 
-### 2. Create the page
+### Step 3: add images
 
-Make `src/app/projects/<slug>/page.tsx`. The folder name **must match the
+Put them in `public/projects/`, named `<slug>_<what>.png`
+(e.g. `port-scanner_output.png`). Note each image's real width and height
+(`file public/projects/<name>` prints them), you'll pass those in step 4.
+
+### Step 4: create the page
+
+Create `src/app/projects/<slug>/page.tsx`. The folder name **must match the
 slug**: `getProject("<slug>")` throws if it isn't in the config, so a typo
-fails the build rather than shipping a broken page. The other direction isn't
-checked: a config entry with no page folder is a 404 link.
+fails the build. The other direction isn't checked: a config entry with no
+page folder is a 404 link.
 
-Starting point (copy one of the existing pages for a fuller example):
+The building blocks are all in `src/components/sections/projects/`:
+
+| Component        | What it is                                                                                     |
+| ---------------- | ---------------------------------------------------------------------------------------------- |
+| `ProjectHeader`  | The card at the top: label pill, status, headline, intro, tags, GitHub button                  |
+| `ProjectSection` | One `<id>.md` panel with a heading. Plain `<p>` / `<strong>` / `<a>` inside are styled for you |
+| `ProjectDetails` | Two column "term / description" rows, good for specs                                           |
+| `ProjectList`    | Bullet list where each item starts with a bold label                                           |
+| `ProjectImage`   | Image with a title strip and caption. Leave out `src` for a placeholder box                    |
+
+`ProjectPageLayout` (`src/components/layout/`) is just the shell: background,
+the `home / projects / <slug>` nav bar, the header on top and the "On this page"
+nav beside the sections.
+
+Copy this and fill it in (the two existing pages are fuller examples):
 
 ```tsx
 import type { Metadata } from "next";
 
 import ProjectPageLayout from "@c/layout/ProjectPageLayout";
 import type { ProjectSectionLink } from "@c/sections/projects/ProjectContentsNav";
-import ProjectImagePlaceholder from "@c/sections/projects/ProjectImagePlaceholder";
-import Card from "@/components/ui/Card";
+import ProjectDetails from "@c/sections/projects/ProjectDetails";
+import ProjectHeader from "@c/sections/projects/ProjectHeader";
+import ProjectImage from "@c/sections/projects/ProjectImage";
+import ProjectList from "@c/sections/projects/ProjectList";
+import ProjectSection from "@c/sections/projects/ProjectSection";
 import { getProject } from "@/config/projects";
 
 const project = getProject("port-scanner");
@@ -116,65 +152,101 @@ export const metadata: Metadata = {
   description: project.summary,
 };
 
-// One entry per <section> below, the id must match the section's id
+// One entry per <ProjectSection>, the ids must match
 const sections: ProjectSectionLink[] = [
   { id: "overview", title: "Overview" },
   { id: "how-it-works", title: "How it works" },
-];
-
-const overviewFacts = [
-  { label: "Current focus", value: "..." },
-  { label: "Core stack", value: "..." },
-  { label: "Status", value: "..." },
+  { id: "skills", title: "Skills developed" },
+  { id: "direction", title: "Where it is going" },
 ];
 
 export default function PortScannerProjectPage() {
   return (
     <ProjectPageLayout
-      headline="The big heading at the top of the page"
-      intro={<>A paragraph under the headline.</>}
-      facts={overviewFacts}
-      github={{
-        href: "https://github.com/GrayHound85/<repo>",
-        label: "View source on GitHub",
-      }}
+      project={project}
       sections={sections}
+      header={
+        <ProjectHeader
+          project={project}
+          headline="A port scanner built to understand network reconnaissance"
+          intro="One or two sentences on what it is and why I built it."
+          status="Working, adding features"
+          github={{
+            href: "https://github.com/GrayHound85/<repo>",
+            label: "View source on GitHub",
+          }}
+        />
+      }
     >
-      <section id="overview" className="scroll-mt-20 lg:scroll-mt-8">
-        <p className="text-sm font-semibold uppercase text-primary">
-          Small label
-        </p>
-        <h2 className="mt-2 text-2xl font-bold text-text-primary">
-          Section title
-        </h2>
-        <Card className="mt-5 border-none bg-panel/50 p-4 sm:p-6">
-          <p className="leading-7 text-text-secondary">...</p>
-        </Card>
-        <div className="mt-6">
-          <ProjectImagePlaceholder
-            title="Caption title"
-            description="Caption text under the image."
-            image="/projects/port-scanner_diagram.png"
-          />
-        </div>
-      </section>
+      <ProjectSection id="overview" title="What it does" label="Overview">
+        <p>Just write paragraphs, they're styled already.</p>
 
-      <section id="how-it-works" className="scroll-mt-20 lg:scroll-mt-8">
-        ...
-      </section>
+        <ProjectDetails
+          items={[{ term: "Scanning", description: "What it does..." }]}
+        />
+
+        <ProjectImage
+          title="Scanner output"
+          description="Caption under the image."
+          src="/projects/port-scanner_output.png"
+          width={1600}
+          height={900}
+        />
+      </ProjectSection>
+
+      <ProjectSection
+        id="how-it-works"
+        title="How it works"
+        label="Under the hood"
+      >
+        <p>A short lead-in.</p>
+
+        <ProjectList
+          items={[{ label: "Networking", text: "raw sockets and..." }]}
+        />
+      </ProjectSection>
+
+      <ProjectSection
+        id="skills"
+        title="Skills developed"
+        label="What I am practising"
+      >
+        <ProjectList items={[{ label: "Concurrency", text: "..." }]} />
+      </ProjectSection>
+
+      <ProjectSection
+        id="direction"
+        title="Where it is going"
+        label="Next stages"
+      >
+        <p>Plans go here and nowhere else.</p>
+      </ProjectSection>
     </ProjectPageLayout>
   );
 }
 ```
 
-- `ProjectPageLayout` gives the back link, the header card (label, GitHub
-  button, headline, intro, facts) and the "On this page" nav. Pass
-  `label="University project"` etc. to change the small label, it defaults to
-  "Personal project".
-- Leave out `image` on `ProjectImagePlaceholder` and it renders a dashed
-  placeholder box, useful while writing.
+Options worth knowing:
 
-### Pinning
+- `ProjectHeader`: leave out `github` for no button, and pass
+  `label="University project"` etc. to change the pill (defaults to
+  "Personal project"). Leave out `status` to hide
+  it.
+- `ProjectSection`: `label` is the small text on the right of its strip,
+  hidden on mobile.
+- For anything one-off, plain JSX inside a `ProjectSection` is fine, the
+  components are only for the patterns that repeat.
+
+### Step 5: check it
+
+1. `npm run dev` and open `/projects/<slug>`. Click each "On this page" link
+   to check the ids match.
+2. Read it top to bottom once looking for anything said twice (step 1's
+   table). Specs and plans are the usual repeat offenders.
+3. Check it shows on `/projects`, and on the home page if `featured`.
+4. `npm run lint` and `npm run build`.
+
+## Pinning
 
 - `featured: true` → shows in the Pinned panel on the home page.
 - Order on the home page = order in the config list, so move an entry up to

@@ -11,6 +11,8 @@ type PortfolioLayoutProps = {
   profile: ReactNode;
   navigation: ReactNode;
   floating?: ReactNode;
+  // Only show the profile card from the md breakpoint up
+  hideProfileOnMobile?: boolean;
   children: ReactNode;
 };
 
@@ -19,6 +21,7 @@ export default function PortfolioLayout({
   navigation,
   children,
   floating,
+  hideProfileOnMobile = false,
 }: PortfolioLayoutProps) {
   return (
     <BackgroundLayout background="plain">
@@ -36,7 +39,7 @@ export default function PortfolioLayout({
                 "
       >
         <aside
-          className="
+          className={`
                         w-full
                         md:w-100
 
@@ -46,7 +49,9 @@ export default function PortfolioLayout({
 
                         md:h-screen
                         md:z-10
-                    "
+
+                        ${hideProfileOnMobile ? "hidden md:block" : ""}
+                    `}
         >
           <div
             className="

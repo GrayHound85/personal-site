@@ -4,8 +4,8 @@ import Link from "next/link";
 import PortfolioLayout from "@c/layout/PortfolioLayout";
 import ProfileCard from "@c/sections/porfolio/ProfileCard";
 import LogEntry, { type LogEntryProps } from "@c/sections/home/LogEntry";
-import PinnedProject from "@c/sections/home/PinnedProject";
-import RepoPanel from "@c/sections/home/RepoPanel";
+import ProjectCard from "@c/sections/projects/ProjectCard";
+import RepoPanel from "@c/ui/RepoPanel";
 import NavBar from "@c/ui/NavBar";
 import LinkButton from "@c/ui/LinkButton";
 import BookIcon from "@c/icons/BooksIcon";
@@ -98,9 +98,9 @@ export default function LandingPage() {
         <NavBar
           type="top"
           items={[
-            { label: "About", targetId: "about" },
-            { label: "Projects", targetId: "projects" },
-            { label: "Log", targetId: "log" },
+            { label: "about", targetId: "about" },
+            { label: "projects", href: "/projects" },
+            { label: "log", targetId: "log" },
           ]}
         />
       }
@@ -161,7 +161,7 @@ export default function LandingPage() {
       >
         <div className="grid gap-4 xl:grid-cols-2">
           {featuredProjects.map((project) => (
-            <PinnedProject key={project.slug} project={project} />
+            <ProjectCard key={project.slug} project={project} />
           ))}
         </div>
       </RepoPanel>

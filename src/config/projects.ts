@@ -13,32 +13,19 @@ export const projects: ProjectDefinition[] = [
     slug: "homelab",
     title: "HomeLab",
     summary:
-      "A self-built Linux server that hosts this site and my other projects, using Docker and Cloudflare Tunnels.",
-    tags: ["Infrastructure", "Linux", "Docker"],
+      "A server I built myself, in a 3D-printed case I designed, that hosts this site and my other projects.",
+    tags: ["Ubuntu Server", "Docker", "Cloudflare Tunnels"],
     year: 2026,
     featured: true,
-    image: "/projects/homelab_fusion_assembly.png",
-    icon: {
-      name: "ServerIcon",
-      foregroundColor: "#85afd8",
-      backgroundColor: "",
-      invert: false,
-    },
   },
   {
     slug: "personal-site",
     title: "Personal Site",
     summary:
-      "This website: a public portfolio plus private tools behind a login, built with Next.js and PostgreSQL.",
-    tags: ["Web", "TypeScript", "PostgreSQL"],
+      "This website: a public portfolio, plus private tools behind a login that I'm building for myself.",
+    tags: ["Next.js", "TypeScript", "PostgreSQL"],
     year: 2026,
     featured: true,
-    icon: {
-      name: "PersonalSiteIcon",
-      foregroundColor: "#85afd8",
-      backgroundColor: "",
-      invert: false,
-    },
   },
 ];
 
