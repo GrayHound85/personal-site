@@ -3,9 +3,12 @@ import ProjectsGrid from "@/components/sections/projects/ProjectsGrid";
 import { projects } from "@/config/projects";
 import Link from "next/link";
 
-const projectItems = Object.entries(projects).map(([id, project], index) => ({
-  id,
-  ...project,
+const projectItems = projects.map((project, index) => ({
+  id: project.slug,
+  link: `/projects/${project.slug}`,
+  title: project.title,
+  image: project.image,
+  icon: project.icon,
   eager: index === 0,
 }));
 

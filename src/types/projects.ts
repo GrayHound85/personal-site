@@ -20,8 +20,15 @@ export type ProjectCardIconOptions = {
 };
 
 export type ProjectDefinition = {
+  // Folder name under src/app/projects/, the page lives at /projects/<slug>
+  slug: string;
   title: string;
-  link: string;
+  // One sentence, used on the home page and as the page's meta description
+  summary: string;
+  tags: string[];
+  year: number;
+  // Show this project on the home page
+  featured: boolean;
   image?: string;
   icon?: ProjectCardIconOptions;
 };

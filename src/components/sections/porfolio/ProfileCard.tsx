@@ -2,7 +2,6 @@ import HeroPanel from "./HeroPanel";
 import Card from "@/components/ui/Card";
 import SocialButton from "../../ui/SocialButton";
 import CopyButton from "@/components/ui/CopyButton";
-import Button from "@/components/ui/Button";
 
 import LinkedinIcon from "@/components/icons/LinkedinIcon";
 import LeetcodeIcon from "@/components/icons/LeetcodeIcon";
@@ -98,10 +97,6 @@ export default function ProfileCard() {
           </div>
 
           <CopyButton text="oliver.norrie@gmail.com" />
-
-          <div className="md:flex-1 h-8" />
-
-          <Button className="w-full ">Resume</Button>
         </div>
       </div>
     </Card>
