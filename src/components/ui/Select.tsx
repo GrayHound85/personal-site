@@ -5,7 +5,22 @@ import { twMerge } from "tailwind-merge";
 
 import { fieldClassName } from "./Input";
 
-export type SelectOption = { value: string; label: string };
+// badge shows a small pill after the label, e.g. { label: "Programming",
+// badge: "category" }
+export type SelectOption = { value: string; label: string; badge?: string };
+
+function OptionLabel({ option }: { option: SelectOption }) {
+  return (
+    <span className="flex min-w-0 items-center gap-2">
+      <span className="truncate">{option.label}</span>
+      {option.badge && (
+        <span className="shrink-0 rounded-full border border-white/20 px-2 font-mono text-xs text-text-secondary">
+          {option.badge}
+        </span>
+      )}
+    </span>
+  );
+}
 
 type SelectProps = {
   name: string;
@@ -115,7 +130,11 @@ export default function Select({
           className,
         )}
       >
-        <span className="truncate">{selected?.label ?? placeholder}</span>
+        {selected ? (
+          <OptionLabel option={selected} />
+        ) : (
+          <span className="truncate">{placeholder}</span>
+        )}
         <svg
           aria-hidden="true"
           className={`h-4 w-4 shrink-0 text-text-secondary transition-transform duration-150 ${open ? "rotate-180" : ""}`}
@@ -190,7 +209,7 @@ export default function Select({
                                         ${isSelected ? "text-text-primary" : "text-text-secondary"}
                                     `}
                 >
-                  {option.label}
+                  <OptionLabel option={option} />
                   {isSelected && (
                     <svg
                       aria-hidden="true"

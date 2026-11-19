@@ -3,6 +3,9 @@
 import Link from "next/link";
 
 import RepoPanel from "@c/ui/RepoPanel";
+import CreateCategoryForm from "./CreateCategoryForm";
+import CreateSubCategoryForm from "./CreateSubCategoryForm";
+import CreateTopicForm from "./CreateTopicForm";
 
 import type {
   ResourceNavigation,
@@ -14,10 +17,16 @@ type ResourceNavigationProps = {
   navigation: ResourceNavigation;
   context: ResourcePageContext;
   onTopicSelect: () => void;
+  onOpenModal: (content: React.ReactNode) => void;
+  onCloseModal: () => void;
 };
 
 const linkClassName =
   "block rounded-button px-3 py-2 text-sm transition-colors hover:bg-white/10 hover:text-text-primary";
+
+// The "+ topic" style buttons at the bottom of the panel
+const addButtonClassName =
+  "flex flex-1 items-center gap-2 rounded-button bg-white/5 px-3 py-2 text-left font-mono text-xs text-text-secondary transition-colors hover:bg-white/10 hover:text-text-primary";
 
 type TopicListProps = {
   topics: ResourceNavigationTopic[];
@@ -60,6 +69,8 @@ export default function ResourceNav({
   navigation,
   context,
   onTopicSelect,
+  onOpenModal,
+  onCloseModal,
 }: ResourceNavigationProps) {
   const category = context.category;
 
@@ -94,9 +105,27 @@ export default function ResourceNav({
 
             {category.subCategories.map((subCategory) => (
               <div key={subCategory.id}>
-                <h3 className="px-3 pt-2 pb-1 font-mono text-xs uppercase tracking-wide text-primary">
-                  {subCategory.name}
-                </h3>
+                <div className="flex items-center justify-between gap-2 px-3 pt-2 pb-1">
+                  <h3 className="font-mono text-xs uppercase tracking-wide text-primary">
+                    {subCategory.name}
+                  </h3>
+                  <button
+                    type="button"
+                    aria-label={`Add topic to ${subCategory.name}`}
+                    onClick={() =>
+                      onOpenModal(
+                        <CreateTopicForm
+                          category={category}
+                          subCategoryId={subCategory.id}
+                          onClose={onCloseModal}
+                        />,
+                      )
+                    }
+                    className="rounded px-1.5 font-mono text-xs text-text-secondary transition-colors hover:bg-white/10 hover:text-text-primary"
+                  >
+                    +
+                  </button>
+                </div>
                 <TopicList
                   topics={subCategory.topics}
                   categorySlug={category.slug}
@@ -105,21 +134,73 @@ export default function ResourceNav({
                 />
               </div>
             ))}
+
+            {category.topics.length === 0 &&
+              category.subCategories.length === 0 && (
+                <p className="px-3 py-2 text-sm text-text-secondary">
+                  Nothing in here yet.
+                </p>
+              )}
+
+            <div className="flex gap-2 border-t border-white/10 pt-3">
+              <button
+                type="button"
+                onClick={() =>
+                  onOpenModal(
+                    <CreateTopicForm
+                      category={category}
+                      onClose={onCloseModal}
+                    />,
+                  )
+                }
+                className={addButtonClassName}
+              >
+                <span className="text-primary">+</span> topic
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  onOpenModal(
+                    <CreateSubCategoryForm
+                      category={category}
+                      onClose={onCloseModal}
+                    />,
+                  )
+                }
+                className={addButtonClassName}
+              >
+                <span className="text-primary">+</span> subcategory
+              </button>
+            </div>
           </div>
         ) : (
-          <ul className="space-y-1">
-            {navigation.map((item) => (
-              <li key={item.id}>
-                <Link
-                  href={`/career/resources/${item.slug}`}
-                  className={`${linkClassName} flex items-center justify-between text-text-secondary`}
-                >
-                  <span>{item.name}</span>
-                  <span aria-hidden="true">→</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div className="space-y-3">
+            <ul className="space-y-1">
+              {navigation.map((item) => (
+                <li key={item.id}>
+                  <Link
+                    href={`/career/resources/${item.slug}`}
+                    className={`${linkClassName} flex items-center justify-between text-text-secondary`}
+                  >
+                    <span>{item.name}</span>
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex border-t border-white/10 pt-3">
+              <button
+                type="button"
+                onClick={() =>
+                  onOpenModal(<CreateCategoryForm onClose={onCloseModal} />)
+                }
+                className={addButtonClassName}
+              >
+                <span className="text-primary">+</span> category
+              </button>
+            </div>
+          </div>
         )}
       </RepoPanel>
     </nav>

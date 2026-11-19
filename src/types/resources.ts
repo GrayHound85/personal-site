@@ -40,3 +40,7 @@ export type ResourcePageContext = {
   subCategory: ResourceNavigationSubCategory | null;
   topic: ResourceNavigationTopic | null;
 };
+
+// Value of the new topic form's "in" dropdown meaning "directly in the
+// category, not in a subcategory"
+export const CATEGORY_ROOT = "category";

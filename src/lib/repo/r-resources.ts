@@ -97,7 +97,7 @@ export function createResource(
   url: string,
   resourceTypeId: string,
 ) {
-  executeDatabaseQuery(() =>
+  return executeDatabaseQuery(() =>
     getDb()
       .insert(ResourceTable)
       .values({
@@ -106,6 +106,40 @@ export function createResource(
         url,
         resourceTypeId,
       })
+      .returning(),
+  );
+}
+
+export function createCategory(name: string, slug: string) {
+  return executeDatabaseQuery(() =>
+    getDb().insert(CategoryTable).values({ name, slug }).returning(),
+  );
+}
+
+export function createSubCategory(
+  categoryId: string,
+  name: string,
+  slug: string,
+) {
+  return executeDatabaseQuery(() =>
+    getDb()
+      .insert(SubCategoryTable)
+      .values({ categoryId, name, slug })
+      .returning(),
+  );
+}
+
+// subCategoryId null puts the topic directly inside the category
+export function createTopic(
+  categoryId: string,
+  subCategoryId: string | null,
+  name: string,
+  slug: string,
+) {
+  return executeDatabaseQuery(() =>
+    getDb()
+      .insert(TopicTable)
+      .values({ categoryId, subCategoryId, name, slug })
       .returning(),
   );
 }

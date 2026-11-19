@@ -9,6 +9,7 @@ import Field from "@c/ui/Field";
 import Form from "@c/ui/Form";
 import Input from "@c/ui/Input";
 import Select from "@c/ui/Select";
+import FormHeading from "./FormHeading";
 
 type CreateResourceFormProps = {
   topicId: string;
@@ -34,6 +35,8 @@ export default function CreateResourceForm({
       }}
       className="w-full sm:w-100"
     >
+      <FormHeading title="New resource" />
+
       <Field label="name">
         <Input
           name="title"

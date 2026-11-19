@@ -10,6 +10,7 @@ data in a couple of files, no database involved.
 | Pin / unpin a project on the home page | `featured` in `src/config/projects.ts`             |
 | Change the README panel text           | `src/app/page.tsx` → `README.md` panel             |
 | Change sidebar (photo, links, email)   | `src/components/sections/porfolio/ProfileCard.tsx` |
+| Add a resource category / topic        | The `+` buttons on `/career/resources`             |
 | Build a new form                       | See [Forms](#forms)                                |
 
 Before committing: `npm run lint` and `npm run build`.
@@ -266,6 +267,32 @@ file for inline code-styled words, like `<Code>homelab</Code>`.
 
 Heading levels: the sidebar name is the page's `h1` and panel titles are `h2`,
 so inside the README use `h3` for the main heading and `h4` for subheadings.
+
+---
+
+## Resource library
+
+Everything is added from `/career/resources` (no code changes needed):
+
+| To add                   | Where                                                                                                     |
+| ------------------------ | --------------------------------------------------------------------------------------------------------- |
+| A category               | `+ category` under the category list                                                                      |
+| A subcategory            | Open the category, `+ subcategory` at the bottom of its list                                              |
+| A topic                  | Open the category, `+ topic`. Pick "in" to put it directly in the category or in one of its subcategories |
+| A topic in a subcategory | The small `+` next to the subcategory's name (it's pre-picked)                                            |
+| A resource               | Open the topic, `+` in the resources panel                                                                |
+
+- URLs (slugs) are made from the name: `Next.js` → `nextjs`, `C++` → `cpp`,
+  `Web Development` → `web-development`. Topic slugs are unique across every
+  category, so a second "Basics" topic becomes `basics-2`.
+- Names have to be unique where they live: no two categories with the same
+  name, no two subcategories with the same name in one category, and no two
+  topics with the same name in the same place.
+- Editing and deleting aren't built yet. For now, fix mistakes in the database
+  directly.
+- The code: forms in `src/components/sections/career/resource/Create*Form.tsx`,
+  actions in `src/app/actions/a-resource.ts`, slug and duplicate checks in
+  `src/lib/service/s-resources.ts`.
 
 ---
 

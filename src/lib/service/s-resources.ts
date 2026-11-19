@@ -1,5 +1,8 @@
-import { createResource } from "../repo/r-resources";
 import {
+  createCategory,
+  createResource,
+  createSubCategory,
+  createTopic,
   getCategories,
   getSubCategories,
   getTopics,
@@ -191,4 +194,152 @@ export function createResourceService(
   resourceTypeId: string,
 ) {
   return createResource(topicId, title, url, resourceTypeId);
+}
+
+//===============================================================
+// Creating categories, subcategories and topics
+
+// Thrown when a new category / subcategory / topic can't be created, e.g. the
+// name is already used. The message is written to be shown to the user.
+export class ResourceConflictError extends Error {}
+
+// "Next.js" -> "nextjs", "C++" -> "cpp", "Web Development" -> "web-development"
+function slugify(name: string) {
+  return name
+    .toLowerCase()
+    .replace(/\+/g, "p")
+    .replace(/#/g, "sharp")
+    .replace(/\./g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+// Slugs are unique across a whole table, so if "basics" is taken by a topic
+// in another category this one becomes "basics-2", then "basics-3"...
+function uniqueSlug(name: string, takenSlugs: string[]) {
+  const base = slugify(name);
+
+  if (!base) {
+    throw new ResourceConflictError(
+      "Use at least one letter or number in the name.",
+    );
+  }
+
+  let slug = base;
+  let suffix = 2;
+
+  while (takenSlugs.includes(slug)) {
+    slug = `${base}-${suffix}`;
+    suffix++;
+  }
+
+  return slug;
+}
+
+function sameName(a: string, b: string) {
+  return a.trim().toLowerCase() === b.trim().toLowerCase();
+}
+
+export async function createCategoryService(name: string) {
+  const categories = await getCategories();
+
+  if (categories.some((category) => sameName(category.name, name))) {
+    throw new ResourceConflictError(
+      `There's already a category called "${name}".`,
+    );
+  }
+
+  await createCategory(
+    name,
+    uniqueSlug(
+      name,
+      categories.map((category) => category.slug),
+    ),
+  );
+}
+
+export async function createSubCategoryService(
+  categoryId: string,
+  name: string,
+) {
+  const [categories, subCategories] = await Promise.all([
+    getCategories(),
+    getSubCategories(),
+  ]);
+
+  if (!categories.some((category) => category.id === categoryId)) {
+    throw new ResourceConflictError("That category doesn't exist.");
+  }
+
+  if (
+    subCategories.some(
+      (subCategory) =>
+        subCategory.categoryId === categoryId &&
+        sameName(subCategory.name, name),
+    )
+  ) {
+    throw new ResourceConflictError(
+      `There's already a subcategory called "${name}" here.`,
+    );
+  }
+
+  await createSubCategory(
+    categoryId,
+    name,
+    uniqueSlug(
+      name,
+      subCategories.map((subCategory) => subCategory.slug),
+    ),
+  );
+}
+
+// subCategoryId null puts the topic directly inside the category
+export async function createTopicService(
+  categoryId: string,
+  subCategoryId: string | null,
+  name: string,
+) {
+  const [categories, subCategories, topics] = await Promise.all([
+    getCategories(),
+    getSubCategories(),
+    getTopics(),
+  ]);
+
+  if (!categories.some((category) => category.id === categoryId)) {
+    throw new ResourceConflictError("That category doesn't exist.");
+  }
+
+  if (
+    subCategoryId &&
+    !subCategories.some(
+      (subCategory) =>
+        subCategory.id === subCategoryId &&
+        subCategory.categoryId === categoryId,
+    )
+  ) {
+    throw new ResourceConflictError("That subcategory isn't in this category.");
+  }
+
+  if (
+    topics.some(
+      (topic) =>
+        topic.categoryId === categoryId &&
+        topic.subCategoryId === subCategoryId &&
+        sameName(topic.name, name),
+    )
+  ) {
+    throw new ResourceConflictError(
+      `There's already a topic called "${name}" there.`,
+    );
+  }
+
+  await createTopic(
+    categoryId,
+    subCategoryId,
+    name,
+    uniqueSlug(
+      name,
+      topics.map((topic) => topic.slug),
+    ),
+  );
 }

@@ -139,6 +139,8 @@ export default function ResourcePageClient({
             navigation={navigation}
             context={context}
             onTopicSelect={() => setMobileNavOpen(false)}
+            onOpenModal={openModal}
+            onCloseModal={closeModal}
           />
         </aside>
 
