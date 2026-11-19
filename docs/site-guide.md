@@ -1,5 +1,9 @@
 # Site guide
 
+> Quick-reference version: the GitHub wiki, generated from `docs/wiki/`.
+> Keep the two in sync: when you change something here, change the matching
+> wiki page in the same commit.
+
 Notes for myself on updating the public side of the site. All of it is plain
 data in a couple of files, no database involved.
 
@@ -34,7 +38,7 @@ packages/
       components/     panels, nav bars, buttons, tag dots, the form system
       icons/
       types/
-docs/                 this guide
+docs/                 this guide, monorepo-migration.md, wiki/ (the GitHub wiki)
 package.json          root: scripts only
 pnpm-workspace.yaml
 olivernorrie.code-workspace

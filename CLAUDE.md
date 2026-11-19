@@ -13,7 +13,8 @@ pnpm workspace (pnpm 10, pinned via `packageManager` in the root `package.json`;
 - `packages/ui/` (`@repo/ui`): shared components (`src/components/`), icons (`src/icons/`), types (`src/types/`) and the Tailwind v4 theme (`src/theme.css`). Exposed through an `exports` map: import as `@repo/ui/components/RepoPanel`, `@repo/ui/types/forms`, `@repo/ui/theme.css`. It ships TypeScript source; the site compiles it via `transpilePackages`, and the site's `src/app/globals.css` has an `@source` line so Tailwind scans it.
 - **Apps never import from each other**, only from `packages/`. Each app's `eslint.config.mjs` lists the other apps in `otherApps` (`no-restricted-imports`); `packages/ui`'s ESLint config bans app imports and app path aliases. Inside `packages/ui`, import other files relatively.
 - Only generic components belong in `packages/ui`. Anything using site data, the database, server actions or NextAuth stays in the app.
-- Docs for humans: `docs/site-guide.md` (repo layout, everyday commands, content how-tos). VS Code: `olivernorrie.code-workspace`.
+- Docs for humans: `docs/site-guide.md` (repo layout, everyday commands, content how-tos), `docs/monorepo-migration.md` (migration report), and `docs/wiki/` (source of the GitHub wiki, published by `.github/workflows/wiki.yml`). VS Code: `olivernorrie.code-workspace`.
+- **Whenever you change the docs, update the wiki too** (and vice versa) in the same change: edit the matching page in `docs/wiki/`, and add new pages to `_Sidebar.md` (and `Home.md` for common tasks). Wiki pages are terse, command-first quick references for the owner, not explanations from scratch. Never edit the wiki on GitHub directly.
 
 ## Commands
 
@@ -92,6 +93,11 @@ Required env vars (in `apps/personal-site/.env.local`): `DATABASE_URL`, `AUTH_PA
 
 - `src/components/ui/ScrambleText.tsx` (site-only) is the "decrypt" text reveal; only use it on monospace text (proportional glyphs jitter).
 - `packages/ui/src/theme.css` has `fade-up` (on load), and `reveal-on-scroll` / `draw-on-scroll` (CSS scroll-driven, no JS; browsers without `animation-timeline` just show the content). All are disabled under `prefers-reduced-motion`.
+
+### Commits and attribution
+
+- The owner makes all commits. Don't commit or push; stop at review points and suggest a commit message.
+- **Never add Claude as a contributor** to any of the owner's repos (including the wiki): no `Co-Authored-By` trailers, no Claude git author, no "Generated with" lines. CI commits (the wiki workflow) are made as `github.actor`.
 
 ### Code style
 
