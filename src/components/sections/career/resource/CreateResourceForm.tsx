@@ -1,15 +1,15 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { createResourceAction } from "@/app/actions/a-resource";
 
+import { createResourceAction } from "@/app/actions/a-resource";
 import type { ResourceType } from "@/types/resources";
 
-import Input from "@c/ui/Input";
-import DropDown from "@/components/ui/DropDown";
-import DropDownOption from "@c/ui/DropDownOption";
+import Field from "@c/ui/Field";
 import Form from "@c/ui/Form";
+import Input from "@c/ui/Input";
+import Select from "@c/ui/Select";
+import FormHeading from "./FormHeading";
 
 type CreateResourceFormProps = {
   topicId: string;
@@ -23,82 +23,50 @@ export default function CreateResourceForm({
   onClose,
 }: CreateResourceFormProps) {
   const router = useRouter();
-  const [state, formAction, pending] = useActionState(
-    createResourceAction.bind(null, topicId),
-    null,
-  );
-
-  useEffect(() => {
-    if (state?.status === "success") {
-      onClose();
-      router.refresh();
-    }
-  }, [onClose, router, state]);
 
   return (
     <Form
-      action={formAction}
-      error={state?.status === "error" ? state.message : null}
-      pending={pending}
-      pendingText="Creating resource..."
-      submitText="Create Resource"
-      className="w-full gap-4 sm:w-100 sm:gap-5"
+      action={createResourceAction.bind(null, topicId)}
+      submitText="Add resource"
+      pendingText="Adding..."
+      onSuccess={() => {
+        onClose();
+        router.refresh();
+      }}
+      className="w-full sm:w-100"
     >
-      <div className="flex flex-col gap-2">
-        <label
-          id="resource-type-label"
-          htmlFor="resource-type"
-          className="text-sm text-text-secondary"
-        >
-          Name
-        </label>
+      <FormHeading title="New resource" />
+
+      <Field label="name">
         <Input
-          aria-labelledby="resource-type-label"
-          id="resource-title"
-          maxLength={255}
           name="title"
+          maxLength={255}
           placeholder="Resource name"
           required
         />
-      </div>
+      </Field>
 
-      <div className="flex flex-col gap-2">
-        <label htmlFor="resource-url" className="text-sm text-text-secondary">
-          URL
-        </label>
+      <Field label="url">
         <Input
-          id="resource-url"
-          maxLength={2048}
           name="url"
+          type="url"
+          maxLength={2048}
           placeholder="https://example.com"
           required
-          type="url"
         />
-      </div>
+      </Field>
 
-      <div className="flex flex-col gap-2">
-        <label
-          id="resource-type-label"
-          htmlFor="resource-type"
-          className="text-sm text-text-secondary"
-        >
-          Resource type
-        </label>
-        <DropDown
-          aria-labelledby="resource-type-label"
-          id="resource-type"
+      <Field label="type">
+        <Select
           name="resourceTypeId"
-          defaultValue=""
           placeholder="Select a resource type"
           required
-        >
-          {resourceTypes.map((type) => (
-            <DropDownOption key={type.id} value={type.id}>
-              {type.code}
-            </DropDownOption>
-          ))}
-        </DropDown>
-      </div>
+          options={resourceTypes.map((type) => ({
+            value: type.id,
+            label: type.code,
+          }))}
+        />
+      </Field>
     </Form>
   );
 }

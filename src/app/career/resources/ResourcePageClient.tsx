@@ -10,11 +10,12 @@ import type {
 } from "@/types/resources";
 
 import ResourceNav from "@/components/sections/career/resource/ResourceNav";
-import ResourceHeader from "@/components/sections/career/resource/ResourceHeader";
 import ResourceTopicDescription from "@/components/sections/career/resource/ResourceTopicDescription";
 import ResourceList from "@/components/sections/career/resource/ResourcesList";
-import BackgroundLayout from "@c/layout/BackgroundLayout";
+import EditTopicForm from "@/components/sections/career/resource/EditTopicForm";
+import PageLayout from "@c/layout/PageLayout";
 import Modal from "@c/ui/Modal";
+import type { PathSegment } from "@c/ui/PathNav";
 
 type ResourcePageClientProps = {
   context: ResourcePageContext;
@@ -29,6 +30,10 @@ export default function ResourcePageClient({
   navigation,
   resourceTypes,
 }: ResourcePageClientProps) {
+  // On mobile the topic list replaces the content while open. It starts open
+  // when no topic is picked yet, as there's nothing else to show. Whichever
+  // one appears animates in with starting: (CSS @starting-style), the one
+  // leaving just disappears so the two never stack up mid-transition.
   const [mobileNavOpen, setMobileNavOpen] = useState(() => !context.topic);
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
 
@@ -39,46 +44,161 @@ export default function ResourcePageClient({
   function closeModal() {
     setModalContent(null);
   }
+
+  // home / dashboard / career / resources / <category>
+  // home and dashboard only fit on wide screens
+  const segments: PathSegment[] = [
+    { label: "home", href: "/", wideOnly: true },
+    { label: "dashboard", href: "/dashboard", wideOnly: true },
+    { label: "career", href: "/career" },
+    {
+      label: "resources",
+      href: context.category ? "/career/resources" : undefined,
+    },
+  ];
+
+  if (context.category) {
+    segments.push({
+      label: context.category.slug,
+      href: context.topic
+        ? `/career/resources/${context.category.slug}`
+        : undefined,
+    });
+  }
+
   return (
     <>
-      <BackgroundLayout background="subtle">
-        <main className="flex h-screen min-h-0 w-full flex-col gap-3 overflow-hidden md:gap-5">
-          <ResourceHeader
-            context={context}
-            navigationOpen={mobileNavOpen}
-            onToggleNavigation={() => setMobileNavOpen((open) => !open)}
-          />
-          <div className="relative flex min-h-0 flex-1 flex-row gap-5 p-3 md:gap-5 md:pb-5 md:pr-5 md:pt-0 md:pl-0">
-            <div
-              className={`fixed bottom-3 left-0 right-3 top-23 z-20 transform transition-transform duration-300 ease-in-out motion-reduce:transition-none md:relative md:inset-auto md:z-auto md:block md:h-full md:w-80 md:shrink-0 md:translate-x-0 md:transform-none md:transition-none md:pointer-events-auto ${mobileNavOpen ? "translate-x-0 pointer-events-auto" : "-translate-x-full pointer-events-none"}`}
+      <PageLayout
+        segments={segments}
+        navExtra={
+          <div className="ml-auto flex min-w-0 items-center gap-4">
+            {context.topic && (
+              <h1 className="hidden truncate font-sans text-2xl font-bold md:block">
+                {context.topic.name}
+              </h1>
+            )}
+
+            <button
+              type="button"
+              aria-label={mobileNavOpen ? "Close topics" : "Open topics"}
+              aria-expanded={mobileNavOpen}
+              onClick={() => setMobileNavOpen((open) => !open)}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-button bg-white/15 transition-colors hover:bg-white/25 md:hidden"
             >
-              <ResourceNav
-                navigation={navigation}
-                context={context}
-                onTopicSelect={() => setMobileNavOpen(false)}
-              />
-            </div>
-            <div
-              className={`flex min-h-0 flex-1 flex-col gap-3 transition-opacity duration-300 ease-out motion-reduce:transition-none md:pointer-events-auto md:opacity-100 md:transition-none md:gap-5 ${mobileNavOpen ? "pointer-events-none opacity-0" : "opacity-100"}`}
-            >
-              {context.topic && context.category && (
-                <ResourceTopicDescription
-                  key={context.topic.id}
-                  description={null}
-                  notesHref={`/notes/${context.category.slug}/${context.topic.slug}`}
+              <svg
+                aria-hidden="true"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d={
+                    mobileNavOpen
+                      ? "M6 6l12 12M18 6L6 18"
+                      : "M4 7h16M4 12h16M4 17h10"
+                  }
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeWidth="2"
                 />
-              )}
-              <ResourceList
-                resourceList={resourceList}
-                topicId={context.topic?.id}
-                resourceTypes={resourceTypes}
-                onOpenModal={openModal}
-                onCloseModal={closeModal}
-              />
-            </div>
+              </svg>
+            </button>
           </div>
-        </main>
-      </BackgroundLayout>
+        }
+        className="flex"
+      >
+        {/*
+          On desktop the topic list is fixed to the screen (under the nav, the
+          page padding away from the bottom and left) so it never moves while
+          the resources scroll. The content leaves room for it with ml-88:
+          the list's w-80 plus a 2rem gap.
+        */}
+        <aside
+          className={`
+                        ${mobileNavOpen ? "block" : "hidden"}
+                        w-full
+
+                        transition
+                        duration-150
+                        ease-out
+                        starting:-translate-x-6
+                        starting:opacity-0
+
+                        md:fixed
+                        md:top-28
+                        md:bottom-6
+                        md:left-6
+                        md:block
+                        md:w-80
+                        md:transition-none
+
+                        lg:bottom-8
+                        lg:left-8
+                    `}
+        >
+          <ResourceNav
+            navigation={navigation}
+            context={context}
+            onTopicSelect={() => setMobileNavOpen(false)}
+            onOpenModal={openModal}
+            onCloseModal={closeModal}
+          />
+        </aside>
+
+        <div
+          className={`
+                        ${mobileNavOpen ? "hidden" : "flex"}
+                        min-w-0
+                        flex-1
+                        flex-col
+                        gap-6
+
+                        transition
+                        duration-150
+                        ease-out
+                        starting:opacity-0
+
+                        md:ml-88
+                        md:flex
+                        md:transition-none
+                    `}
+        >
+          {/* On desktop the topic name is in the nav bar instead */}
+          {context.topic && (
+            <h1 className="text-3xl font-bold text-text-primary md:hidden">
+              {context.topic.name}
+            </h1>
+          )}
+
+          {context.topic && context.category && (
+            <ResourceTopicDescription
+              key={context.topic.id}
+              description={null}
+              notesHref={`/notes/${context.category.slug}/${context.topic.slug}`}
+              topicName={context.topic.name}
+              onEdit={() =>
+                context.topic &&
+                context.category &&
+                openModal(
+                  <EditTopicForm
+                    category={context.category}
+                    topic={context.topic}
+                    subCategoryId={context.subCategory?.id}
+                    onClose={closeModal}
+                  />,
+                )
+              }
+            />
+          )}
+          <ResourceList
+            resourceList={resourceList}
+            topicId={context.topic?.id}
+            resourceTypes={resourceTypes}
+            onOpenModal={openModal}
+            onCloseModal={closeModal}
+          />
+        </div>
+      </PageLayout>
       <Modal open={modalContent !== null} onClose={closeModal}>
         {modalContent}
       </Modal>

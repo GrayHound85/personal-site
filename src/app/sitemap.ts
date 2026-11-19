@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 
+import { projects } from "@/config/projects";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://olivernorrie.com";
 
@@ -16,17 +18,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
-    {
-      url: `${baseUrl}/projects/homelab`,
+    ...projects.map((project) => ({
+      url: `${baseUrl}/projects/${project.slug}`,
       lastModified: new Date(),
-      changeFrequency: "monthly",
+      changeFrequency: "monthly" as const,
       priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/projects/personal-site`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
+    })),
   ];
 }

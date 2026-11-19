@@ -1,49 +1,68 @@
 "use client";
 
-import type { ReactNode } from "react";
+import {
+  useActionState,
+  useEffect,
+  useEffectEvent,
+  type ReactNode,
+} from "react";
 import { twMerge } from "tailwind-merge";
 
-import Button from "@c/ui/Button";
+import Button from "./Button";
+import type { FormState } from "@/types/forms";
 
 type FormProps = {
-  children: ReactNode;
-  action: (formData: FormData) => void | Promise<void>;
+  // A server action returning a FormState (see src/types/forms.ts)
+  action: (state: FormState, formData: FormData) => Promise<FormState>;
   submitText: string;
-  pending?: boolean;
   pendingText?: string;
-  error?: string | null;
+  // Runs once each time the action returns { status: "success" }
+  onSuccess?: () => void;
   className?: string;
-  submitButtonClassName?: string;
+  submitClassName?: string;
+  children: ReactNode;
 };
 
+// Wraps a server action in a form: tracks the pending state, shows the
+// action's error message and renders the submit button. The fields go in
+// children, usually <Field> with an <Input> or <Select> inside.
 export default function Form({
-  children,
   action,
   submitText,
-  pending = false,
-  pendingText = "Submitting...",
-  error,
+  pendingText = "Saving...",
+  onSuccess,
   className,
-  submitButtonClassName,
+  submitClassName,
+  children,
 }: FormProps) {
+  const [state, formAction, pending] = useActionState(action, null);
+
+  // useEffectEvent so a new onSuccess function each render doesn't re-run it
+  const handleSuccess = useEffectEvent(() => onSuccess?.());
+
+  useEffect(() => {
+    if (state?.status === "success") {
+      handleSuccess();
+    }
+  }, [state]);
+
   return (
     <form
-      action={action}
+      action={formAction}
       className={twMerge("flex w-full flex-col gap-5", className)}
     >
       {children}
 
-      {error && (
-        <p className="text-sm text-red-500" role="alert">
-          {error}
+      {state?.status === "error" && (
+        <p
+          role="alert"
+          className="rounded-button border border-red-300/30 bg-red-300/10 px-3 py-2 text-sm text-red-100"
+        >
+          {state.message}
         </p>
       )}
 
-      <Button
-        className={submitButtonClassName}
-        disabled={pending}
-        type="submit"
-      >
+      <Button className={submitClassName} disabled={pending} type="submit">
         {pending ? pendingText : submitText}
       </Button>
     </form>

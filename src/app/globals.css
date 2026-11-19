@@ -69,25 +69,80 @@
   animation: section-highlight 500ms ease-in-out;
 }
 
+/*
+  No visible page scrollbar: it takes width away from the layout and makes
+  pages jump sideways when they become long enough to scroll. Scrolling
+  still works as normal with the wheel, touch and keyboard.
+*/
+html {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
 }
 
-h1 {
-  font-family: inherit;
-}
-
-.login-password-input:-webkit-autofill,
-.login-password-input:-webkit-autofill:hover,
-.login-password-input:-webkit-autofill:focus,
-.login-password-input:autofill {
+/* Stop browser autofill turning inputs a light colour with dark text */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:autofill {
   color: var(--color-text-primary);
   -webkit-text-fill-color: var(--color-text-primary);
   caret-color: var(--color-text-primary);
   -webkit-transition: background-color 99999s ease-out 0s;
   transition: background-color 99999s ease-out 0s;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes draw-line {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* Plays once on load, use style={{ animationDelay }} to sequence */
+.fade-up {
+  animation: fade-up 600ms ease-out both;
+}
+
+/*
+  Scroll driven: rules draw across and content slides in as it enters the
+  viewport. Browsers without animation-timeline just show everything.
+*/
+@supports (animation-timeline: view()) {
+  .draw-on-scroll {
+    transform-origin: left;
+    animation: draw-line linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+
+  .reveal-on-scroll {
+    animation: fade-up linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 40%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up,
+  .draw-on-scroll,
+  .reveal-on-scroll {
+    animation: none;
+  }
 }
 
 @utility scrollbar-hidden {

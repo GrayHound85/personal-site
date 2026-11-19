@@ -1,54 +1,54 @@
-import BackgroundLayout from "@/components/layout/BackgroundLayout";
+import type { Metadata } from "next";
 
-import DashboardCard from "@/components/sections/dashboard/DashboardCard";
+import PageLayout from "@c/layout/PageLayout";
+import WorkspaceCard, {
+  type WorkspaceCardProps,
+} from "@c/sections/workspace/WorkspaceCard";
+import RepoPanel from "@c/ui/RepoPanel";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+};
+
+// Temporary: the areas will get proper overviews once their tools exist
+const areas: WorkspaceCardProps[] = [
+  {
+    href: "/career",
+    name: "career",
+    description:
+      "Study and career tools. The resource library works, the rest are still scaffolds.",
+  },
+  {
+    href: "/media",
+    name: "media",
+    description: "A media server for digital copies of physical media I own.",
+  },
+  {
+    href: "/finance",
+    name: "finance",
+    description: "Personal finance tracking, and later market analysis.",
+  },
+];
 
 export default function DashboardPage() {
   return (
-    <BackgroundLayout background="plain">
-      <main
-        className="
-                flex
-                flex-col
-                w-full
-                h-full
-                items-center
-                p-8
-              "
+    <PageLayout
+      segments={[{ label: "home", href: "/" }, { label: "dashboard" }]}
+    >
+      <RepoPanel
+        title="workspace"
+        action={
+          <span className="font-mono text-xs text-text-secondary">
+            {areas.length} areas
+          </span>
+        }
       >
-        <h2 className="font-bold text-3xl text-text-secondary">Good morning</h2>
-        <h1 className="font-bold text-5xl p-4">Oliver</h1>
-
-        <div
-          className="
-                  h-full
-                  w-full
-                  flex
-                  flex-col
-                  xl:flex-row
-                  gap-8
-                  p-4
-                "
-        >
-          <DashboardCard
-            href="/career"
-            title="Career"
-            description="Manage your career goals and progress."
-            icon={<span>o</span>}
-          />
-          <DashboardCard
-            href="/media"
-            title="Media"
-            description="Explore media content and updates."
-            icon={<span>o</span>}
-          />
-          <DashboardCard
-            href="/finance"
-            title="Finance"
-            description="Track your financial activities."
-            icon={<span>o</span>}
-          />
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {areas.map((area) => (
+            <WorkspaceCard key={area.href} {...area} />
+          ))}
         </div>
-      </main>
-    </BackgroundLayout>
+      </RepoPanel>
+    </PageLayout>
   );
 }

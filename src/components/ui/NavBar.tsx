@@ -1,32 +1,34 @@
 "use client";
 
+import Link from "next/link";
 import type { MouseEvent } from "react";
-import { twMerge } from "tailwind-merge";
 
-type NavBarType = "standard" | "top";
+import PathNav from "./PathNav";
 
-export type NavItem = {
-  label: string;
-  targetId: string;
-};
+// Either scrolls to a section on this page (targetId) or links to another
+// page (href)
+export type NavItem =
+  | { label: string; targetId: string }
+  | { label: string; href: string };
+
+const itemClassName = "opacity-80 transition-opacity hover:opacity-60";
 
 type NavBarProps = {
   items: NavItem[];
-  children?: React.ReactNode;
+  // The page's name, shown on the left like the last segment of a PathNav
+  current?: string;
   className?: string;
-  type?: NavBarType;
+  type?: "standard" | "top";
 };
 
-const typeVariants: Record<NavBarType, string> = {
-  standard: "rounded-card",
-  top: "rounded-b-card",
-};
-
+// The home page nav. It's a PathNav with just the current page on the left
+// and the links on the right, so it looks the same as the path nav on the
+// rest of the site and "home" stays in the same place when you navigate.
 export default function NavBar({
   items,
-  children,
-  className = "",
-  type = "standard",
+  current = "home",
+  className,
+  type,
 }: NavBarProps) {
   const handleScroll = (
     event: MouseEvent<HTMLButtonElement>,
@@ -40,84 +42,47 @@ export default function NavBar({
       return;
     }
 
+    // Remove and force a reflow so the highlight replays on repeat clicks
     element.classList.remove("section-highlight");
-
     void element.offsetWidth;
-
-    const distance = Math.abs(element.getBoundingClientRect().top);
 
     element.scrollIntoView({
       behavior: "smooth",
       block: "start",
     });
 
-    const animationDelay = 0;
+    element.classList.add("section-highlight");
 
     setTimeout(() => {
-      element.classList.add("section-highlight");
-
-      setTimeout(() => {
-        element.classList.remove("section-highlight");
-      }, 400);
-    }, animationDelay);
+      element.classList.remove("section-highlight");
+    }, 400);
   };
 
   return (
-    <nav
-      className={twMerge(
-        `
-                ${typeVariants[type]}
-
-                w-full
-                h-20
-
-                bg-action
-
-                flex
-                items-center
-
-                px-4
-                lg:px-16
-            `,
-        className,
-      )}
+    <PathNav
+      label="Main"
+      segments={[{ label: current }]}
+      className={className}
+      type={type}
     >
-      <div
-        className="
-                flex
-                items-center
-
-                w-full
-
-                lg:w-auto
-                lg:gap-20
-            "
-      >
-        {items.map((item) => (
-          <button
-            key={item.targetId}
-            type="button"
-            onClick={(event) => handleScroll(event, item.targetId)}
-            className="
-                            flex-1
-
-                            text-center
-                            text-l
-                            font-bold
-                            text-white
-
-                            transition-opacity
-                            hover:opacity-70
-
-                            lg:flex-none
-                        "
-          >
-            {item.label}
-          </button>
-        ))}
+      <div className="ml-auto flex items-center gap-5 sm:gap-8">
+        {items.map((item) =>
+          "href" in item ? (
+            <Link key={item.label} href={item.href} className={itemClassName}>
+              {item.label}
+            </Link>
+          ) : (
+            <button
+              key={item.label}
+              type="button"
+              onClick={(event) => handleScroll(event, item.targetId)}
+              className={itemClassName}
+            >
+              {item.label}
+            </button>
+          ),
+        )}
       </div>
-
-      {children}
-    </nav>
+    </PathNav>
   );
 }

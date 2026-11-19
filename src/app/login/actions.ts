@@ -2,15 +2,12 @@
 
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth";
-
-export type LoginState = {
-  error?: string;
-} | null;
+import type { FormState } from "@/types/forms";
 
 export async function loginAction(
-  _state: LoginState,
+  _state: FormState,
   formData: FormData,
-): Promise<LoginState> {
+): Promise<FormState> {
   const password = formData.get("password");
   const requestedRedirect = formData.get("redirectTo");
   const redirectTo =
@@ -21,14 +18,14 @@ export async function loginAction(
       : "/dashboard";
 
   if (typeof password !== "string" || password.length === 0) {
-    return { error: "Enter your password." };
+    return { status: "error", message: "Enter your password." };
   }
 
   try {
     await signIn("credentials", { password, redirectTo });
   } catch (error) {
     if (error instanceof AuthError) {
-      return { error: "Incorrect password." };
+      return { status: "error", message: "Incorrect password." };
     }
 
     throw error;

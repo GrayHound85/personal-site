@@ -1,20 +1,18 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
-import BackgroundLayout from "@c/layout/BackgroundLayout";
 import PortfolioLayout from "@c/layout/PortfolioLayout";
-
-import HeroPanel from "@c/sections/porfolio/HeroPanel";
 import ProfileCard from "@c/sections/porfolio/ProfileCard";
+import LogEntry, { type LogEntryProps } from "@c/sections/home/LogEntry";
+import ProjectCard from "@c/sections/projects/ProjectCard";
+import RepoPanel from "@c/ui/RepoPanel";
 import NavBar from "@c/ui/NavBar";
-import AdminButton from "@c/sections/porfolio/AdminButton";
-import ProjectCard from "@/components/sections/porfolio/ProjectCard";
-import AwardCard from "@/components/sections/porfolio/AwardCard";
-import ExpandableText from "@c/ui/ExpandibleText";
-import LinkButton from "@/components/ui/LinkButton";
-import ExperienceCard from "@/components/sections/porfolio/ExperienceCard";
+import LinkButton from "@c/ui/LinkButton";
+import BookIcon from "@c/icons/BooksIcon";
+import CommitIcon from "@c/icons/CommitIcon";
+import DocsIcon from "@c/icons/DocsIcon";
 
 import { projects } from "@/config/projects";
-import Card from "@/components/ui/Card";
 
 export const metadata: Metadata = {
   title: "Oliver Norrie | Computer Science Student at Edinburgh",
@@ -34,6 +32,64 @@ export const metadata: Metadata = {
   },
 };
 
+const featuredProjects = projects.filter((project) => project.featured);
+
+// Newest first
+const log: LogEntryProps[] = [
+  {
+    date: "2026-04",
+    kind: "award",
+    title: "VEX Robotics V5: programming award at UK Nationals",
+    details: [
+      "Our team won the programming award at the UK National finals.",
+      "That qualified us for the world championship in the USA later that year.",
+    ],
+  },
+  {
+    date: "2025-11",
+    kind: "work",
+    title: "Placement week with LUMC IT Infrastructure, Leiden",
+    details: [
+      "Shadowed several teams, including DevOps, to see the day to day computing behind one of the biggest hospitals in the Netherlands.",
+      "Got a much better picture of how infrastructure changes when it has to handle huge amounts of data.",
+      "Learned about their project migrating the hospital's infrastructure to a modern data warehouse.",
+    ],
+  },
+  {
+    date: "2024-09",
+    kind: "work",
+    title: "Audio & visual lead, UoE satellite instrument project",
+    details: [
+      "Part time, Sep 2024 to Nov 2025.",
+      "Made graphics that explain complex instrument data to investors and scientific audiences.",
+      "Took output from the team's end to end instrument model and turned it into metrics people could follow.",
+      "Some of that work went into funding proposals to the European Space Agency.",
+    ],
+  },
+  {
+    date: "2024-02",
+    kind: "award",
+    title: "STEM Racing: 2nd at UK National finals + Best Display",
+    details: [
+      "I was head of branding for the team.",
+      "Our display won awards at both the regional and national competitions.",
+    ],
+  },
+];
+
+const logYears = [...new Set(log.map((entry) => entry.date.slice(0, 4)))];
+
+const commit = process.env.BUILD_COMMIT;
+const buildDate = process.env.BUILD_DATE;
+
+function Code({ children }: { children: React.ReactNode }) {
+  return (
+    <code className="rounded-md bg-white/10 px-1.5 py-0.5 font-mono text-[0.9em] text-text-primary">
+      {children}
+    </code>
+  );
+}
+
 export default function LandingPage() {
   return (
     <PortfolioLayout
@@ -42,148 +98,119 @@ export default function LandingPage() {
         <NavBar
           type="top"
           items={[
-            {
-              label: "About",
-              targetId: "about",
-            },
-            {
-              label: "Projects",
-              targetId: "projects",
-            },
-            {
-              label: "Awards",
-              targetId: "awards",
-            },
-            {
-              label: "Experience",
-              targetId: "experience",
-            },
+            { label: "about", targetId: "about" },
+            { label: "projects", href: "/projects" },
+            { label: "log", targetId: "log" },
           ]}
         />
       }
-      floating={<AdminButton />}
     >
-      <HeroPanel id="about">
-        <h2
-          className="
-                    text-3xl
-                    font-bold
-                    mb-3
-                    text-text-secondary
-                "
-        >
-          About
-        </h2>
+      <RepoPanel id="about" icon={DocsIcon} title="README.md">
+        <div className="fade-up max-w-3xl leading-relaxed text-text-secondary">
+          <h3 className="border-b border-white/10 pb-3 text-3xl font-bold text-text-primary">
+            Hi, I&apos;m Oliver
+          </h3>
 
-        <p className="space-y-3 sm:space-y-0">
-          <span className="block sm:inline">
-            I’m a Computer Science student at the University of Edinburgh with a
-            strong interest in software development, robotics, and building
-            practical projects from ideas into working solutions.
-          </span>{" "}
-          <span className="block sm:inline">
-            I enjoy exploring new technologies through a wide range of personal
-            and university projects, while continuing to develop my skills
-            across software and systems.
-          </span>{" "}
-          <span className="block sm:inline">
-            I also have experience competing nationally and internationally in
-            STEM events, including robotics and STEM Racing.
-          </span>
-        </p>
-      </HeroPanel>
+          <p className="mt-4">
+            I&apos;m a Computer Science student at the University of Edinburgh,
+            working towards a career as a software developer.
+          </p>
 
-      <HeroPanel
+          <h4 className="mt-8 border-b border-white/10 pb-2 text-xl font-semibold text-text-primary">
+            What I&apos;m into
+          </h4>
+          <ul className="mt-4 list-disc space-y-2 pl-5 marker:text-primary">
+            <li>
+              <strong className="text-text-primary">Cyber security</strong>: how
+              systems break, and how to build them so they don&apos;t.
+            </li>
+            <li>
+              <strong className="text-text-primary">
+                Quantitative finance
+              </strong>
+              : problems where the code has to be right and the numbers have to
+              hold up.
+            </li>
+            <li>
+              <strong className="text-text-primary">Self-hosting</strong>: this
+              site runs in Docker on my <Code>homelab</Code>, behind a
+              Cloudflare tunnel.
+            </li>
+          </ul>
+
+          <h4 className="mt-8 border-b border-white/10 pb-2 text-xl font-semibold text-text-primary">
+            Away from the keyboard
+          </h4>
+          <p className="mt-4">
+            I&apos;ve competed nationally and internationally in VEX Robotics
+            and STEM Racing, and I design and 3D-print things, including the
+            case my server lives in.
+          </p>
+        </div>
+      </RepoPanel>
+
+      <RepoPanel
         id="projects"
-        className="flex flex-col gap-4 p-4 sm:p-5 lg:flex-row lg:p-8"
+        icon={BookIcon}
+        title="Pinned"
+        action={
+          <LinkButton href="/projects" className="h-8 px-4 py-0 text-sm">
+            View all
+          </LinkButton>
+        }
       >
-        <div className="flex flex-row gap-2 lg:hidden">
-          <LinkButton
-            href="./projects"
-            className="text-center text-s h-10 w-30"
-          >
-            View all
-          </LinkButton>
-          <div className="flex-1" />
-          <h1 className="text-3xl font-bold text-text-secondary text-right ">
-            Projects
-          </h1>
+        <div className="grid gap-4 xl:grid-cols-2">
+          {featuredProjects.map((project) => (
+            <ProjectCard key={project.slug} project={project} />
+          ))}
         </div>
-        <div className="grid gap-8 min-[1500px]:grid-cols-2 min-[1900px]:grid-cols-3 w-full">
-          <ProjectCard
-            link={projects.homelab.link}
-            title={projects.homelab.title}
-            image={projects.homelab.image}
-            eager
-          />
-          <ProjectCard
-            link={projects.personalSite.link}
-            title={projects.personalSite.title}
-            icon={projects.personalSite.icon}
-          />
-          <Card className="border-none w-100 h-70 hidden min-[1900px]:block">
-            {""}
-          </Card>
-        </div>
-        <div className="hidden flex-1 lg:block" />
-        <div className="lg:flex flex-col gap-2 hidden">
-          <h1 className="text-3xl font-bold text-text-secondary text-right">
-            Projects
-          </h1>
-          <LinkButton
-            href="./projects"
-            className="text-center text-s h-10 w-30"
-          >
-            View all
-          </LinkButton>
-        </div>
-      </HeroPanel>
+      </RepoPanel>
 
-      <HeroPanel id="awards" className="flex flex-col gap-5 p-5 lg:p-8">
-        <h1 className="text-3xl font-bold text-text-secondary">Awards</h1>
-        <div className="grid grid-cols-1 min-[1500px]:grid-cols-2 gap-8">
-          <AwardCard
-            title="STEM Racing"
-            subHeading="2nd place UK National finals + Best display"
-            date="Feb 2024"
-            description={[
-              "Was head of branding winning multiple awards for our display at both regional and national competitions.",
-            ]}
-          />
-          <AwardCard
-            title="Vex Robotics V5"
-            subHeading="World championship qualifiers"
-            date="Apr 2026"
-            description={[
-              "Our team won the programming award at the UK National finals which qualified us to compete in the USA later that year.",
-            ]}
-          />
-        </div>
-      </HeroPanel>
+      <RepoPanel
+        id="log"
+        icon={CommitIcon}
+        title="Log"
+        action={
+          <span className="font-mono text-xs text-text-secondary">
+            {log.length} entries
+          </span>
+        }
+      >
+        {logYears.map((year) => (
+          <div key={year} className="pb-6 last:pb-0">
+            <h3 className="flex items-center gap-2 text-sm font-semibold text-text-secondary">
+              <CommitIcon aria-hidden="true" className="h-4 w-4" />
+              {year}
+            </h3>
 
-      <HeroPanel id="experience" className="flex flex-col gap-5 p-5 lg:p-8">
-        <h1 className="text-3xl font-bold text-text-secondary">Experience</h1>
-        <ExperienceCard
-          title="Audio and Visual lead"
-          subHeading="University Of Edinburgh Satellite Instrument Development Project"
-          date="Sep 2024 – Nov 2025 (Part time)"
-          description={[
-            "Worked on creating simple to understand computer graphics to deliver complex information to investors and scientific audiences.",
-            "Worked with data from proprietary end to end instrument model and transformed it to deliver impact full metrics.",
-            "Worked to create graphics to bring across important information in funding proposals to the European Space Agency (ESA)",
-          ]}
-        />
-        <ExperienceCard
-          title="Placement week at LUMC IT Infrastructure"
-          subHeading="LUMC (Leiden University Medical Center)"
-          date="Nov 2025"
-          description={[
-            "Followed different teams including DevOps to see the day to day operations of computing behind one of the biggest hospitals in the Netherlands",
-            "Got a much deeper insight into how infrastructure change when handling huge quantities of data.",
-            "Learned about their migration project to move the hospitals infrastructure to more modern data warehouse solution.",
-          ]}
-        />
-      </HeroPanel>
+            {/* The vertical line joining the entries, like a commit graph */}
+            <ol className="mt-3 ml-2 space-y-3 border-l border-white/15 pl-5">
+              {log
+                .filter((entry) => entry.date.startsWith(year))
+                .map((entry) => (
+                  <LogEntry key={entry.title} {...entry} />
+                ))}
+            </ol>
+          </div>
+        ))}
+      </RepoPanel>
+
+      <footer className="flex flex-wrap justify-between gap-2 px-2 font-mono text-xs text-text-secondary">
+        <a
+          href={`https://github.com/GrayHound85/personal-site/commit/${commit}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="transition-colors hover:text-text-primary"
+        >
+          build {commit} · {buildDate}
+        </a>
+        <Link
+          href="/login"
+          className="transition-colors hover:text-text-primary"
+        >
+          admin
+        </Link>
+      </footer>
     </PortfolioLayout>
   );
 }
