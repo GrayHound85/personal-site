@@ -1,7 +1,11 @@
-node_modules
-.next
+# The build context is the repo root, so these patterns use **/ to match in
+# every app and package
+**/node_modules
+**/.next
+**/.env
+**/.env.*
+**/*.tsbuildinfo
 .git
 .github
-.env
-.env.*
+docs
 README.md

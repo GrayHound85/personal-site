@@ -1,0 +1,12 @@
+packages:
+  - apps/*
+  - packages/*
+
+# pnpm doesn't run install scripts unless they're listed here.
+# sharp: image optimisation for next/image (needed in production)
+# esbuild: used by tsx
+# unrs-resolver: used by eslint-config-next
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - unrs-resolver

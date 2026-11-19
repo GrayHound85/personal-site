@@ -39,7 +39,7 @@ Some areas are still under development as the application grows.
 
 The application is built around Next.js App Router, with server-side functionality for data access and authentication. PostgreSQL provides persistent storage, accessed through Drizzle ORM.
 
-![Personal site application architecture](public/projects/personal-site_architecture.png)
+![Personal site application architecture](apps/personal-site/public/projects/personal-site_architecture.png)
 
 The architecture diagram above illustrates the application's structure and how its components interact.
 
@@ -89,7 +89,16 @@ These features will be developed incrementally as the underlying application and
 
 ## Project Structure
 
-The application uses the Next.js App Router. Routes and supporting code are organised into separate directories according to their responsibilities.
+The repository is a pnpm monorepo. Each app lives in `apps/`, and code shared between apps lives in `packages/`. Apps can import from packages but never from each other.
+
+```text
+apps/
+└── personal-site/   the Next.js site
+packages/
+└── ui/              shared components and the Tailwind theme (@repo/ui)
+```
+
+The site uses the Next.js App Router. Its routes (in `apps/personal-site/src/app/`) and supporting code are organised into separate directories according to their responsibilities.
 
 ```text
 app/
@@ -110,7 +119,7 @@ The exact contents of each directory will evolve as new functionality is added.
 ### Prerequisites
 
 - Node.js compatible with the project configuration.
-- npm.
+- pnpm (via `corepack enable pnpm`, which uses the version pinned in `package.json`).
 - A PostgreSQL database.
 - Environment variables configured for authentication and database access.
 
@@ -123,23 +132,23 @@ git clone https://github.com/GrayHound85/personal-site.git
 cd personal-site
 ```
 
-Install dependencies:
+Install dependencies (from the repository root):
 
 ```bash
-npm install
+pnpm install
 ```
 
-Configure the required environment variables in a local `.env` file. These include the database connection string and authentication configuration, such as `DATABASE_URL`, `AUTH_SECRET`, and `AUTH_PASSWORD`, as required by the current implementation.
+Configure the required environment variables in `apps/personal-site/.env.local`. These include the database connection string and authentication configuration, such as `DATABASE_URL`, `AUTH_SECRET`, and `AUTH_PASSWORD`, as required by the current implementation.
 
 Start the development server:
 
 ```bash
-npm run dev
+pnpm dev:site
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Available scripts can be checked in `package.json`.
+Available scripts can be checked in the root `package.json`.
 
 ## Deployment
 

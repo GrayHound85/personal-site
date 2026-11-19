@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+/* Colours, fonts, animations and base styles shared with the other apps */
+@import "@repo/ui/theme.css";
+
+/*
+  Tailwind only scans this app's own files for class names by default, so
+  point it at the shared components too.
+*/
+@source "../../../../packages/ui/src";

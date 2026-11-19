@@ -1,0 +1,161 @@
+/*
+  The shared look for every app: colours, radii, fonts, animations and base
+  page styles. An app's own CSS imports this straight after Tailwind:
+
+    @import "tailwindcss";
+    @import "@repo/ui/theme.css";
+    @source "<path to>/packages/ui/src";
+*/
+
+:root {
+  --background: #4c80a5;
+  --foreground: #edf3f6;
+
+  --color-primary: #a1c6ea;
+  --color-primary-hover: #a1c6ea;
+  --color-action: #85afd8;
+  --color-panel: #071421d9;
+
+  --color-surface: #ffffff;
+
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #c4d8e3;
+
+  --color-border: #35495a;
+
+  --radius-card: 16px;
+  --radius-card_inner: 12px;
+  --radius-button: 8px;
+
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-action: var(--color-action);
+  --color-panel: var(--color-panel);
+
+  --color-surface: var(--color-surface);
+
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+
+  --color-border: var(--color-border);
+
+  --radius-card: var(--radius-card);
+  --radius-card_inner: var(--radius-card_inner);
+  --radius-button: var(--radius-button);
+
+  --shadow-card: var(--shadow-card);
+
+  --font-sans: Helvetica, Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+@keyframes section-highlight {
+  0% {
+    border-color: transparent;
+  }
+
+  50% {
+    border-color: var(--color-primary);
+  }
+
+  100% {
+    border-color: transparent;
+  }
+}
+
+.section-highlight {
+  border-width: 1px;
+  border-style: solid;
+  animation: section-highlight 500ms ease-in-out;
+}
+
+/*
+  No visible page scrollbar: it takes width away from the layout and makes
+  pages jump sideways when they become long enough to scroll. Scrolling
+  still works as normal with the wheel, touch and keyboard.
+*/
+html {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Stop browser autofill turning inputs a light colour with dark text */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:autofill {
+  color: var(--color-text-primary);
+  -webkit-text-fill-color: var(--color-text-primary);
+  caret-color: var(--color-text-primary);
+  -webkit-transition: background-color 99999s ease-out 0s;
+  transition: background-color 99999s ease-out 0s;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes draw-line {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* Plays once on load, use style={{ animationDelay }} to sequence */
+.fade-up {
+  animation: fade-up 600ms ease-out both;
+}
+
+/*
+  Scroll driven: rules draw across and content slides in as it enters the
+  viewport. Browsers without animation-timeline just show everything.
+*/
+@supports (animation-timeline: view()) {
+  .draw-on-scroll {
+    transform-origin: left;
+    animation: draw-line linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+
+  .reveal-on-scroll {
+    animation: fade-up linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 40%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up,
+  .draw-on-scroll,
+  .reveal-on-scroll {
+    animation: none;
+  }
+}
+
+@utility scrollbar-hidden {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
