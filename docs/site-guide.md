@@ -3,23 +3,142 @@
 Notes for myself on updating the public side of the site. All of it is plain
 data in a couple of files, no database involved.
 
-| I want to...                           | Edit                                               |
-| -------------------------------------- | -------------------------------------------------- |
-| Add a log entry (award, work, etc.)    | `src/app/page.tsx` → `log` array                   |
-| Add a project                          | `src/config/projects.ts` + a new page folder       |
-| Pin / unpin a project on the home page | `featured` in `src/config/projects.ts`             |
-| Change the README panel text           | `src/app/page.tsx` → `README.md` panel             |
-| Change sidebar (photo, links, email)   | `src/components/sections/porfolio/ProfileCard.tsx` |
-| Add / edit / delete resources, topics… | The `+` and pencil buttons on `/career/resources`  |
-| Build a new form                       | See [Forms](#forms)                                |
+| I want to...                                       | Edit                                                                  |
+| -------------------------------------------------- | --------------------------------------------------------------------- |
+| Add a log entry (award, work, etc.)                | `apps/personal-site/src/app/page.tsx` → `log` array                   |
+| Add a project                                      | `apps/personal-site/src/config/projects.ts` + a new page folder       |
+| Pin / unpin a project on the home page             | `featured` in `apps/personal-site/src/config/projects.ts`             |
+| Change the README panel text                       | `apps/personal-site/src/app/page.tsx` → `README.md` panel             |
+| Change sidebar (photo, links, email)               | `apps/personal-site/src/components/sections/porfolio/ProfileCard.tsx` |
+| Add / edit / delete resources, topics…             | The `+` and pencil buttons on `/career/resources`                     |
+| Build a new form                                   | See [Forms](#forms)                                                   |
+| Run, build, add a dependency or a shared component | See [Repo layout](#repo-layout-and-everyday-commands)                 |
 
-Before committing: `npm run lint` and `npm run build`.
+Before committing, from the repo root: `pnpm lint`, `pnpm typecheck` and `pnpm build:site`.
+
+---
+
+## Repo layout and everyday commands
+
+The repo is a pnpm workspace: each app lives in `apps/`, and code the apps
+share lives in `packages/`.
+
+```
+apps/
+  personal-site/      the Next.js site (pages, database, auth, server actions)
+  monitor-site/       (later) the monitoring app
+packages/
+  ui/                 @repo/ui: shared components, icons, the FormState type
+    src/
+      theme.css       colours, fonts, animations, base page styles
+      components/     panels, nav bars, buttons, tag dots, the form system
+      icons/
+      types/
+docs/                 this guide
+package.json          root: scripts only
+pnpm-workspace.yaml
+olivernorrie.code-workspace
+```
+
+**The one rule: apps can import from `packages/`, but never from each other.**
+Anything two apps both need goes in a package. ESLint enforces it: each app's
+`eslint.config.mjs` lists the other apps in `otherApps`, and importing one is
+an error. `packages/ui` can't import from any app either.
+
+### First-time setup
+
+pnpm comes from corepack (part of Node), pinned to the version in the root
+`package.json`. Once per machine:
+
+```bash
+corepack enable pnpm        # may need sudo, or add --install-directory ~/.local/bin
+pnpm install                # from the repo root
+```
+
+### Commands (run from the repo root)
+
+| To...                                  | Run                |
+| -------------------------------------- | ------------------ |
+| Run the site locally                   | `pnpm dev:site`    |
+| Production build of the site           | `pnpm build:site`  |
+| Run that build                         | `pnpm start:site`  |
+| Lint every app and package             | `pnpm lint`        |
+| Type-check every app and package       | `pnpm typecheck`   |
+| Make a migration after a schema change | `pnpm db:generate` |
+| Apply migrations locally               | `pnpm db:migrate`  |
+
+When the monitoring app exists it gets its own `dev:monitor` style scripts in
+the root `package.json`.
+
+### Adding a dependency
+
+Always add it to the app or package that uses it, not the root:
+
+```bash
+pnpm --filter personal-site add some-package       # a site dependency
+pnpm --filter personal-site add -D some-dev-tool   # a dev dependency
+pnpm --filter @repo/ui add some-package            # used by shared components
+```
+
+pnpm is strict: code can only import packages listed in its own
+`package.json`, so a missing entry fails straight away instead of working by
+accident. If a new package needs an install script (pnpm will warn that it
+skipped one), add it to `onlyBuiltDependencies` in `pnpm-workspace.yaml`.
+
+### Adding a shared component to `packages/ui`
+
+1. Create `packages/ui/src/components/MyThing.tsx` (or move one across with
+   `git mv`).
+2. Inside the package, import other files **relatively**
+   (`./Button`, `../types/forms`). The site's `@/` and `@c/` aliases don't
+   exist there, and ESLint will flag them.
+3. Keep `"use client"` at the top if it uses hooks or event handlers.
+4. Use it from an app with `import MyThing from "@repo/ui/components/MyThing";`
+   (icons: `@repo/ui/icons/...`, types: `@repo/ui/types/...`).
+5. Tailwind classes in it just work: the site's `globals.css` has an
+   `@source` line pointing at `packages/ui/src`.
+6. Run `pnpm typecheck` and `pnpm lint`.
+
+Only move things that are actually generic. Anything that uses the site's
+data, database, server actions or auth stays in `apps/personal-site`.
+
+### Env file and local database
+
+- The site's env file is `apps/personal-site/.env.local` (Next only reads env
+  files from the app's own folder).
+- Local Postgres: `docker compose -f apps/personal-site/compose.yaml up -d postgres`
+
+### Opening it in VS Code
+
+Open `olivernorrie.code-workspace` (File → Open Workspace from File). The
+sidebar shows "Personal site" and "Shared UI" as separate folders, so each
+gets its own search, ESLint and TypeScript setup.
+
+- **Monitoring**: the entry is commented out. Once `apps/monitor-site` exists,
+  remove the `//` from its two lines.
+- **Root files** (`docs/`, `.github/`, the root `package.json`) aren't in the
+  sidebar. To see them too, add `{ "name": "Repo root", "path": "." }` to the
+  `folders` list.
+
+### Building the Docker image
+
+The image is built from the repo root, since it needs `packages/ui` too:
+
+```bash
+docker build -f apps/personal-site/Dockerfile .
+```
+
+CI does this on every push to `main` that touches the site, the shared
+packages, the lockfile or the workspace files
+(`.github/workflows/personal-site.yml`), then pushes
+`ghcr.io/<owner>/personal-site:latest`. On the homelab:
+`docker compose pull && docker compose up -d`.
 
 ---
 
 ## Log entries
 
-The log is the `log` array near the top of `src/app/page.tsx`.
+The log is the `log` array near the top of `apps/personal-site/src/app/page.tsx`.
 
 ```ts
 {
@@ -44,7 +163,7 @@ The log is the `log` array near the top of `src/app/page.tsx`.
 ### Adding a new kind (e.g. `"hackathon"`)
 
 1. Add it to the `kind` union in `LogEntryProps`
-   (`src/components/sections/home/LogEntry.tsx`).
+   (`apps/personal-site/src/components/sections/home/LogEntry.tsx`).
 2. Add a badge style for it in `kindStyles` in the same file. TypeScript will
    complain until you do.
 
@@ -52,14 +171,14 @@ The log is the `log` array near the top of `src/app/page.tsx`.
 
 ## Projects
 
-Every project lives in one list: `src/config/projects.ts`. The order in that
+Every project lives in one list: `apps/personal-site/src/config/projects.ts`. The order in that
 list is the order everywhere (home page and `/projects`).
 
 From that list, automatically:
 
 - the row on `/projects`
 - the pinned card on the home page (if `featured: true`)
-- the sitemap entry (`src/app/sitemap.ts` reads the list)
+- the sitemap entry (`apps/personal-site/src/app/sitemap.ts` reads the list)
 - the `home / projects / <slug>` nav bar and the tags on the project page
 - the page's `<title>` and meta description
 
@@ -89,7 +208,7 @@ not a rule: a small project can just be one or two sections.
 
 ### Step 2: add the config entry
 
-In `src/config/projects.ts`:
+In `apps/personal-site/src/config/projects.ts`:
 
 ```ts
 {
@@ -103,23 +222,23 @@ In `src/config/projects.ts`:
 ```
 
 New tag? Give it a dot colour in `tagColours` at the top of
-`src/components/sections/projects/ProjectTags.tsx`, otherwise it gets the
+`packages/ui/src/components/TagDots.tsx`, otherwise it gets the
 primary colour.
 
 ### Step 3: add images
 
-Put them in `public/projects/`, named `<slug>_<what>.png`
+Put them in `apps/personal-site/public/projects/`, named `<slug>_<what>.png`
 (e.g. `port-scanner_output.png`). Note each image's real width and height
-(`file public/projects/<name>` prints them), you'll pass those in step 4.
+(`file apps/personal-site/public/projects/<name>` prints them), you'll pass those in step 4.
 
 ### Step 4: create the page
 
-Create `src/app/projects/<slug>/page.tsx`. The folder name **must match the
+Create `apps/personal-site/src/app/projects/<slug>/page.tsx`. The folder name **must match the
 slug**: `getProject("<slug>")` throws if it isn't in the config, so a typo
 fails the build. The other direction isn't checked: a config entry with no
 page folder is a 404 link.
 
-The building blocks are all in `src/components/sections/projects/`:
+The building blocks are all in `apps/personal-site/src/components/sections/projects/`:
 
 | Component        | What it is                                                                                     |
 | ---------------- | ---------------------------------------------------------------------------------------------- |
@@ -129,7 +248,7 @@ The building blocks are all in `src/components/sections/projects/`:
 | `ProjectList`    | Bullet list where each item starts with a bold label                                           |
 | `ProjectImage`   | Image with a title strip and caption. Leave out `src` for a placeholder box                    |
 
-`ProjectPageLayout` (`src/components/layout/`) is just the shell: background,
+`ProjectPageLayout` (`apps/personal-site/src/components/layout/`) is just the shell: background,
 the `home / projects / <slug>` nav bar, the header on top and the "On this page"
 nav beside the sections.
 
@@ -241,12 +360,12 @@ Options worth knowing:
 
 ### Step 5: check it
 
-1. `npm run dev` and open `/projects/<slug>`. Click each "On this page" link
+1. `pnpm dev:site` and open `/projects/<slug>`. Click each "On this page" link
    to check the ids match.
 2. Read it top to bottom once looking for anything said twice (step 1's
    table). Specs and plans are the usual repeat offenders.
 3. Check it shows on `/projects`, and on the home page if `featured`.
-4. `npm run lint` and `npm run build`.
+4. `pnpm lint`, `pnpm typecheck` and `pnpm build:site`.
 
 ## Pinning
 
@@ -261,7 +380,7 @@ Options worth knowing:
 
 ## README panel
 
-The README panel text is written straight into `src/app/page.tsx` (the
+The README panel text is written straight into `apps/personal-site/src/app/page.tsx` (the
 `RepoPanel` with `title="README.md"`). Use the small `Code` component in that
 file for inline code-styled words, like `<Code>homelab</Code>`.
 
@@ -355,16 +474,16 @@ It prints `INSERT 0 4` (or a smaller number if some already existed).
 **A new type also needs a code change** to look right: add its code to
 `resourceTypeIcons` (the icon) and `resourceTypeNames` (the group heading,
 e.g. "Courses") at the top of
-`src/components/sections/career/resource/ResourcesList.tsx`. Without that it
+`apps/personal-site/src/components/sections/career/resource/ResourcesList.tsx`. Without that it
 still works, it just shows under its raw code with no icon.
 
 ### Where the code is
 
-- Forms: `src/components/sections/career/resource/Create*Form.tsx` and
+- Forms: `apps/personal-site/src/components/sections/career/resource/Create*Form.tsx` and
   `Edit*Form.tsx`
-- Actions: `src/app/actions/a-resource.ts`
-- Rules (duplicate names, "still has…", slugs): `src/lib/service/s-resources.ts`
-- The confirm-then-delete button: `src/components/ui/DeleteButton.tsx`
+- Actions: `apps/personal-site/src/app/actions/a-resource.ts`
+- Rules (duplicate names, "still has…", slugs): `apps/personal-site/src/lib/service/s-resources.ts`
+- The confirm-then-delete button: `packages/ui/src/components/DeleteButton.tsx`
 
 ---
 
@@ -374,17 +493,17 @@ A form is two files: a **server action** that validates and saves, and a
 **form component** that lays out the fields. Everything else (pending state,
 error message, submit button) is handled by `Form`.
 
-| Piece    | File                           | What it does                                                                            |
-| -------- | ------------------------------ | --------------------------------------------------------------------------------------- |
-| `Form`   | `src/components/ui/Form.tsx`   | Runs the server action, shows "Saving..." while pending, shows the error, submit button |
-| `Field`  | `src/components/ui/Field.tsx`  | A mono label above whatever control you put inside it                                   |
-| `Input`  | `src/components/ui/Input.tsx`  | Text / url / password etc. Takes any normal `<input>` props                             |
-| `Select` | `src/components/ui/Select.tsx` | The custom dropdown. Takes `name`, `options` and `placeholder`                          |
+| Piece    | File                                    | What it does                                                                            |
+| -------- | --------------------------------------- | --------------------------------------------------------------------------------------- |
+| `Form`   | `packages/ui/src/components/Form.tsx`   | Runs the server action, shows "Saving..." while pending, shows the error, submit button |
+| `Field`  | `packages/ui/src/components/Field.tsx`  | A mono label above whatever control you put inside it                                   |
+| `Input`  | `packages/ui/src/components/Input.tsx`  | Text / url / password etc. Takes any normal `<input>` props                             |
+| `Select` | `packages/ui/src/components/Select.tsx` | The custom dropdown. Takes `name`, `options` and `placeholder`                          |
 
 ### Step 1: the server action
 
-In `src/app/actions/a-<area>.ts`. It always takes `(state, formData)` and
-returns a `FormState` (`src/types/forms.ts`):
+In `apps/personal-site/src/app/actions/a-<area>.ts`. It always takes `(state, formData)` and
+returns a `FormState` (`packages/ui/src/types/forms.ts`):
 
 - `{ status: "error", message: "..." }`: the message is shown above the button
 - `{ status: "success" }`: runs the form's `onSuccess`
@@ -394,7 +513,7 @@ returns a `FormState` (`src/types/forms.ts`):
 "use server";
 
 import { requirePathAccess } from "@/lib/auth/server";
-import type { FormState } from "@/types/forms";
+import type { FormState } from "@repo/ui/types/forms";
 
 export async function createThingAction(
   _state: FormState,
@@ -430,10 +549,10 @@ first and `.bind` it in the form (see `createResourceAction`).
 import { useRouter } from "next/navigation";
 
 import { createThingAction } from "@/app/actions/a-thing";
-import Field from "@c/ui/Field";
-import Form from "@c/ui/Form";
-import Input from "@c/ui/Input";
-import Select from "@c/ui/Select";
+import Field from "@repo/ui/components/Field";
+import Form from "@repo/ui/components/Form";
+import Input from "@repo/ui/components/Input";
+import Select from "@repo/ui/components/Select";
 
 export default function CreateThingForm({ onClose }: { onClose: () => void }) {
   const router = useRouter();
@@ -490,11 +609,11 @@ it there to restyle every input and dropdown at once.
 
 ## Animations
 
-- **Decrypt reveal**: `src/components/ui/ScrambleText.tsx`. Only use it on
+- **Decrypt reveal**: `apps/personal-site/src/components/ui/ScrambleText.tsx`. Only use it on
   monospace text (`font-mono`), with proportional fonts the random characters
   are different widths and the line jitters. Speed is `REVEAL_SPEED` in
   `LogEntry.tsx` (milliseconds per character, lower is faster).
-- **Fade / slide in** classes are in `src/app/globals.css`:
+- **Fade / slide in** classes are in `packages/ui/src/theme.css`:
   - `fade-up`: plays once on load (README panel).
   - `reveal-on-scroll`: slides in as it scrolls into view (log entries). Pure
     CSS, so Firefox currently just shows things without animating.
@@ -504,9 +623,9 @@ it there to restyle every input and dropdown at once.
 
 ## Build stamp in the footer
 
-The `build abc1234 · date` line comes from `next.config.ts`, which sets
+The `build abc1234 · date` line comes from `apps/personal-site/next.config.ts`, which sets
 `BUILD_COMMIT` and `BUILD_DATE` at build time. In CI the commit is passed into
-the Docker build as `GIT_COMMIT` (see `.github/workflows/production.yml` and the
-`ARG GIT_COMMIT` in the `Dockerfile`), because `.git` isn't copied into the
+the Docker build as `GIT_COMMIT` (see `.github/workflows/personal-site.yml` and the
+`ARG GIT_COMMIT` in `apps/personal-site/Dockerfile`), because `.git` isn't copied into the
 image. Locally it falls back to `git rev-parse`. It links to that commit on
 GitHub, so it only works once the commit has been pushed.

@@ -1,0 +1,15 @@
+{
+  // Open with File → Open Workspace from File. Each folder gets its own
+  // search, ESLint and TypeScript setup.
+  "folders": [
+    { "name": "Personal site", "path": "apps/personal-site" },
+    { "name": "Shared UI", "path": "packages/ui" },
+
+    // Enable once apps/monitor-site exists:
+    // { "name": "Monitoring", "path": "apps/monitor-site" },
+  ],
+  "settings": {
+    // Use the TypeScript version the project installs, not VS Code's own
+    "typescript.tsdk": "apps/personal-site/node_modules/typescript/lib",
+  },
+}
