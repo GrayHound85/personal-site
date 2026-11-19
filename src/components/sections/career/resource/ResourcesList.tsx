@@ -4,9 +4,7 @@ import CreateResourceForm from "./CreateResourceForm";
 
 import type { Resource, ResourceType } from "@/types/resources";
 
-import Card from "@/components/ui/Card";
-import DividerLine from "@c/ui/DividerLine";
-import LinkButton from "@c/ui/LinkButton";
+import RepoPanel from "@c/ui/RepoPanel";
 import BookIcon from "@c/icons/BooksIcon";
 import VideoIcon from "@c/icons/VideoIcon";
 import DocsIcon from "@c/icons/DocsIcon";
@@ -38,6 +36,15 @@ const resourceTypeNames: Record<string, string> = {
   docs: "Docs",
 };
 
+// "https://www.youtube.com/watch?v=..." -> "youtube.com"
+function siteName(url: string) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
+
 export default function ResourceList({
   resourceList,
   resourceTypes,
@@ -61,105 +68,89 @@ export default function ResourceList({
   );
 
   return (
-    <Card className="flex min-h-0 w-full flex-1 flex-col p-3 pt-3 md:p-8 md:pt-3">
-      <div className="flex h-7 flex-row gap-2 md:h-6 md:gap-3">
-        {topicId && (
-          <button
-            type="button"
-            aria-label="Create resource"
-            onClick={() =>
-              onOpenModal(
-                <CreateResourceForm
-                  topicId={topicId}
-                  resourceTypes={resourceTypes}
-                  onClose={onCloseModal}
-                />,
-              )
-            }
-            className="h-7 w-10 font-bold md:h-5"
-          >
-            +
-          </button>
-        )}
+    <RepoPanel
+      title="resources"
+      action={
+        topicId && (
+          <div className="flex items-center gap-4">
+            <span className="font-mono text-xs text-text-secondary">
+              {resourceList.length}{" "}
+              {resourceList.length === 1 ? "resource" : "resources"}
+            </span>
+            <button
+              type="button"
+              aria-label="Add resource"
+              onClick={() =>
+                onOpenModal(
+                  <CreateResourceForm
+                    topicId={topicId}
+                    resourceTypes={resourceTypes}
+                    onClose={onCloseModal}
+                  />,
+                )
+              }
+              className="flex h-8 w-8 items-center justify-center rounded-button bg-white/10 font-mono text-lg leading-none text-text-primary transition-colors hover:bg-white/20"
+            >
+              +
+            </button>
+          </div>
+        )
+      }
+    >
+      {resourceList.length === 0 ? (
+        <p className="text-text-secondary">
+          {topicId
+            ? "No resources have been added yet."
+            : "Pick a topic to see its resources."}
+        </p>
+      ) : (
+        <div className="space-y-8">
+          {Object.entries(groupedResources).map(([typeCode, resources]) => {
+            const Icon = resourceTypeIcons[typeCode];
 
-        <div className="flex-1" />
+            return (
+              <section key={typeCode}>
+                <h2 className="flex items-center gap-2 border-b border-white/10 pb-3 text-xl font-semibold text-text-primary">
+                  {Icon && (
+                    <Icon
+                      aria-hidden="true"
+                      className="h-5 w-5 shrink-0 text-primary"
+                    />
+                  )}
+                  {resourceTypeNames[typeCode] ?? typeCode}
+                </h2>
 
-        <div>G</div>
-        <div>L</div>
-      </div>
-
-      <DividerLine className="mt-1" />
-      <div className="scrollbar-hidden min-h-0 flex-1 overflow-y-auto">
-        <div className="flex flex-col gap-4 md:gap-7">
-          {resourceList.length === 0 ? (
-            <p className="px-2 py-4 text-sm text-text-secondary">
-              {topicId
-                ? "No resources have been added yet."
-                : "Select a topic to view its resources."}
-            </p>
-          ) : (
-            Object.entries(groupedResources).map(([typeCode, resources]) => {
-              const Icon = resourceTypeIcons[typeCode];
-
-              return (
-                <section
-                  key={typeCode}
-                  className="flex flex-col gap-1 md:gap-2"
-                >
-                  <h2 className="flex flex-row items-center gap-2 text-lg font-bold align-text-bottom md:gap-3 md:text-2xl">
-                    {Icon && (
-                      <Icon className="h-6 w-6 shrink-0 md:h-8 md:w-8" />
-                    )}
-
-                    {resourceTypeNames[typeCode] ?? typeCode}
-                  </h2>
-
+                <ul className="mt-4 space-y-2">
                   {resources.map((resource) => (
-                    <LinkButton
-                      href={resource.url}
-                      key={resource.id}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="
-                      group
-                      h-11
-                      md:h-13
-                      justify-between!
-                      rounded-card_inner!
-                      border!
-                      border-border/40!
-                      bg-panel/40
-                      px-3!
-                      py-3!
-                      md:px-6!
-                      md:py-5!
-                      text-left!
-                      text-text-primary!
-                      transition-all
-                      duration-100
-                      hover:-translate-y-0.5
-                      hover:bg-primary-hover
-                      hover:shadow-lg!
-                    "
-                    >
-                      <div className="flex w-full items-center justify-between gap-4">
-                        <span className="font-medium text-text-secondary transition-colors group-hover:text-text-primary">
-                          {resource.title}
+                    <li key={resource.id}>
+                      <a
+                        href={resource.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center justify-between gap-4 rounded-card_inner border border-white/10 bg-panel/50 px-4 py-3 transition-colors hover:bg-white/10"
+                      >
+                        <span className="min-w-0">
+                          <span className="block truncate font-medium text-text-primary">
+                            {resource.title}
+                          </span>
+                          <span className="block truncate font-mono text-xs text-text-secondary">
+                            {siteName(resource.url)}
+                          </span>
                         </span>
 
                         <ArrowIcon
                           direction="right"
-                          className="text-text-secondary transition-transform duration-200 group-hover:translate-x-1"
+                          className="shrink-0 text-text-secondary transition-transform duration-200 group-hover:translate-x-1"
                         />
-                      </div>
-                    </LinkButton>
+                      </a>
+                    </li>
                   ))}
-                </section>
-              );
-            })
-          )}
+                </ul>
+              </section>
+            );
+          })}
         </div>
-      </div>
-    </Card>
+      )}
+    </RepoPanel>
   );
 }

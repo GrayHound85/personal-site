@@ -2,11 +2,11 @@ import type { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
 import BackgroundLayout from "./BackgroundLayout";
-import PathNav from "@c/ui/PathNav";
+import PathNav, { type PathSegment } from "@c/ui/PathNav";
 
 type PageLayoutProps = {
   // The path shown in the nav bar, e.g. home / dashboard / career
-  segments: { label: string; href?: string }[];
+  segments: PathSegment[];
   // Extra controls on the right of the nav bar (mobile menus etc.)
   navExtra?: ReactNode;
   // Keep the page in a centred max-w-7xl column (project pages) instead of

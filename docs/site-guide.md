@@ -10,6 +10,7 @@ data in a couple of files, no database involved.
 | Pin / unpin a project on the home page | `featured` in `src/config/projects.ts`             |
 | Change the README panel text           | `src/app/page.tsx` → `README.md` panel             |
 | Change sidebar (photo, links, email)   | `src/components/sections/porfolio/ProfileCard.tsx` |
+| Build a new form                       | See [Forms](#forms)                                |
 
 Before committing: `npm run lint` and `npm run build`.
 
@@ -265,6 +266,126 @@ file for inline code-styled words, like `<Code>homelab</Code>`.
 
 Heading levels: the sidebar name is the page's `h1` and panel titles are `h2`,
 so inside the README use `h3` for the main heading and `h4` for subheadings.
+
+---
+
+## Forms
+
+A form is two files: a **server action** that validates and saves, and a
+**form component** that lays out the fields. Everything else (pending state,
+error message, submit button) is handled by `Form`.
+
+| Piece    | File                           | What it does                                                                            |
+| -------- | ------------------------------ | --------------------------------------------------------------------------------------- |
+| `Form`   | `src/components/ui/Form.tsx`   | Runs the server action, shows "Saving..." while pending, shows the error, submit button |
+| `Field`  | `src/components/ui/Field.tsx`  | A mono label above whatever control you put inside it                                   |
+| `Input`  | `src/components/ui/Input.tsx`  | Text / url / password etc. Takes any normal `<input>` props                             |
+| `Select` | `src/components/ui/Select.tsx` | The custom dropdown. Takes `name`, `options` and `placeholder`                          |
+
+### Step 1: the server action
+
+In `src/app/actions/a-<area>.ts`. It always takes `(state, formData)` and
+returns a `FormState` (`src/types/forms.ts`):
+
+- `{ status: "error", message: "..." }`: the message is shown above the button
+- `{ status: "success" }`: runs the form's `onSuccess`
+- (redirecting instead, like login does, is fine too)
+
+```ts
+"use server";
+
+import { requirePathAccess } from "@/lib/auth/server";
+import type { FormState } from "@/types/forms";
+
+export async function createThingAction(
+  _state: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  // Always check access first: the proxy doesn't protect server actions
+  await requirePathAccess("/career/things");
+
+  const name = formData.get("name");
+
+  if (typeof name !== "string" || name.trim().length === 0) {
+    return { status: "error", message: "Enter a name." };
+  }
+
+  try {
+    await createThingService(name.trim()); // service layer, see CLAUDE.md
+  } catch {
+    return { status: "error", message: "Could not save. Please try again." };
+  }
+
+  return { status: "success" };
+}
+```
+
+Need an extra argument the user doesn't type in, like the topic id? Put it
+first and `.bind` it in the form (see `createResourceAction`).
+
+### Step 2: the form component
+
+```tsx
+"use client";
+
+import { useRouter } from "next/navigation";
+
+import { createThingAction } from "@/app/actions/a-thing";
+import Field from "@c/ui/Field";
+import Form from "@c/ui/Form";
+import Input from "@c/ui/Input";
+import Select from "@c/ui/Select";
+
+export default function CreateThingForm({ onClose }: { onClose: () => void }) {
+  const router = useRouter();
+
+  return (
+    <Form
+      action={createThingAction}
+      submitText="Add thing"
+      pendingText="Adding..."
+      onSuccess={() => {
+        onClose(); // e.g. close the modal
+        router.refresh(); // re-fetch the server data so the new thing shows
+      }}
+    >
+      <Field label="name">
+        <Input name="name" placeholder="Thing name" required />
+      </Field>
+
+      <Field label="kind">
+        <Select
+          name="kind"
+          placeholder="Select a kind"
+          required
+          options={[
+            { value: "a", label: "Kind A" },
+            { value: "b", label: "Kind B" },
+          ]}
+        />
+      </Field>
+    </Form>
+  );
+}
+```
+
+- Every field's `name` is the key you read with `formData.get(...)` in the
+  action.
+- Use browser validation (`required`, `type="url"`, `maxLength`) for quick
+  feedback, but always validate again in the action, since it can be called
+  without the form.
+- Labels are lowercase to match the rest of the site.
+- `Form` options: `pendingText` (defaults to "Saving..."), `onSuccess`,
+  `className` (e.g. `"w-full sm:w-100"` to size it inside a modal) and
+  `submitClassName` (e.g. `"w-full"`).
+- To show a form in a modal, see how `ResourcesList.tsx` passes
+  `CreateResourceForm` to `onOpenModal`.
+
+### Styling
+
+Fields, the dropdown list and the error message all use the site's colours
+already. The shared field look is `fieldClassName` in `Input.tsx`, so change
+it there to restyle every input and dropdown at once.
 
 ---
 

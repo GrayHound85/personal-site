@@ -1,33 +1,24 @@
-"use client";
-
-import { useActionState } from "react";
-import Form from "@/components/ui/Form";
-import Input from "@/components/ui/Input";
+import Field from "@c/ui/Field";
+import Form from "@c/ui/Form";
+import Input from "@c/ui/Input";
 import { loginAction } from "./actions";
 
 export default function LoginForm({ redirectTo }: { redirectTo?: string }) {
-  const [state, formAction, pending] = useActionState(loginAction, null);
-
   return (
     <Form
-      action={formAction}
-      className="text-text-primary"
-      error={state?.error}
-      pending={pending}
-      pendingText="Signing in..."
-      submitButtonClassName="w-full"
+      action={loginAction}
       submitText="Sign in"
+      pendingText="Signing in..."
+      submitClassName="w-full"
     >
-      <label className="flex flex-col gap-2">
-        <span className="font-mono text-xs text-text-secondary">password</span>
+      <Field label="password">
         <Input
           autoComplete="current-password"
-          className="login-password-input"
           name="password"
           required
           type="password"
         />
-      </label>
+      </Field>
       <input name="redirectTo" type="hidden" value={redirectTo ?? ""} />
     </Form>
   );

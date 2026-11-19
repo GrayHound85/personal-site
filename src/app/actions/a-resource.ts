@@ -2,11 +2,7 @@
 
 import { createResourceService } from "@l/service/s-resources";
 import { requirePathAccess } from "@/lib/auth/server";
-
-export type CreateResourceActionState =
-  | { status: "error"; message: string }
-  | { status: "success" }
-  | null;
+import type { FormState } from "@/types/forms";
 
 const UUID_PATTERN = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
 
@@ -17,9 +13,9 @@ function getTextField(formData: FormData, name: string): string | null {
 
 export async function createResourceAction(
   topicId: string,
-  _state: CreateResourceActionState,
+  _state: FormState,
   formData: FormData,
-): Promise<CreateResourceActionState> {
+): Promise<FormState> {
   await requirePathAccess("/career/resources");
 
   const title = getTextField(formData, "title");

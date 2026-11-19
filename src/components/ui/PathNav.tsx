@@ -4,10 +4,14 @@ import { twMerge } from "tailwind-merge";
 
 type PathNavType = "standard" | "top";
 
+export type PathSegment = { label: string; href?: string; wideOnly?: boolean };
+
 type PathNavProps = {
   // e.g. [{ label: "home", href: "/" }, { label: "projects" }]
   // The last segment is the current page and isn't a link.
-  segments: { label: string; href?: string }[];
+  // wideOnly segments are only shown from the lg breakpoint up, for long
+  // paths that won't fit on small screens.
+  segments: PathSegment[];
   className?: string;
   type?: PathNavType;
   // aria-label for the <nav>
@@ -64,35 +68,41 @@ export default function PathNav({
         for the bar, e.g. home / projects / personal-site on a small phone.
       */}
       <ol className="flex min-w-0 flex-wrap items-center gap-x-1.5 sm:gap-x-2">
-        {segments.map((segment, index) => (
-          <Fragment key={segment.label}>
-            {index > 0 && (
-              <li aria-hidden="true" className="shrink-0 opacity-60">
-                /
+        {segments.map((segment, index) => {
+          const isLast = index === segments.length - 1;
+          // Each segment owns the "/" after it, so hiding a segment hides
+          // its slash too
+          const visibility = segment.wideOnly ? "hidden lg:block" : "";
+
+          return (
+            <Fragment key={segment.label}>
+              <li
+                className={`${visibility} ${isLast ? "max-w-full truncate" : "shrink-0"}`}
+              >
+                {segment.href ? (
+                  <Link
+                    href={segment.href}
+                    className="opacity-80 transition-opacity hover:opacity-60"
+                  >
+                    {segment.label}
+                  </Link>
+                ) : (
+                  <span aria-current="page" className="font-bold">
+                    {segment.label}
+                  </span>
+                )}
               </li>
-            )}
-            <li
-              className={
-                index === segments.length - 1
-                  ? "max-w-full truncate"
-                  : "shrink-0"
-              }
-            >
-              {segment.href ? (
-                <Link
-                  href={segment.href}
-                  className="opacity-80 transition-opacity hover:opacity-60"
+              {!isLast && (
+                <li
+                  aria-hidden="true"
+                  className={`${visibility} shrink-0 opacity-60`}
                 >
-                  {segment.label}
-                </Link>
-              ) : (
-                <span aria-current="page" className="font-bold">
-                  {segment.label}
-                </span>
+                  /
+                </li>
               )}
-            </li>
-          </Fragment>
-        ))}
+            </Fragment>
+          );
+        })}
       </ol>
 
       {children}

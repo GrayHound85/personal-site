@@ -56,13 +56,18 @@ Required env vars (in `.env.local` / `.env`): `DATABASE_URL`, `AUTH_PASSWORD`, p
 - Home (`src/app/page.tsx`) uses `PortfolioLayout` (profile sidebar + `NavBar`): README panel, pinned projects (`featured` in config), and the log. Log entries are the `log` array in that file (newest first); each renders a `sections/home/LogEntry.tsx`.
 - `RepoPanel` (`ui/RepoPanel.tsx`) is the panel with a header strip used on home and `/projects`.
 - Pages with the profile sidebar use `PortfolioLayout` (home, `/projects`, login). Pages without it use `layout/PageLayout.tsx` (background + sticky `PathNav` + content). Private pages (dashboard, career) use the full screen width; project pages (via `ProjectPageLayout`) pass `contained` for a centred `max-w-7xl` column.
-- The private dashboard and career pages are temporary: grids of `sections/workspace/WorkspaceCard.tsx` (name, description, and a `planned` badge only for tools that aren't built; dashboard cards have none). They'll be redesigned once the tools exist. Media, finance, notes and the career sub-pages still use the old design.
+- The private dashboard and career pages are temporary: grids of `sections/workspace/WorkspaceCard.tsx` (name, description, and a `planned` badge only for tools that aren't built; dashboard cards have none). They'll be redesigned once the tools exist. The resources page (`career/resources`) is in the new style: `PageLayout` with the path in the nav and the topic name on the right of the bar, then the topic list (`ResourceNav`), summary and resource list as `RepoPanel`s. Media, finance, notes and the other career sub-pages still use the old design.
 
 ### Projects
 
 - `src/config/projects.ts` is the single source of truth (`slug`, `title`, `summary`, `tags`, `year`, `featured`). It drives the `/projects` list, the home page pinned cards, `sitemap.ts`, and each project page's nav path, tags and metadata. `getProject(slug)` throws on an unknown slug.
 - Each project has a hand-written page at `src/app/projects/<slug>/page.tsx` built from `ProjectPageLayout` (shell: sticky `PathNav`, header, contents nav) plus the building blocks in `src/components/sections/projects/`: `ProjectHeader`, `ProjectSection` (styles plain `<p>`/`<strong>`/`<a>` children), `ProjectDetails`, `ProjectList`, `ProjectImage`. Each `ProjectSection` id must match an entry in the page's `sections` array. On mobile the contents list is `ProjectContentsMenu`, inside the nav bar.
 - Tag dot colours live in `tagColours` in `ProjectTags.tsx`. Tags are the tech stack; don't repeat the stack elsewhere on a page.
+
+### Forms
+
+- Server actions used by forms return `FormState` (`src/types/forms.ts`): `{ status: "error", message }`, `{ status: "success" }` or `null`.
+- `ui/Form.tsx` takes the server action directly and handles `useActionState`, the pending text, the error message and the submit button; `onSuccess` runs after a success. Fields are `<Field label="...">` (`ui/Field.tsx`, a label wrapper) around an `<Input>` or `<Select>` (a custom dropdown so the option list can be styled; takes an `options` array of `{ value, label }` and submits under `name`). See `CreateResourceForm.tsx` and `LoginForm.tsx`.
 
 ### Animation
 

@@ -69,16 +69,30 @@
   animation: section-highlight 500ms ease-in-out;
 }
 
+/*
+  No visible page scrollbar: it takes width away from the layout and makes
+  pages jump sideways when they become long enough to scroll. Scrolling
+  still works as normal with the wheel, touch and keyboard.
+*/
+html {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
 }
 
-.login-password-input:-webkit-autofill,
-.login-password-input:-webkit-autofill:hover,
-.login-password-input:-webkit-autofill:focus,
-.login-password-input:autofill {
+/* Stop browser autofill turning inputs a light colour with dark text */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:autofill {
   color: var(--color-text-primary);
   -webkit-text-fill-color: var(--color-text-primary);
   caret-color: var(--color-text-primary);

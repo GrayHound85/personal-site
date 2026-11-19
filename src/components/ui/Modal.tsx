@@ -58,8 +58,8 @@ export default function Modal({ open, onClose, children }: ModalProps) {
           overflow-y-auto
           rounded-card
           border
-          border-border
-          bg-[#03151C]
+          border-white/10
+          bg-[#071421]
           p-5
           pt-12
           pb-6
@@ -94,11 +94,23 @@ export default function Modal({ open, onClose, children }: ModalProps) {
             text-text-secondary
 
             transition-colors
-            hover:bg-panel-hover
+            hover:bg-white/10
             hover:text-text-primary
           "
         >
-          x
+          <svg
+            aria-hidden="true"
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M6 6l12 12M18 6L6 18"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeWidth="2"
+            />
+          </svg>
         </button>
 
         {children}
