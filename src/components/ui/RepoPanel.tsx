@@ -8,6 +8,8 @@ type RepoPanelProps = {
   // Shown on the right of the header strip, e.g. a button or a count
   action?: ReactNode;
   className?: string;
+  // Classes for the content area under the header strip
+  bodyClassName?: string;
   children: ReactNode;
 };
 
@@ -19,6 +21,7 @@ export default function RepoPanel({
   icon: Icon,
   action,
   className,
+  bodyClassName,
   children,
 }: RepoPanelProps) {
   return (
@@ -47,7 +50,7 @@ export default function RepoPanel({
         {action}
       </div>
 
-      <div className="p-5 lg:p-8">{children}</div>
+      <div className={twMerge("p-5 lg:p-8", bodyClassName)}>{children}</div>
     </section>
   );
 }

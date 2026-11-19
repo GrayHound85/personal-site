@@ -11,22 +11,23 @@ export default function LoginForm({ redirectTo }: { redirectTo?: string }) {
   return (
     <Form
       action={formAction}
-      className="mt-8 text-text-primary"
+      className="text-text-primary"
       error={state?.error}
       pending={pending}
       pendingText="Signing in..."
       submitButtonClassName="w-full"
-      submitText="Login"
+      submitText="Sign in"
     >
-      <Input
-        aria-label="Password"
-        autoComplete="current-password"
-        className="login-password-input"
-        name="password"
-        placeholder="Password"
-        required
-        type="password"
-      />
+      <label className="flex flex-col gap-2">
+        <span className="font-mono text-xs text-text-secondary">password</span>
+        <Input
+          autoComplete="current-password"
+          className="login-password-input"
+          name="password"
+          required
+          type="password"
+        />
+      </label>
       <input name="redirectTo" type="hidden" value={redirectTo ?? ""} />
     </Form>
   );
