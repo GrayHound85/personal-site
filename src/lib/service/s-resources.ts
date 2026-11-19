@@ -3,11 +3,20 @@ import {
   createResource,
   createSubCategory,
   createTopic,
+  deleteCategory,
+  deleteResource,
+  deleteSubCategory,
+  deleteTopic,
   getCategories,
+  getResource,
   getSubCategories,
   getTopics,
   getResourcesByTopic,
   getResourceTypes,
+  updateCategory,
+  updateResource,
+  updateSubCategory,
+  updateTopic,
 } from "@l/repo/r-resources";
 
 import type {
@@ -342,4 +351,214 @@ export async function createTopicService(
       topics.map((topic) => topic.slug),
     ),
   );
+}
+
+//===============================================================
+// Editing and deleting
+
+// "1 topic", "2 topics", "3 subcategories"
+function countOf(count: number, singular: string, plural: string) {
+  return `${count} ${count === 1 ? singular : plural}`;
+}
+
+// "it" for one thing, "them" for more
+function itOrThem(count: number) {
+  return count === 1 ? "it" : "them";
+}
+
+export async function updateCategoryService(id: string, name: string) {
+  const categories = await getCategories();
+
+  if (!categories.some((category) => category.id === id)) {
+    throw new ResourceConflictError("That category doesn't exist any more.");
+  }
+
+  if (
+    categories.some(
+      (category) => category.id !== id && sameName(category.name, name),
+    )
+  ) {
+    throw new ResourceConflictError(
+      `There's already a category called "${name}".`,
+    );
+  }
+
+  await updateCategory(id, name);
+}
+
+// Only empty categories can be deleted
+export async function deleteCategoryService(id: string) {
+  const [categories, subCategories, topics] = await Promise.all([
+    getCategories(),
+    getSubCategories(),
+    getTopics(),
+  ]);
+
+  const category = categories.find((category) => category.id === id);
+
+  if (!category) {
+    throw new ResourceConflictError("That category doesn't exist any more.");
+  }
+
+  const subCategoryCount = subCategories.filter(
+    (subCategory) => subCategory.categoryId === id,
+  ).length;
+  const topicCount = topics.filter((topic) => topic.categoryId === id).length;
+
+  if (subCategoryCount > 0 || topicCount > 0) {
+    const contents = [
+      subCategoryCount > 0 &&
+        countOf(subCategoryCount, "subcategory", "subcategories"),
+      topicCount > 0 && countOf(topicCount, "topic", "topics"),
+    ]
+      .filter(Boolean)
+      .join(" and ");
+
+    throw new ResourceConflictError(
+      `${category.name} still has ${contents}. Delete or move ${itOrThem(subCategoryCount + topicCount)} first.`,
+    );
+  }
+
+  await deleteCategory(id);
+}
+
+export async function updateSubCategoryService(id: string, name: string) {
+  const subCategories = await getSubCategories();
+  const subCategory = subCategories.find(
+    (subCategory) => subCategory.id === id,
+  );
+
+  if (!subCategory) {
+    throw new ResourceConflictError("That subcategory doesn't exist any more.");
+  }
+
+  if (
+    subCategories.some(
+      (other) =>
+        other.id !== id &&
+        other.categoryId === subCategory.categoryId &&
+        sameName(other.name, name),
+    )
+  ) {
+    throw new ResourceConflictError(
+      `There's already a subcategory called "${name}" here.`,
+    );
+  }
+
+  await updateSubCategory(id, name);
+}
+
+// Only subcategories with no topics in them can be deleted
+export async function deleteSubCategoryService(id: string) {
+  const [subCategories, topics] = await Promise.all([
+    getSubCategories(),
+    getTopics(),
+  ]);
+
+  const subCategory = subCategories.find(
+    (subCategory) => subCategory.id === id,
+  );
+
+  if (!subCategory) {
+    throw new ResourceConflictError("That subcategory doesn't exist any more.");
+  }
+
+  const topicCount = topics.filter(
+    (topic) => topic.subCategoryId === id,
+  ).length;
+
+  if (topicCount > 0) {
+    throw new ResourceConflictError(
+      `${subCategory.name} still has ${countOf(topicCount, "topic", "topics")}. Delete or move ${itOrThem(topicCount)} first.`,
+    );
+  }
+
+  await deleteSubCategory(id);
+}
+
+// A topic can be renamed and moved between its category and that category's
+// subcategories (subCategoryId null = directly in the category)
+export async function updateTopicService(
+  id: string,
+  subCategoryId: string | null,
+  name: string,
+) {
+  const [subCategories, topics] = await Promise.all([
+    getSubCategories(),
+    getTopics(),
+  ]);
+
+  const topic = topics.find((topic) => topic.id === id);
+
+  if (!topic) {
+    throw new ResourceConflictError("That topic doesn't exist any more.");
+  }
+
+  if (
+    subCategoryId &&
+    !subCategories.some(
+      (subCategory) =>
+        subCategory.id === subCategoryId &&
+        subCategory.categoryId === topic.categoryId,
+    )
+  ) {
+    throw new ResourceConflictError("That subcategory isn't in this category.");
+  }
+
+  if (
+    topics.some(
+      (other) =>
+        other.id !== id &&
+        other.categoryId === topic.categoryId &&
+        other.subCategoryId === subCategoryId &&
+        sameName(other.name, name),
+    )
+  ) {
+    throw new ResourceConflictError(
+      `There's already a topic called "${name}" there.`,
+    );
+  }
+
+  await updateTopic(id, name, subCategoryId);
+}
+
+// Only topics with no resources in them can be deleted
+export async function deleteTopicService(id: string) {
+  const [topics, resources] = await Promise.all([
+    getTopics(),
+    getResourcesByTopic(id),
+  ]);
+
+  const topic = topics.find((topic) => topic.id === id);
+
+  if (!topic) {
+    throw new ResourceConflictError("That topic doesn't exist any more.");
+  }
+
+  if (resources.length > 0) {
+    throw new ResourceConflictError(
+      `${topic.name} still has ${countOf(resources.length, "resource", "resources")}. Delete ${itOrThem(resources.length)} first.`,
+    );
+  }
+
+  await deleteTopic(id);
+}
+
+export async function updateResourceService(
+  id: string,
+  title: string,
+  url: string,
+  resourceTypeId: string,
+) {
+  const [resource] = await getResource(id);
+
+  if (!resource) {
+    throw new ResourceConflictError("That resource doesn't exist any more.");
+  }
+
+  await updateResource(id, title, url, resourceTypeId);
+}
+
+export async function deleteResourceService(id: string) {
+  await deleteResource(id);
 }

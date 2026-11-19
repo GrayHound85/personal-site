@@ -12,6 +12,7 @@ import type {
 import ResourceNav from "@/components/sections/career/resource/ResourceNav";
 import ResourceTopicDescription from "@/components/sections/career/resource/ResourceTopicDescription";
 import ResourceList from "@/components/sections/career/resource/ResourcesList";
+import EditTopicForm from "@/components/sections/career/resource/EditTopicForm";
 import PageLayout from "@c/layout/PageLayout";
 import Modal from "@c/ui/Modal";
 import type { PathSegment } from "@c/ui/PathNav";
@@ -174,6 +175,19 @@ export default function ResourcePageClient({
               key={context.topic.id}
               description={null}
               notesHref={`/notes/${context.category.slug}/${context.topic.slug}`}
+              topicName={context.topic.name}
+              onEdit={() =>
+                context.topic &&
+                context.category &&
+                openModal(
+                  <EditTopicForm
+                    category={context.category}
+                    topic={context.topic}
+                    subCategoryId={context.subCategory?.id}
+                    onClose={closeModal}
+                  />,
+                )
+              }
             />
           )}
           <ResourceList

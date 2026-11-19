@@ -1,6 +1,8 @@
 "use client";
 
 import CreateResourceForm from "./CreateResourceForm";
+import EditButton from "./EditButton";
+import EditResourceForm from "./EditResourceForm";
 
 import type { Resource, ResourceType } from "@/types/resources";
 
@@ -122,12 +124,15 @@ export default function ResourceList({
 
                 <ul className="mt-4 space-y-2">
                   {resources.map((resource) => (
-                    <li key={resource.id}>
+                    <li
+                      key={resource.id}
+                      className="group flex items-center rounded-card_inner border border-white/10 bg-panel/50 transition-colors hover:bg-white/10"
+                    >
                       <a
                         href={resource.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center justify-between gap-4 rounded-card_inner border border-white/10 bg-panel/50 px-4 py-3 transition-colors hover:bg-white/10"
+                        className="flex min-w-0 flex-1 items-center justify-between gap-4 py-3 pr-2 pl-4"
                       >
                         <span className="min-w-0">
                           <span className="block truncate font-medium text-text-primary">
@@ -143,6 +148,21 @@ export default function ResourceList({
                           className="shrink-0 text-text-secondary transition-transform duration-200 group-hover:translate-x-1"
                         />
                       </a>
+
+                      {/* Separate from the link, a button can't sit inside an <a> */}
+                      <EditButton
+                        label={`Edit ${resource.title}`}
+                        onClick={() =>
+                          onOpenModal(
+                            <EditResourceForm
+                              resource={resource}
+                              resourceTypes={resourceTypes}
+                              onClose={onCloseModal}
+                            />,
+                          )
+                        }
+                        className="mr-3"
+                      />
                     </li>
                   ))}
                 </ul>

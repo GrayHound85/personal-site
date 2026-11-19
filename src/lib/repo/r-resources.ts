@@ -143,3 +143,74 @@ export function createTopic(
       .returning(),
   );
 }
+
+//===============================================================
+// Updating and deleting. Slugs are left alone on rename so URLs don't change.
+
+export function updateCategory(id: string, name: string) {
+  return executeDatabaseQuery(() =>
+    getDb().update(CategoryTable).set({ name }).where(eq(CategoryTable.id, id)),
+  );
+}
+
+export function deleteCategory(id: string) {
+  return executeDatabaseQuery(() =>
+    getDb().delete(CategoryTable).where(eq(CategoryTable.id, id)),
+  );
+}
+
+export function updateSubCategory(id: string, name: string) {
+  return executeDatabaseQuery(() =>
+    getDb()
+      .update(SubCategoryTable)
+      .set({ name })
+      .where(eq(SubCategoryTable.id, id)),
+  );
+}
+
+export function deleteSubCategory(id: string) {
+  return executeDatabaseQuery(() =>
+    getDb().delete(SubCategoryTable).where(eq(SubCategoryTable.id, id)),
+  );
+}
+
+// subCategoryId null moves the topic directly into its category
+export function updateTopic(
+  id: string,
+  name: string,
+  subCategoryId: string | null,
+) {
+  return executeDatabaseQuery(() =>
+    getDb()
+      .update(TopicTable)
+      .set({ name, subCategoryId })
+      .where(eq(TopicTable.id, id)),
+  );
+}
+
+export function deleteTopic(id: string) {
+  return executeDatabaseQuery(() =>
+    getDb().delete(TopicTable).where(eq(TopicTable.id, id)),
+  );
+}
+
+export function updateResource(
+  id: string,
+  title: string,
+  url: string,
+  resourceTypeId: string,
+) {
+  return executeDatabaseQuery(() =>
+    getDb()
+      .update(ResourceTable)
+      .set({ title, url, resourceTypeId, updatedAt: new Date() })
+      .where(eq(ResourceTable.id, id)),
+  );
+}
+
+// The resource's notes are removed with it (onDelete cascade)
+export function deleteResource(id: string) {
+  return executeDatabaseQuery(() =>
+    getDb().delete(ResourceTable).where(eq(ResourceTable.id, id)),
+  );
+}

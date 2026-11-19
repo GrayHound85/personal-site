@@ -10,7 +10,7 @@ data in a couple of files, no database involved.
 | Pin / unpin a project on the home page | `featured` in `src/config/projects.ts`             |
 | Change the README panel text           | `src/app/page.tsx` → `README.md` panel             |
 | Change sidebar (photo, links, email)   | `src/components/sections/porfolio/ProfileCard.tsx` |
-| Add a resource category / topic        | The `+` buttons on `/career/resources`             |
+| Add / edit / delete resources, topics… | The `+` and pencil buttons on `/career/resources`  |
 | Build a new form                       | See [Forms](#forms)                                |
 
 Before committing: `npm run lint` and `npm run build`.
@@ -272,27 +272,55 @@ so inside the README use `h3` for the main heading and `h4` for subheadings.
 
 ## Resource library
 
-Everything is added from `/career/resources` (no code changes needed):
+Everything is managed from `/career/resources` (no code changes needed).
 
-| To add                   | Where                                                                                                     |
-| ------------------------ | --------------------------------------------------------------------------------------------------------- |
-| A category               | `+ category` under the category list                                                                      |
-| A subcategory            | Open the category, `+ subcategory` at the bottom of its list                                              |
-| A topic                  | Open the category, `+ topic`. Pick "in" to put it directly in the category or in one of its subcategories |
-| A topic in a subcategory | The small `+` next to the subcategory's name (it's pre-picked)                                            |
-| A resource               | Open the topic, `+` in the resources panel                                                                |
+### Adding
+
+| To add        | Where                                                                                                     |
+| ------------- | --------------------------------------------------------------------------------------------------------- |
+| A category    | `+ category` under the category list                                                                      |
+| A subcategory | Open the category, `+ subcategory` at the bottom of its list                                              |
+| A topic       | Open the category, `+ topic`. Pick "in" to put it directly in the category or in one of its subcategories |
+| A resource    | Open the topic, `+` in the resources panel                                                                |
+
+### Editing and deleting
+
+Every pencil button opens an edit form with a **Delete** button at the bottom
+(it asks to confirm first).
+
+| To edit       | Pencil is on…                                  | Can change                          |
+| ------------- | ---------------------------------------------- | ----------------------------------- |
+| A category    | The category panel header, next to `← all`     | Name                                |
+| A subcategory | Its heading in the topic list                  | Name                                |
+| A topic       | The summary panel header (on the topic's page) | Name, and which subcategory it's in |
+| A resource    | Its row in the resources list                  | Name, URL, type                     |
+
+- **You can only delete empty things.** A category with subcategories or
+  topics, a subcategory with topics, or a topic with resources can't be
+  deleted: you get a message saying what's still in it. Resources can always
+  be deleted (their notes go with them).
+- Deleting the page you're on takes you up a level (a topic → its category, a
+  category → all categories).
+- Renaming doesn't change the URL. The slug is made once, when the thing is
+  created, so links and bookmarks keep working.
+
+### Names and slugs
 
 - URLs (slugs) are made from the name: `Next.js` → `nextjs`, `C++` → `cpp`,
   `Web Development` → `web-development`. Topic slugs are unique across every
   category, so a second "Basics" topic becomes `basics-2`.
 - Names have to be unique where they live: no two categories with the same
   name, no two subcategories with the same name in one category, and no two
-  topics with the same name in the same place.
-- Editing and deleting aren't built yet. For now, fix mistakes in the database
-  directly.
-- The code: forms in `src/components/sections/career/resource/Create*Form.tsx`,
-  actions in `src/app/actions/a-resource.ts`, slug and duplicate checks in
-  `src/lib/service/s-resources.ts`.
+  topics with the same name in the same place. This also applies when renaming
+  or moving.
+
+### Where the code is
+
+- Forms: `src/components/sections/career/resource/Create*Form.tsx` and
+  `Edit*Form.tsx`
+- Actions: `src/app/actions/a-resource.ts`
+- Rules (duplicate names, "still has…", slugs): `src/lib/service/s-resources.ts`
+- The confirm-then-delete button: `src/components/ui/DeleteButton.tsx`
 
 ---
 

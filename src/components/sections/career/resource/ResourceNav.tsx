@@ -6,6 +6,9 @@ import RepoPanel from "@c/ui/RepoPanel";
 import CreateCategoryForm from "./CreateCategoryForm";
 import CreateSubCategoryForm from "./CreateSubCategoryForm";
 import CreateTopicForm from "./CreateTopicForm";
+import EditButton from "./EditButton";
+import EditCategoryForm from "./EditCategoryForm";
+import EditSubCategoryForm from "./EditSubCategoryForm";
 
 import type {
   ResourceNavigation,
@@ -80,12 +83,25 @@ export default function ResourceNav({
         title={category ? category.name : "categories"}
         action={
           category && (
-            <Link
-              href="/career/resources"
-              className="shrink-0 font-mono text-xs text-text-secondary transition-colors hover:text-text-primary"
-            >
-              ← all
-            </Link>
+            <div className="flex shrink-0 items-center gap-2">
+              <EditButton
+                label={`Edit ${category.name}`}
+                onClick={() =>
+                  onOpenModal(
+                    <EditCategoryForm
+                      category={category}
+                      onClose={onCloseModal}
+                    />,
+                  )
+                }
+              />
+              <Link
+                href="/career/resources"
+                className="font-mono text-xs text-text-secondary transition-colors hover:text-text-primary"
+              >
+                ← all
+              </Link>
+            </div>
           )
         }
         className="flex flex-col md:h-full"
@@ -105,26 +121,23 @@ export default function ResourceNav({
 
             {category.subCategories.map((subCategory) => (
               <div key={subCategory.id}>
-                <div className="flex items-center justify-between gap-2 px-3 pt-2 pb-1">
+                <div className="flex items-center justify-between gap-2 pt-2 pr-1 pb-1 pl-3">
                   <h3 className="font-mono text-xs uppercase tracking-wide text-primary">
                     {subCategory.name}
                   </h3>
-                  <button
-                    type="button"
-                    aria-label={`Add topic to ${subCategory.name}`}
+                  <EditButton
+                    label={`Edit ${subCategory.name}`}
                     onClick={() =>
                       onOpenModal(
-                        <CreateTopicForm
+                        <EditSubCategoryForm
                           category={category}
-                          subCategoryId={subCategory.id}
+                          subCategory={subCategory}
                           onClose={onCloseModal}
                         />,
                       )
                     }
-                    className="rounded px-1.5 font-mono text-xs text-text-secondary transition-colors hover:bg-white/10 hover:text-text-primary"
-                  >
-                    +
-                  </button>
+                    className="-my-1 h-6 w-6"
+                  />
                 </div>
                 <TopicList
                   topics={subCategory.topics}

@@ -16,14 +16,11 @@ import FormHeading from "./FormHeading";
 
 type CreateTopicFormProps = {
   category: ResourceNavigationCategory;
-  // Pre-pick a subcategory, e.g. when opened from that subcategory's "+"
-  subCategoryId?: string;
   onClose: () => void;
 };
 
 export default function CreateTopicForm({
   category,
-  subCategoryId,
   onClose,
 }: CreateTopicFormProps) {
   const router = useRouter();
@@ -64,7 +61,7 @@ export default function CreateTopicForm({
         <Select
           name="parent"
           options={parentOptions}
-          defaultValue={subCategoryId ?? CATEGORY_ROOT}
+          defaultValue={CATEGORY_ROOT}
           required
         />
       </Field>
