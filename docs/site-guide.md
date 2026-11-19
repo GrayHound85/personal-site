@@ -314,6 +314,50 @@ Every pencil button opens an edit form with a **Delete** button at the bottom
   topics with the same name in the same place. This also applies when renaming
   or moving.
 
+### Resource types
+
+The types (video, website, book, docs) live in the `ResourceType` table, and
+there's no page for managing them, so add them with a command on the homelab.
+`code` is what the site uses internally (lowercase, no spaces) and `name` is a
+readable name. Both must be unique.
+
+You need three names, all visible on the homelab:
+
+- **Container**: run `docker ps` and find the Postgres one (locally it's
+  `personal-site-postgres`).
+- **User** and **database**: the app's `DATABASE_URL` is
+  `postgres://USER:PASSWORD@HOST:5432/DATABASE`, use the `USER` and
+  `DATABASE` parts (locally `postgres` and `personal_site`).
+
+Then run (with your names swapped in):
+
+```bash
+docker exec -i personal-site-postgres psql -U postgres -d personal_site <<'SQL'
+INSERT INTO "ResourceType" ("code", "name") VALUES
+  ('video', 'Video'),
+  ('website', 'Website'),
+  ('book', 'Book'),
+  ('docs', 'Documentation')
+ON CONFLICT ("code") DO NOTHING;
+SQL
+```
+
+It prints `INSERT 0 4` (or a smaller number if some already existed).
+
+- `ON CONFLICT ... DO NOTHING` skips any type that already exists, so it's
+  safe to run again. To add a new type later, just put its row in the list,
+  e.g. `('course', 'Course')`.
+- No password is needed: `docker exec` runs `psql` inside the container,
+  where local connections are trusted.
+- To see what's there, swap the `INSERT ... ;` for
+  `SELECT "code", "name" FROM "ResourceType";`
+
+**A new type also needs a code change** to look right: add its code to
+`resourceTypeIcons` (the icon) and `resourceTypeNames` (the group heading,
+e.g. "Courses") at the top of
+`src/components/sections/career/resource/ResourcesList.tsx`. Without that it
+still works, it just shows under its raw code with no icon.
+
 ### Where the code is
 
 - Forms: `src/components/sections/career/resource/Create*Form.tsx` and
