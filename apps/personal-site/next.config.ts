@@ -17,6 +17,10 @@ function getCommit() {
 const nextConfig: NextConfig = {
   output: "standalone",
 
+  // @repo/ui ships TypeScript source rather than built files, so Next
+  // compiles it along with the app
+  transpilePackages: ["@repo/ui"],
+
   // Shown in the title block at the bottom of the home page
   env: {
     BUILD_COMMIT: getCommit(),

@@ -13,12 +13,12 @@ const tagColours: Record<string, string> = {
   Python: "#3572a5",
 };
 
-type ProjectTagsProps = {
+type TagDotsProps = {
   tags: string[];
   className?: string;
 };
 
-export default function ProjectTags({ tags, className }: ProjectTagsProps) {
+export default function TagDots({ tags, className }: TagDotsProps) {
   return (
     <ul
       className={twMerge(

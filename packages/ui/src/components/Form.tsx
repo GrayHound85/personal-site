@@ -9,7 +9,7 @@ import {
 import { twMerge } from "tailwind-merge";
 
 import Button from "./Button";
-import type { FormState } from "@/types/forms";
+import type { FormState } from "../types/forms";
 
 type FormProps = {
   // A server action returning a FormState (see src/types/forms.ts)

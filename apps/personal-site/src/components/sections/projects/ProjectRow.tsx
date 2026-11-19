@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import ProjectTags from "./ProjectTags";
+import TagDots from "@repo/ui/components/TagDots";
 import type { ProjectDefinition } from "@/types/projects";
 
 type ProjectRowProps = {
@@ -30,7 +30,7 @@ export default function ProjectRow({ project }: ProjectRowProps) {
       </p>
 
       <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2">
-        <ProjectTags tags={project.tags} />
+        <TagDots tags={project.tags} />
         <span className="text-xs text-text-secondary">{project.year}</span>
       </div>
     </li>

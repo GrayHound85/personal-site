@@ -16,7 +16,7 @@ import {
   updateTopicService,
 } from "@l/service/s-resources";
 import { requirePathAccess } from "@/lib/auth/server";
-import type { FormState } from "@/types/forms";
+import type { FormState } from "@repo/ui/types/forms";
 import { CATEGORY_ROOT } from "@/types/resources";
 
 const UUID_PATTERN = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;

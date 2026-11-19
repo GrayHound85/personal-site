@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import PortfolioLayout from "@c/layout/PortfolioLayout";
 import ProfileCard from "@c/sections/porfolio/ProfileCard";
 import ProjectRow from "@c/sections/projects/ProjectRow";
-import PathNav from "@c/ui/PathNav";
-import RepoPanel from "@c/ui/RepoPanel";
+import PathNav from "@repo/ui/components/PathNav";
+import RepoPanel from "@repo/ui/components/RepoPanel";
 import BookIcon from "@c/icons/BooksIcon";
 
 import { projects } from "@/config/projects";

@@ -1,6 +1,6 @@
 import BookIcon from "@c/icons/BooksIcon";
-import LinkCard from "@c/ui/LinkCard";
-import ProjectTags from "./ProjectTags";
+import LinkCard from "@repo/ui/components/LinkCard";
+import TagDots from "@repo/ui/components/TagDots";
 import type { ProjectDefinition } from "@/types/projects";
 
 type ProjectCardProps = {
@@ -26,7 +26,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         {project.summary}
       </p>
 
-      <ProjectTags tags={project.tags} className="mt-4" />
+      <TagDots tags={project.tags} className="mt-4" />
     </LinkCard>
   );
 }

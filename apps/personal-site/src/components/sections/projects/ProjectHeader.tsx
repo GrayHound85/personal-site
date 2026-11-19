@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import GithubIcon from "@c/icons/GithubIcon";
-import ProjectTags from "./ProjectTags";
+import TagDots from "@repo/ui/components/TagDots";
 import type { ProjectDefinition } from "@/types/projects";
 
 type ProjectHeaderProps = {
@@ -63,7 +63,7 @@ export default function ProjectHeader({
         {intro}
       </p>
 
-      <ProjectTags tags={project.tags} className="mt-5" />
+      <TagDots tags={project.tags} className="mt-5" />
     </header>
   );
 }

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import RepoPanel from "@c/ui/RepoPanel";
+import RepoPanel from "@repo/ui/components/RepoPanel";
 import CreateCategoryForm from "./CreateCategoryForm";
 import CreateSubCategoryForm from "./CreateSubCategoryForm";
 import CreateTopicForm from "./CreateTopicForm";

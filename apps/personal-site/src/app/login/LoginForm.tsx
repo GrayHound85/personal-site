@@ -1,6 +1,6 @@
-import Field from "@c/ui/Field";
-import Form from "@c/ui/Form";
-import Input from "@c/ui/Input";
+import Field from "@repo/ui/components/Field";
+import Form from "@repo/ui/components/Form";
+import Input from "@repo/ui/components/Input";
 import { loginAction } from "./actions";
 
 export default function LoginForm({ redirectTo }: { redirectTo?: string }) {

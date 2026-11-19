@@ -2,7 +2,7 @@
 
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth";
-import type { FormState } from "@/types/forms";
+import type { FormState } from "@repo/ui/types/forms";
 
 export async function loginAction(
   _state: FormState,

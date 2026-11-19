@@ -9,11 +9,11 @@ import {
   type ResourceNavigationTopic,
 } from "@/types/resources";
 
-import DeleteButton from "@c/ui/DeleteButton";
-import Field from "@c/ui/Field";
-import Form from "@c/ui/Form";
-import Input from "@c/ui/Input";
-import Select from "@c/ui/Select";
+import DeleteButton from "@repo/ui/components/DeleteButton";
+import Field from "@repo/ui/components/Field";
+import Form from "@repo/ui/components/Form";
+import Input from "@repo/ui/components/Input";
+import Select from "@repo/ui/components/Select";
 import FormHeading from "./FormHeading";
 
 type EditTopicFormProps = {

@@ -14,8 +14,8 @@ import ResourceTopicDescription from "@/components/sections/career/resource/Reso
 import ResourceList from "@/components/sections/career/resource/ResourcesList";
 import EditTopicForm from "@/components/sections/career/resource/EditTopicForm";
 import PageLayout from "@c/layout/PageLayout";
-import Modal from "@c/ui/Modal";
-import type { PathSegment } from "@c/ui/PathNav";
+import Modal from "@repo/ui/components/Modal";
+import type { PathSegment } from "@repo/ui/components/PathNav";
 
 type ResourcePageClientProps = {
   context: ResourcePageContext;

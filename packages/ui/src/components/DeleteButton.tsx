@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import Form from "./Form";
-import type { FormState } from "@/types/forms";
+import type { FormState } from "../types/forms";
 
 type DeleteButtonProps = {
   // A server action with the id already bound,

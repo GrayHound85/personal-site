@@ -1,7 +1,7 @@
 import HeroPanel from "./HeroPanel";
-import Card from "@/components/ui/Card";
+import Card from "@repo/ui/components/Card";
 import SocialButton from "../../ui/SocialButton";
-import CopyButton from "@/components/ui/CopyButton";
+import CopyButton from "@repo/ui/components/CopyButton";
 
 import LinkedinIcon from "@/components/icons/LinkedinIcon";
 import LeetcodeIcon from "@/components/icons/LeetcodeIcon";

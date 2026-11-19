@@ -6,7 +6,7 @@ import EditResourceForm from "./EditResourceForm";
 
 import type { Resource, ResourceType } from "@/types/resources";
 
-import RepoPanel from "@c/ui/RepoPanel";
+import RepoPanel from "@repo/ui/components/RepoPanel";
 import BookIcon from "@c/icons/BooksIcon";
 import VideoIcon from "@c/icons/VideoIcon";
 import DocsIcon from "@c/icons/DocsIcon";

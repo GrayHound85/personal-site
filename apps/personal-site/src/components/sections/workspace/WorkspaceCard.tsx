@@ -1,4 +1,4 @@
-import LinkCard from "@c/ui/LinkCard";
+import LinkCard from "@repo/ui/components/LinkCard";
 
 export type WorkspaceCardProps = {
   href: string;

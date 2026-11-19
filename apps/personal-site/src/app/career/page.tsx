@@ -4,7 +4,7 @@ import PageLayout from "@c/layout/PageLayout";
 import WorkspaceCard, {
   type WorkspaceCardProps,
 } from "@c/sections/workspace/WorkspaceCard";
-import RepoPanel from "@c/ui/RepoPanel";
+import RepoPanel from "@repo/ui/components/RepoPanel";
 
 export const metadata: Metadata = {
   title: "Career",

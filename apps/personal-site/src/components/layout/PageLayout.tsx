@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
 import BackgroundLayout from "./BackgroundLayout";
-import PathNav, { type PathSegment } from "@c/ui/PathNav";
+import PathNav, { type PathSegment } from "@repo/ui/components/PathNav";
 
 type PageLayoutProps = {
   // The path shown in the nav bar, e.g. home / dashboard / career

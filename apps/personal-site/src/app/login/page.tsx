@@ -3,8 +3,8 @@ import Link from "next/link";
 
 import PortfolioLayout from "@c/layout/PortfolioLayout";
 import ProfileCard from "@c/sections/porfolio/ProfileCard";
-import PathNav from "@c/ui/PathNav";
-import RepoPanel from "@c/ui/RepoPanel";
+import PathNav from "@repo/ui/components/PathNav";
+import RepoPanel from "@repo/ui/components/RepoPanel";
 import LockIcon from "@c/icons/LockIcon";
 import LoginForm from "./LoginForm";
 

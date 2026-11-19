@@ -1,5 +1,5 @@
-import LinkButton from "@c/ui/LinkButton";
-import RepoPanel from "@c/ui/RepoPanel";
+import LinkButton from "@repo/ui/components/LinkButton";
+import RepoPanel from "@repo/ui/components/RepoPanel";
 import EditButton from "./EditButton";
 
 type ResourceTopicDescriptionProps = {
