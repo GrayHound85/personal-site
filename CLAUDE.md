@@ -52,6 +52,7 @@ Required env vars (in `apps/personal-site/.env.local`): `DATABASE_URL`, `AUTH_PA
 ### Auth and access control
 
 - Single-user credentials login: `src/auth.ts` compares the submitted password to `AUTH_PASSWORD` and issues a JWT with `role: "admin"`. Roles are `AppRole = "admin" | "media"` (`src/types/auth.ts`); the role is copied onto the session via JWT/session callbacks (types augmented in `src/types/next-auth.d.ts`).
+- Login brute-force lockout: `src/lib/auth/login-limiter.ts` (in-memory, per IP from `CF-Connecting-IP`): 5 failures in 15 min locks the IP out for 15 min. It is enforced inside `authorize` (not the login action) so direct POSTs to `/api/auth/callback/credentials` are covered too; a locked IP gets `LoginRateLimited` (`code = "rate_limited"`), which `src/app/login/actions.ts` turns into a "try again in N min" message. Request-volume rate limiting is done in Cloudflare, not the app.
 - **Routes are private by default.** `src/lib/auth/access.ts` holds `ACCESS_RULES`; any path not matched by a rule requires `admin`. The longest matching rule wins. When adding a public page (or a public file route like `sitemap.xml`), add it to `ACCESS_RULES`, otherwise the proxy redirects to `/login`.
 - `src/proxy.ts` enforces those rules on every non-static request. Server actions must additionally call `requirePathAccess(path)` from `src/lib/auth/server.ts` (see `src/app/actions/a-resource.ts`).
 
